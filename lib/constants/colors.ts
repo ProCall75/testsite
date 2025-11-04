@@ -44,17 +44,5 @@ export const colors = {
     s: 0,
     l: 10,
   },
-  conversationBg: {
-    h: 47,
-    s: 30,
-    l: 96,
-  },
 } as const
-
-/**
- * Helper to convert HSL object to HSL string
- */
-export function hslToString(color: { h: number; s: number; l: number }): string {
-  return `${color.h} ${color.s}% ${color.l}%`
-}
 

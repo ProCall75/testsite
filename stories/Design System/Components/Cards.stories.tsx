@@ -66,7 +66,7 @@ export const CardWithImage: Story = {
         </p>
       </CardContent>
       <CardFooter className="flex gap-2">
-        <Button variant="outline" size="sm">Annuler</Button>
+        <Button variant="ghost" size="sm">Annuler</Button>
         <Button size="sm">Confirmer</Button>
       </CardFooter>
     </Card>
@@ -243,7 +243,7 @@ export const AllCardVariants: Story = {
               </p>
             </CardContent>
             <CardFooter>
-              <Button size="sm" variant="outline">Action</Button>
+              <Button size="sm" variant="ghost">Action</Button>
             </CardFooter>
           </Card>
 
@@ -263,7 +263,7 @@ export const AllCardVariants: Story = {
                 de manière optimale.
               </p>
               <div className="flex gap-2">
-                <Button size="sm" variant="outline">Annuler</Button>
+                <Button size="sm" variant="ghost">Annuler</Button>
                 <Button size="sm">Confirmer</Button>
               </div>
             </CardContent>
