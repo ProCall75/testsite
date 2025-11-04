@@ -17,14 +17,14 @@ export function AnimatedBackground() {
         {/* Primary network - flowing curves */}
         <defs>
           <linearGradient id="lineGradient1" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="rgba(200, 200, 200, 0)" />
-            <stop offset="50%" stopColor="rgba(200, 200, 200, 0.25)" />
-            <stop offset="100%" stopColor="rgba(200, 200, 200, 0)" />
+            <stop offset="0%" stopColor="hsl(0 0% 78% / 0)" />
+            <stop offset="50%" stopColor="hsl(0 0% 78% / 0.25)" />
+            <stop offset="100%" stopColor="hsl(0 0% 78% / 0)" />
           </linearGradient>
           <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="rgba(212, 175, 55, 0)" />
-            <stop offset="50%" stopColor="rgba(212, 175, 55, 0.35)" />
-            <stop offset="100%" stopColor="rgba(212, 175, 55, 0)" />
+            <stop offset="0%" stopColor="hsl(var(--primary) / 0)" />
+            <stop offset="50%" stopColor="hsl(var(--primary) / 0.35)" />
+            <stop offset="100%" stopColor="hsl(var(--primary) / 0)" />
           </linearGradient>
           <filter id="glow">
             <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
@@ -53,7 +53,7 @@ export function AnimatedBackground() {
         {/* Branch to orb area */}
         <path
           d="M 420 400 Q 380 380, 350 360 Q 320 340, 300 320"
-          stroke="rgba(200, 200, 200, 0.2)"
+          stroke="hsl(0 0% 78% / 0.2)"
           strokeWidth="1"
           fill="none"
           strokeLinecap="round"
@@ -67,7 +67,7 @@ export function AnimatedBackground() {
         {/* Branch to CTA area */}
         <path
           d="M 420 400 Q 500 380, 580 370 Q 660 360, 720 350 Q 780 340, 830 330"
-          stroke="rgba(200, 200, 200, 0.2)"
+          stroke="hsl(0 0% 78% / 0.2)"
           strokeWidth="1"
           fill="none"
           strokeLinecap="round"
@@ -96,7 +96,7 @@ export function AnimatedBackground() {
         {/* Secondary golden branch */}
         <path
           d="M 900 350 Q 850 400, 800 450 Q 750 500, 700 540"
-          stroke="rgba(212, 175, 55, 0.25)"
+          stroke="hsl(var(--primary) / 0.25)"
           strokeWidth="1.2"
           fill="none"
           strokeLinecap="round"
@@ -110,7 +110,7 @@ export function AnimatedBackground() {
         {/* Secondary flow from bottom left */}
         <path
           d="M 150 900 Q 200 750, 250 650 Q 300 580, 360 530 Q 400 500, 450 480"
-          stroke="rgba(200, 200, 200, 0.18)"
+          stroke="hsl(0 0% 78% / 0.18)"
           strokeWidth="1"
           fill="none"
           strokeLinecap="round"
@@ -124,7 +124,7 @@ export function AnimatedBackground() {
         {/* Connecting subtle line */}
         <path
           d="M 360 530 Q 400 500, 450 480 Q 500 460, 550 450"
-          stroke="rgba(200, 200, 200, 0.15)"
+          stroke="hsl(0 0% 78% / 0.15)"
           strokeWidth="0.8"
           fill="none"
           strokeLinecap="round"
@@ -138,7 +138,7 @@ export function AnimatedBackground() {
         {/* Ambient top curve */}
         <path
           d="M 0 200 Q 300 150, 600 180 Q 900 210, 1200 200 Q 1440 190, 1440 200"
-          stroke="rgba(200, 200, 200, 0.12)"
+          stroke="hsl(0 0% 78% / 0.12)"
           strokeWidth="0.8"
           fill="none"
           strokeLinecap="round"
@@ -152,7 +152,7 @@ export function AnimatedBackground() {
         {/* Blue accent line - subtle */}
         <path
           d="M 100 0 Q 200 200, 300 400 Q 400 550, 500 600"
-          stroke="rgba(58, 111, 248, 0.15)"
+          stroke="hsl(var(--accent) / 0.15)"
           strokeWidth="1"
           fill="none"
           strokeLinecap="round"
@@ -166,7 +166,7 @@ export function AnimatedBackground() {
         {/* Cross-connection line */}
         <path
           d="M 800 200 Q 700 400, 600 500 Q 550 550, 500 570"
-          stroke="rgba(200, 200, 200, 0.15)"
+          stroke="hsl(0 0% 78% / 0.15)"
           strokeWidth="0.8"
           fill="none"
           strokeLinecap="round"
@@ -182,24 +182,24 @@ export function AnimatedBackground() {
       <div
         className="particle-curve-1 absolute h-2 w-2 rounded-full"
         style={{
-          background: "radial-gradient(circle, rgba(212, 175, 55, 0.9) 0%, rgba(212, 175, 55, 0.3) 70%)",
-          boxShadow: "0 0 10px rgba(212, 175, 55, 0.8), 0 0 20px rgba(212, 175, 55, 0.4)",
+          background: `radial-gradient(circle, hsl(var(--primary) / 0.9) 0%, hsl(var(--primary) / 0.3) 70%)`,
+          boxShadow: `0 0 10px hsl(var(--primary) / 0.8), 0 0 20px hsl(var(--primary) / 0.4)`,
           filter: "blur(0.5px)",
         }}
       />
       <div
         className="particle-curve-2 absolute h-1.5 w-1.5 rounded-full"
         style={{
-          background: "radial-gradient(circle, rgba(212, 175, 55, 0.8) 0%, rgba(212, 175, 55, 0.2) 70%)",
-          boxShadow: "0 0 8px rgba(212, 175, 55, 0.7), 0 0 15px rgba(212, 175, 55, 0.3)",
+          background: `radial-gradient(circle, hsl(var(--primary) / 0.8) 0%, hsl(var(--primary) / 0.2) 70%)`,
+          boxShadow: `0 0 8px hsl(var(--primary) / 0.7), 0 0 15px hsl(var(--primary) / 0.3)`,
           filter: "blur(0.5px)",
         }}
       />
       <div
         className="particle-curve-3 absolute h-1.5 w-1.5 rounded-full"
         style={{
-          background: "radial-gradient(circle, rgba(212, 175, 55, 0.85) 0%, rgba(212, 175, 55, 0.25) 70%)",
-          boxShadow: "0 0 9px rgba(212, 175, 55, 0.75), 0 0 18px rgba(212, 175, 55, 0.35)",
+          background: `radial-gradient(circle, hsl(var(--primary) / 0.85) 0%, hsl(var(--primary) / 0.25) 70%)`,
+          boxShadow: `0 0 9px hsl(var(--primary) / 0.75), 0 0 18px hsl(var(--primary) / 0.35)`,
           filter: "blur(0.5px)",
         }}
       />
@@ -208,8 +208,8 @@ export function AnimatedBackground() {
       <div
         className="absolute h-1 w-1 rounded-full"
         style={{
-          background: "radial-gradient(circle, rgba(58, 111, 248, 0.8) 0%, rgba(58, 111, 248, 0.2) 70%)",
-          boxShadow: "0 0 6px rgba(58, 111, 248, 0.6)",
+          background: `radial-gradient(circle, hsl(var(--accent) / 0.8) 0%, hsl(var(--accent) / 0.2) 70%)`,
+          boxShadow: `0 0 6px hsl(var(--accent) / 0.6)`,
           animation: "particle-curve-1 12s ease-in-out infinite",
           animationDelay: "4s",
         }}

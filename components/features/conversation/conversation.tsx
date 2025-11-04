@@ -16,7 +16,7 @@ export function Conversation() {
     <div className="relative min-h-screen flex flex-col">
       {/* Background with dark cream and lines */}
       <div className="fixed inset-0 -z-10 overflow-hidden" aria-hidden="true">
-        <div className="absolute inset-0 bg-[#F5F0E8]"></div>
+        <div className="absolute inset-0" style={{ backgroundColor: "hsl(var(--conversation-bg))" }}></div>
         
         {/* Subtle gradient overlay */}
         <div className="absolute inset-0 bg-gradient-to-br from-transparent via-background/20 to-transparent"></div>
@@ -29,14 +29,14 @@ export function Conversation() {
         >
           <defs>
             <linearGradient id="convLineGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="rgba(180, 180, 180, 0)" />
-              <stop offset="50%" stopColor="rgba(180, 180, 180, 0.2)" />
-              <stop offset="100%" stopColor="rgba(180, 180, 180, 0)" />
+              <stop offset="0%" stopColor="hsl(0 0% 71% / 0)" />
+              <stop offset="50%" stopColor="hsl(0 0% 71% / 0.2)" />
+              <stop offset="100%" stopColor="hsl(0 0% 71% / 0)" />
             </linearGradient>
             <linearGradient id="convGoldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="rgba(212, 175, 55, 0)" />
-              <stop offset="50%" stopColor="rgba(212, 175, 55, 0.3)" />
-              <stop offset="100%" stopColor="rgba(212, 175, 55, 0)" />
+              <stop offset="0%" stopColor="hsl(var(--primary) / 0)" />
+              <stop offset="50%" stopColor="hsl(var(--primary) / 0.3)" />
+              <stop offset="100%" stopColor="hsl(var(--primary) / 0)" />
             </linearGradient>
             <filter id="convGlow">
               <feGaussianBlur stdDeviation="1.5" result="coloredBlur"/>
@@ -78,14 +78,14 @@ export function Conversation() {
           {/* Connecting branches */}
           <path
             d="M 450 400 Q 350 450, 300 500 Q 250 550, 220 600"
-            stroke="rgba(180, 180, 180, 0.15)"
+            stroke="hsl(0 0% 71% / 0.15)"
             strokeWidth="0.8"
             fill="none"
             strokeLinecap="round"
           />
           <path
             d="M 450 400 Q 550 450, 650 500 Q 750 550, 850 600"
-            stroke="rgba(180, 180, 180, 0.15)"
+            stroke="hsl(0 0% 71% / 0.15)"
             strokeWidth="0.8"
             fill="none"
             strokeLinecap="round"
@@ -94,7 +94,7 @@ export function Conversation() {
           {/* Subtle top curve */}
           <path
             d="M 0 300 Q 500 250, 1000 280 Q 1440 300, 1440 300"
-            stroke="rgba(180, 180, 180, 0.1)"
+            stroke="hsl(0 0% 71% / 0.1)"
             strokeWidth="0.8"
             fill="none"
             strokeLinecap="round"
@@ -103,14 +103,14 @@ export function Conversation() {
           {/* Radial lines from center */}
           <path
             d="M 720 450 Q 600 500, 500 550"
-            stroke="rgba(200, 200, 200, 0.12)"
+            stroke="hsl(0 0% 78% / 0.12)"
             strokeWidth="0.6"
             fill="none"
             strokeLinecap="round"
           />
           <path
             d="M 720 450 Q 840 500, 940 550"
-            stroke="rgba(200, 200, 200, 0.12)"
+            stroke="hsl(0 0% 78% / 0.12)"
             strokeWidth="0.6"
             fill="none"
             strokeLinecap="round"
@@ -121,8 +121,8 @@ export function Conversation() {
         <div
           className="absolute h-2 w-2 rounded-full"
           style={{
-            background: "radial-gradient(circle, rgba(212, 175, 55, 0.9) 0%, rgba(212, 175, 55, 0.3) 70%)",
-            boxShadow: "0 0 12px rgba(212, 175, 55, 0.9), 0 0 24px rgba(212, 175, 55, 0.5)",
+            background: `radial-gradient(circle, hsl(var(--primary) / 0.9) 0%, hsl(var(--primary) / 0.3) 70%)`,
+            boxShadow: `0 0 12px hsl(var(--primary) / 0.9), 0 0 24px hsl(var(--primary) / 0.5)`,
             filter: "blur(0.5px)",
             animation: "particle-curve-1 10s ease-in-out infinite",
           }}
@@ -132,8 +132,8 @@ export function Conversation() {
         <div
           className="absolute h-1.5 w-1.5 rounded-full"
           style={{
-            background: "radial-gradient(circle, rgba(212, 175, 55, 0.8) 0%, rgba(212, 175, 55, 0.2) 70%)",
-            boxShadow: "0 0 10px rgba(212, 175, 55, 0.8), 0 0 20px rgba(212, 175, 55, 0.4)",
+            background: `radial-gradient(circle, hsl(var(--primary) / 0.8) 0%, hsl(var(--primary) / 0.2) 70%)`,
+            boxShadow: `0 0 10px hsl(var(--primary) / 0.8), 0 0 20px hsl(var(--primary) / 0.4)`,
             filter: "blur(0.5px)",
             animation: "particle-curve-2 12s ease-in-out infinite",
             animationDelay: "3s",

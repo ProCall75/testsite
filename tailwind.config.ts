@@ -22,11 +22,13 @@ const config = {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
-        background: "#FFF9F2",
-        foreground: "#1A1A1A",
+        background: "hsl(var(--background))",
+        foreground: "hsl(var(--foreground))",
         primary: {
-          DEFAULT: "#D4AF37",
-          foreground: "#1A1A1A",
+          DEFAULT: "hsl(var(--primary))",
+          foreground: "hsl(var(--primary-foreground))",
+          light: "hsl(var(--primary-light))",
+          dark: "hsl(var(--primary-dark))",
         },
         secondary: {
           DEFAULT: "hsl(var(--secondary))",
@@ -43,6 +45,8 @@ const config = {
         accent: {
           DEFAULT: "hsl(var(--accent))",
           foreground: "hsl(var(--accent-foreground))",
+          light: "hsl(var(--accent-light))",
+          dark: "hsl(var(--accent-dark))",
         },
         popover: {
           DEFAULT: "hsl(var(--popover))",
@@ -53,19 +57,19 @@ const config = {
           foreground: "hsl(var(--card-foreground))",
         },
         gold: {
-          DEFAULT: "#D4AF37",
-          light: "#E5C966",
-          dark: "#B8941F",
+          DEFAULT: "hsl(var(--primary))",
+          light: "hsl(var(--primary-light))",
+          dark: "hsl(var(--primary-dark))",
         },
         blue: {
-          DEFAULT: "#3A6FF8",
-          light: "#5B8AFF",
-          dark: "#2A5BD9",
+          DEFAULT: "hsl(var(--accent))",
+          light: "hsl(var(--accent-light))",
+          dark: "hsl(var(--accent-dark))",
         },
       },
       fontFamily: {
-        sans: ['Inter', 'SF Pro Display', 'Söhne', 'system-ui', 'sans-serif'],
-        serif: ['var(--font-fraunces)', 'Fraunces', 'serif'],
+        sans: ['var(--font-sans)', 'Inter', 'SF Pro Display', 'Söhne', 'system-ui', 'sans-serif'],
+        serif: ['var(--font-serif)', 'var(--font-fraunces)', 'Fraunces', 'serif'],
       },
       borderRadius: {
         lg: "var(--radius)",

@@ -1,3 +1,6 @@
-// Constantes du projet
-// TODO: Ajouter les constantes partagées ici
+/**
+ * Design system constants - Centralized exports
+ */
 
+export * from './colors'
+export * from './tokens'

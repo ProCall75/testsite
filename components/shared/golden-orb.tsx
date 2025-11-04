@@ -35,7 +35,7 @@ export function GoldenOrb({ className, isActive = false, size = "default", varia
           <div
             className="absolute inset-0 rounded-full"
             style={{
-              background: `radial-gradient(circle at 40% 40%, rgba(58, 111, 248, 0.6) 0%, rgba(212, 175, 55, 0.5) 30%, rgba(212, 175, 55, 0.3) 50%, rgba(255, 255, 255, 0.15) 70%, rgba(255, 255, 255, 0.05) 100%)`,
+              background: `radial-gradient(circle at 40% 40%, hsl(var(--accent) / 0.6) 0%, hsl(var(--primary) / 0.5) 30%, hsl(var(--primary) / 0.3) 50%, hsl(0 0% 100% / 0.15) 70%, hsl(0 0% 100% / 0.05) 100%)`,
             }}
           />
           
@@ -43,7 +43,7 @@ export function GoldenOrb({ className, isActive = false, size = "default", varia
           <div
             className="absolute -inset-[20%] rounded-full orb-celestial-glow"
             style={{
-              background: `radial-gradient(circle, rgba(212, 175, 55, 0.4) 0%, rgba(58, 111, 248, 0.3) 50%, transparent 70%)`,
+              background: `radial-gradient(circle, hsl(var(--primary) / 0.4) 0%, hsl(var(--accent) / 0.3) 50%, transparent 70%)`,
               filter: "blur(40px)",
             }}
           />
@@ -52,7 +52,7 @@ export function GoldenOrb({ className, isActive = false, size = "default", varia
           <div
             className="absolute inset-[15%] rounded-full"
             style={{
-              background: `radial-gradient(circle, rgba(255, 255, 255, 0.6) 0%, rgba(212, 175, 55, 0.3) 40%, transparent 70%)`,
+              background: `radial-gradient(circle, hsl(0 0% 100% / 0.6) 0%, hsl(var(--primary) / 0.3) 40%, transparent 70%)`,
               filter: "blur(25px)",
             }}
           />
@@ -61,7 +61,7 @@ export function GoldenOrb({ className, isActive = false, size = "default", varia
           <div
             className="absolute left-[30%] top-[30%] h-16 w-16 sm:h-20 sm:w-20 lg:h-24 lg:w-24 rounded-full opacity-70 refraction-effect"
             style={{
-              background: `radial-gradient(circle, rgba(255, 255, 255, 0.9) 0%, rgba(58, 111, 248, 0.4) 50%, transparent 70%)`,
+              background: `radial-gradient(circle, hsl(0 0% 100% / 0.9) 0%, hsl(var(--accent) / 0.4) 50%, transparent 70%)`,
               filter: "blur(12px)",
               backgroundSize: "200% 200%",
             }}
@@ -73,7 +73,7 @@ export function GoldenOrb({ className, isActive = false, size = "default", varia
           <div
             className="absolute inset-0 rounded-full"
             style={{
-              background: `radial-gradient(circle at 30% 30%, rgba(212, 175, 55, 0.5) 0%, rgba(212, 175, 55, 0.2) 40%, rgba(255, 255, 255, 0.15) 70%, rgba(255, 255, 255, 0.05) 100%)`,
+              background: `radial-gradient(circle at 30% 30%, hsl(var(--primary) / 0.5) 0%, hsl(var(--primary) / 0.2) 40%, hsl(0 0% 100% / 0.15) 70%, hsl(0 0% 100% / 0.05) 100%)`,
             }}
           />
           
@@ -84,7 +84,7 @@ export function GoldenOrb({ className, isActive = false, size = "default", varia
               isActive && "opacity-50"
             )}
             style={{
-              background: `radial-gradient(circle, rgba(255, 255, 255, 0.4) 0%, transparent 70%)`,
+              background: `radial-gradient(circle, hsl(0 0% 100% / 0.4) 0%, transparent 70%)`,
               filter: "blur(20px)",
             }}
           />
@@ -93,7 +93,7 @@ export function GoldenOrb({ className, isActive = false, size = "default", varia
           <div
             className="absolute left-[25%] top-[25%] h-8 w-8 rounded-full opacity-60 refraction-effect"
             style={{
-              background: `radial-gradient(circle, rgba(255, 255, 255, 0.8) 0%, transparent 70%)`,
+              background: `radial-gradient(circle, hsl(0 0% 100% / 0.8) 0%, transparent 70%)`,
               filter: "blur(8px)",
               backgroundSize: "200% 200%",
             }}
@@ -103,7 +103,7 @@ export function GoldenOrb({ className, isActive = false, size = "default", varia
           <div
             className="absolute inset-0 rounded-full opacity-20"
             style={{
-              background: `linear-gradient(135deg, rgba(255, 255, 255, 0.3) 0%, transparent 50%)`,
+              background: `linear-gradient(135deg, hsl(0 0% 100% / 0.3) 0%, transparent 50%)`,
             }}
           />
           
@@ -112,7 +112,7 @@ export function GoldenOrb({ className, isActive = false, size = "default", varia
             <div
               className="absolute inset-0 rounded-full"
               style={{
-                background: `radial-gradient(circle, rgba(212, 175, 55, 0.3) 0%, transparent 70%)`,
+                background: `radial-gradient(circle, hsl(var(--primary) / 0.3) 0%, transparent 70%)`,
                 filter: "blur(15px)",
               }}
             />

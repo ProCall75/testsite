@@ -4,41 +4,130 @@
 
 @layer base {
   :root {
-    --glass-bg: rgba(255, 255, 255, 0.35);
-    --glass-blur: blur(20px) saturate(180%);
-    --glass-border: rgba(255, 255, 255, 0.25);
-    --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
-    --glass-gold: rgba(212, 175, 55, 0.3);
-    --inner-glow: rgba(255, 255, 255, 0.15);
-    
-    /* Depth shadows with inset highlights */
-    --shadow-s: inset 0 1px 2px rgba(255, 255, 255, 0.18), 0 1px 2px rgba(0, 0, 0, 0.18), 0 2px 4px rgba(0, 0, 0, 0.08);
-    --shadow-m: inset 0 1px 2px rgba(255, 255, 255, 0.3), 0 2px 4px rgba(0, 0, 0, 0.18), 0 4px 8px rgba(0, 0, 0, 0.08);
-    --shadow-l: inset 0 1px 2px rgba(255, 255, 255, 0.4), 0 4px 6px rgba(0, 0, 0, 0.18), 0 6px 10px rgba(0, 0, 0, 0.08);
-    
-    --navbar-glass-bg: rgba(255, 255, 255, 0.25);
-    --navbar-glass-blur: blur(20px) saturate(160%);
-    
-    --background: 0 0% 100%;
+    /* Color tokens - Core theme colors */
+    --background: 47 100% 98%;
     --foreground: 0 0% 10%;
     --card: 0 0% 100%;
     --card-foreground: 0 0% 10%;
     --popover: 0 0% 100%;
     --popover-foreground: 0 0% 10%;
-    --primary: 0 0% 10%;
-    --primary-foreground: 0 0% 98%;
+    --primary: 47 67% 52%;
+    --primary-foreground: 0 0% 10%;
+    --primary-light: 47 67% 66%;
+    --primary-dark: 47 67% 40%;
     --secondary: 0 0% 96%;
     --secondary-foreground: 0 0% 10%;
     --muted: 0 0% 96%;
     --muted-foreground: 0 0% 45%;
-    --accent: 0 0% 96%;
-    --accent-foreground: 0 0% 10%;
+    --accent: 220 92% 60%;
+    --accent-foreground: 0 0% 98%;
+    --accent-light: 220 92% 68%;
+    --accent-dark: 220 92% 50%;
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 98%;
     --border: 0 0% 90%;
     --input: 0 0% 90%;
-    --ring: 0 0% 10%;
+    --ring: 47 67% 52%;
     --radius: 0.5rem;
+    
+    /* Typography tokens */
+    --font-sans: 'Inter', 'SF Pro Display', 'Söhne', 'system-ui', 'sans-serif';
+    --font-serif: 'var(--font-fraunces)', 'Fraunces', 'serif';
+    --font-weight-normal: 400;
+    --font-weight-medium: 500;
+    --font-weight-semibold: 600;
+    --font-weight-bold: 700;
+    
+    /* Glass effect tokens - Base */
+    --glass-bg: hsl(0 0% 100% / 0.35);
+    --glass-blur: blur(20px) saturate(180%);
+    --glass-border: hsl(0 0% 100% / 0.25);
+    --glass-shadow: 0 8px 32px hsl(0 0% 0% / 0.05);
+    --glass-white-opacity-low: hsl(0 0% 100% / 0.15);
+    --glass-white-opacity-mid: hsl(0 0% 100% / 0.32);
+    --glass-white-opacity-high: hsl(0 0% 100% / 0.42);
+    
+    /* Glass effect tokens - Gold (derived from primary) */
+    --glass-gold-base: hsl(var(--primary) / 0.3);
+    --glass-gold-light: hsl(var(--primary-light) / 0.2);
+    --glass-gold-dark: hsl(var(--primary-dark) / 0.18);
+    --glass-gold-border: hsl(var(--primary) / 0.6);
+    --glass-gold-border-hover: hsl(var(--primary) / 0.75);
+    --glass-gold-glow: hsl(var(--primary) / 0.2);
+    
+    /* Glass effect tokens - Blue (derived from accent) */
+    --glass-blue-base: hsl(var(--accent) / 0.3);
+    --glass-blue-light: hsl(var(--accent-light) / 0.2);
+    --glass-blue-dark: hsl(var(--accent-dark) / 0.18);
+    --glass-blue-border: hsl(var(--accent) / 0.6);
+    --glass-blue-border-hover: hsl(var(--accent) / 0.75);
+    --glass-blue-glow: hsl(var(--accent) / 0.2);
+    
+    /* Legacy glass variables (converted to use tokens) */
+    --glass-gold: hsl(var(--primary) / 0.3);
+    --inner-glow: hsl(0 0% 100% / 0.15);
+    
+    /* Depth shadows with inset highlights */
+    --shadow-s: inset 0 1px 2px hsl(0 0% 100% / 0.18), 0 1px 2px hsl(0 0% 0% / 0.18), 0 2px 4px hsl(0 0% 0% / 0.08);
+    --shadow-m: inset 0 1px 2px hsl(0 0% 100% / 0.3), 0 2px 4px hsl(0 0% 0% / 0.18), 0 4px 8px hsl(0 0% 0% / 0.08);
+    --shadow-l: inset 0 1px 2px hsl(0 0% 100% / 0.4), 0 4px 6px hsl(0 0% 0% / 0.18), 0 6px 10px hsl(0 0% 0% / 0.08);
+    
+    --navbar-glass-bg: hsl(0 0% 100% / 0.25);
+    --navbar-glass-blur: blur(20px) saturate(160%);
+    
+    /* SVG gradient tokens */
+    --svg-line-color: hsl(0 0% 78% / 0.25);
+    --svg-line-subtle: hsl(0 0% 78% / 0.18);
+    --svg-line-light: hsl(0 0% 78% / 0.12);
+    --svg-primary-gradient-start: hsl(var(--primary) / 0);
+    --svg-primary-gradient-mid: hsl(var(--primary) / 0.35);
+    --svg-primary-gradient-end: hsl(var(--primary) / 0);
+    --svg-accent-stroke: hsl(var(--accent) / 0.15);
+    --svg-primary-stroke: hsl(var(--primary) / 0.25);
+    --particle-primary-glow: hsl(var(--primary) / 0.8);
+    --particle-accent-glow: hsl(var(--accent) / 0.6);
+    
+    /* Component-specific background tokens */
+    --conversation-bg: hsl(47 30% 96%);
+    
+    /* Nebula glass effect tokens */
+    --nebula-accent-light: hsl(220 20% 85% / 0.12);
+    --nebula-accent-subtle: hsl(220 20% 85% / 0.06);
+  }
+  
+  .dark {
+    /* Color tokens - Dark mode */
+    --background: 0 0% 5%;
+    --foreground: 0 0% 98%;
+    --card: 0 0% 8%;
+    --card-foreground: 0 0% 98%;
+    --popover: 0 0% 8%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 47 67% 52%;
+    --primary-foreground: 0 0% 98%;
+    --primary-light: 47 67% 66%;
+    --primary-dark: 47 67% 40%;
+    --secondary: 0 0% 15%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 0 0% 15%;
+    --muted-foreground: 0 0% 65%;
+    --accent: 220 92% 60%;
+    --accent-foreground: 0 0% 98%;
+    --accent-light: 220 92% 68%;
+    --accent-dark: 220 92% 50%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 20%;
+    --input: 0 0% 20%;
+    --ring: 47 67% 52%;
+    
+    /* Glass effect tokens - Dark mode adjustments */
+    --glass-bg: hsl(0 0% 100% / 0.15);
+    --glass-border: hsl(0 0% 100% / 0.15);
+    --glass-white-opacity-low: hsl(0 0% 100% / 0.1);
+    --glass-white-opacity-mid: hsl(0 0% 100% / 0.2);
+    --glass-white-opacity-high: hsl(0 0% 100% / 0.3);
+    --navbar-glass-bg: hsl(0 0% 100% / 0.15);
   }
   
   * {
@@ -67,19 +156,19 @@
   .glass-gold {
     background: linear-gradient(
       135deg,
-      rgba(212, 175, 55, 0.2) 0%,
-      rgba(255, 255, 255, 0.38) 50%,
-      rgba(212, 175, 55, 0.12) 100%
+      hsl(var(--primary) / 0.2) 0%,
+      hsl(0 0% 100% / 0.38) 50%,
+      hsl(var(--primary) / 0.12) 100%
     );
     backdrop-filter: blur(20px) saturate(180%);
     -webkit-backdrop-filter: blur(20px) saturate(180%);
-    border: 0.5px solid rgba(212, 175, 55, 0.6);
+    border: 0.5px solid var(--glass-gold-border);
     box-shadow: 
-      inset 0 1px 1px rgba(255, 255, 255, 0.5),
-      inset 0 -0.5px 0.5px rgba(212, 175, 55, 0.15),
-      0 1px 2px rgba(0, 0, 0, 0.1),
-      0 2px 4px rgba(0, 0, 0, 0.06);
-    color: #0A0A0A;
+      inset 0 1px 1px hsl(0 0% 100% / 0.5),
+      inset 0 -0.5px 0.5px hsl(var(--primary) / 0.15),
+      0 1px 2px hsl(0 0% 0% / 0.1),
+      0 2px 4px hsl(0 0% 0% / 0.06);
+    color: hsl(var(--foreground));
     position: relative;
     overflow: hidden;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -100,7 +189,7 @@
     background: linear-gradient(
       90deg,
       transparent,
-      rgba(255, 255, 255, 0.3),
+      hsl(0 0% 100% / 0.3),
       transparent
     );
     transition: left 0.5s ease;
@@ -120,62 +209,62 @@
   }
   
   .glass-button {
-    background: rgba(255, 255, 255, 0.32);
+    background: var(--glass-white-opacity-mid);
     backdrop-filter: blur(20px) saturate(180%);
     -webkit-backdrop-filter: blur(20px) saturate(180%);
-    border: 0.5px solid rgba(255, 255, 255, 0.5);
+    border: 0.5px solid hsl(0 0% 100% / 0.5);
     box-shadow: 
-      inset 0 1px 1px rgba(255, 255, 255, 0.5),
-      0 1px 2px rgba(0, 0, 0, 0.1),
-      0 2px 4px rgba(0, 0, 0, 0.06);
+      inset 0 1px 1px hsl(0 0% 100% / 0.5),
+      0 1px 2px hsl(0 0% 0% / 0.1),
+      0 2px 4px hsl(0 0% 0% / 0.06);
     transition: all 0.3s ease;
-    color: #0A0A0A;
+    color: hsl(var(--foreground));
   }
   
   .glass-button:hover {
-    background: rgba(255, 255, 255, 0.42);
+    background: var(--glass-white-opacity-high);
     backdrop-filter: blur(25px) saturate(200%);
     -webkit-backdrop-filter: blur(25px) saturate(200%);
-    border-color: rgba(255, 255, 255, 0.6);
+    border-color: hsl(0 0% 100% / 0.6);
     box-shadow: 
-      inset 0 1px 1px rgba(255, 255, 255, 0.6),
-      0 2px 4px rgba(0, 0, 0, 0.12),
-      0 4px 8px rgba(0, 0, 0, 0.08);
+      inset 0 1px 1px hsl(0 0% 100% / 0.6),
+      0 2px 4px hsl(0 0% 0% / 0.12),
+      0 4px 8px hsl(0 0% 0% / 0.08);
   }
   
   .glass-gold:hover {
     background: linear-gradient(
       135deg,
-      rgba(212, 175, 55, 0.28) 0%,
-      rgba(255, 255, 255, 0.45) 50%,
-      rgba(212, 175, 55, 0.18) 100%
+      hsl(var(--primary) / 0.28) 0%,
+      hsl(0 0% 100% / 0.45) 50%,
+      hsl(var(--primary) / 0.18) 100%
     );
-    border-color: rgba(212, 175, 55, 0.75);
+    border-color: var(--glass-gold-border-hover);
     box-shadow: 
-      inset 0 1px 1px rgba(255, 255, 255, 0.6),
-      inset 0 -0.5px 0.5px rgba(212, 175, 55, 0.2),
-      0 2px 4px rgba(0, 0, 0, 0.12),
-      0 4px 8px rgba(0, 0, 0, 0.08),
-      0 0 16px rgba(212, 175, 55, 0.2);
+      inset 0 1px 1px hsl(0 0% 100% / 0.6),
+      inset 0 -0.5px 0.5px hsl(var(--primary) / 0.2),
+      0 2px 4px hsl(0 0% 0% / 0.12),
+      0 4px 8px hsl(0 0% 0% / 0.08),
+      0 0 16px var(--glass-gold-glow);
     transform: translateY(-0.5px);
   }
   
   .glass-blue {
     background: linear-gradient(
       135deg,
-      rgba(58, 111, 248, 0.2) 0%,
-      rgba(255, 255, 255, 0.38) 50%,
-      rgba(58, 111, 248, 0.12) 100%
+      hsl(var(--accent) / 0.2) 0%,
+      hsl(0 0% 100% / 0.38) 50%,
+      hsl(var(--accent) / 0.12) 100%
     );
     backdrop-filter: blur(20px) saturate(180%);
     -webkit-backdrop-filter: blur(20px) saturate(180%);
-    border: 0.5px solid rgba(58, 111, 248, 0.6);
+    border: 0.5px solid var(--glass-blue-border);
     box-shadow: 
-      inset 0 1px 1px rgba(255, 255, 255, 0.5),
-      inset 0 -0.5px 0.5px rgba(58, 111, 248, 0.15),
-      0 1px 2px rgba(0, 0, 0, 0.1),
-      0 2px 4px rgba(0, 0, 0, 0.06);
-    color: #0A0A0A;
+      inset 0 1px 1px hsl(0 0% 100% / 0.5),
+      inset 0 -0.5px 0.5px hsl(var(--accent) / 0.15),
+      0 1px 2px hsl(0 0% 0% / 0.1),
+      0 2px 4px hsl(0 0% 0% / 0.06);
+    color: hsl(var(--foreground));
     position: relative;
     overflow: hidden;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -196,7 +285,7 @@
     background: linear-gradient(
       90deg,
       transparent,
-      rgba(255, 255, 255, 0.3),
+      hsl(0 0% 100% / 0.3),
       transparent
     );
     transition: left 0.5s ease;
@@ -206,17 +295,17 @@
   .glass-blue:hover {
     background: linear-gradient(
       135deg,
-      rgba(58, 111, 248, 0.28) 0%,
-      rgba(255, 255, 255, 0.45) 50%,
-      rgba(58, 111, 248, 0.18) 100%
+      hsl(var(--accent) / 0.28) 0%,
+      hsl(0 0% 100% / 0.45) 50%,
+      hsl(var(--accent) / 0.18) 100%
     );
-    border-color: rgba(58, 111, 248, 0.75);
+    border-color: var(--glass-blue-border-hover);
     box-shadow: 
-      inset 0 1px 1px rgba(255, 255, 255, 0.6),
-      inset 0 -0.5px 0.5px rgba(58, 111, 248, 0.2),
-      0 2px 4px rgba(0, 0, 0, 0.12),
-      0 4px 8px rgba(0, 0, 0, 0.08),
-      0 0 16px rgba(58, 111, 248, 0.2);
+      inset 0 1px 1px hsl(0 0% 100% / 0.6),
+      inset 0 -0.5px 0.5px hsl(var(--accent) / 0.2),
+      0 2px 4px hsl(0 0% 0% / 0.12),
+      0 4px 8px hsl(0 0% 0% / 0.08),
+      0 0 16px var(--glass-blue-glow);
     transform: translateY(-0.5px);
   }
   
@@ -226,24 +315,24 @@
   
   .text-glow {
     text-shadow: 
-      0 0 20px rgba(255, 255, 255, 0.1),
-      0 0 40px rgba(255, 255, 255, 0.05);
+      0 0 20px hsl(0 0% 100% / 0.1),
+      0 0 40px hsl(0 0% 100% / 0.05);
   }
   
   .inner-glow {
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15);
+    box-shadow: inset 0 1px 0 var(--inner-glow);
   }
   
   /* Nebula Glassmorphism Styles */
   .glass-nebula {
-    background: rgba(255, 255, 255, 0.15);
+    background: hsl(0 0% 100% / 0.15);
     backdrop-filter: blur(40px) saturate(180%);
     -webkit-backdrop-filter: blur(40px) saturate(180%);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    border: 1px solid hsl(0 0% 100% / 0.2);
     box-shadow: 
-      0 8px 32px rgba(0, 0, 0, 0.1),
-      inset 0 1px 0 rgba(255, 255, 255, 0.4),
-      inset 0 -1px 0 rgba(255, 255, 255, 0.1);
+      0 8px 32px hsl(0 0% 0% / 0.1),
+      inset 0 1px 0 hsl(0 0% 100% / 0.4),
+      inset 0 -1px 0 hsl(0 0% 100% / 0.1);
     position: relative;
     overflow: hidden;
   }
@@ -254,8 +343,8 @@
     inset: 0;
     background: radial-gradient(
       ellipse at top right,
-      rgba(255, 255, 255, 0.2),
-      rgba(255, 255, 255, 0)
+      hsl(0 0% 100% / 0.2),
+      hsl(0 0% 100% / 0)
     );
     pointer-events: none;
     z-index: 0;
@@ -271,7 +360,7 @@
     background: linear-gradient(
       90deg,
       transparent,
-      rgba(255, 255, 255, 0.4),
+      hsl(0 0% 100% / 0.4),
       transparent
     );
     pointer-events: none;
@@ -286,18 +375,18 @@
   .glass-nebula-card {
     background: linear-gradient(
       135deg,
-      rgba(255, 255, 255, 0.15) 0%,
-      rgba(255, 255, 255, 0.1) 50%,
-      rgba(200, 200, 220, 0.12) 100%
+      hsl(0 0% 100% / 0.15) 0%,
+      hsl(0 0% 100% / 0.1) 50%,
+      var(--nebula-accent-light) 100%
     );
     backdrop-filter: blur(40px) saturate(180%);
     -webkit-backdrop-filter: blur(40px) saturate(180%);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    border: 1px solid hsl(0 0% 100% / 0.2);
     box-shadow: 
-      0 8px 32px rgba(0, 0, 0, 0.12),
-      inset 0 1px 0 rgba(255, 255, 255, 0.5),
-      inset 0 -1px 0 rgba(255, 255, 255, 0.1),
-      inset 0 0 40px rgba(150, 180, 255, 0.05);
+      0 8px 32px hsl(0 0% 0% / 0.12),
+      inset 0 1px 0 hsl(0 0% 100% / 0.5),
+      inset 0 -1px 0 hsl(0 0% 100% / 0.1),
+      inset 0 0 40px hsl(var(--accent) / 0.05);
     position: relative;
     overflow: hidden;
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
@@ -309,9 +398,9 @@
     inset: 0;
     background: radial-gradient(
       ellipse at top right,
-      rgba(255, 255, 255, 0.25),
-      rgba(200, 220, 255, 0.1),
-      rgba(255, 255, 255, 0)
+      hsl(0 0% 100% / 0.25),
+      hsl(var(--accent) / 0.1),
+      hsl(0 0% 100% / 0)
     );
     pointer-events: none;
     z-index: 0;
@@ -327,7 +416,7 @@
     background: linear-gradient(
       90deg,
       transparent,
-      rgba(255, 255, 255, 0.5),
+      hsl(0 0% 100% / 0.5),
       transparent
     );
     pointer-events: none;
@@ -342,28 +431,28 @@
   .glass-nebula-card:hover {
     transform: translateY(-4px);
     box-shadow: 
-      0 12px 48px rgba(0, 0, 0, 0.15),
-      inset 0 1px 0 rgba(255, 255, 255, 0.6),
-      inset 0 -1px 0 rgba(255, 255, 255, 0.15),
-      inset 0 0 50px rgba(150, 180, 255, 0.08);
-    border-color: rgba(255, 255, 255, 0.3);
+      0 12px 48px hsl(0 0% 0% / 0.15),
+      inset 0 1px 0 hsl(0 0% 100% / 0.6),
+      inset 0 -1px 0 hsl(0 0% 100% / 0.15),
+      inset 0 0 50px hsl(var(--accent) / 0.08);
+    border-color: hsl(0 0% 100% / 0.3);
   }
   
   .glass-nebula-mockup {
     background: linear-gradient(
       135deg,
-      rgba(255, 255, 255, 0.15) 0%,
-      rgba(255, 255, 255, 0.08) 50%,
-      rgba(200, 200, 220, 0.06) 100%
+      hsl(0 0% 100% / 0.15) 0%,
+      hsl(0 0% 100% / 0.08) 50%,
+      var(--nebula-accent-subtle) 100%
     );
     backdrop-filter: blur(60px) saturate(180%);
     -webkit-backdrop-filter: blur(60px) saturate(180%);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    border: 1px solid hsl(0 0% 100% / 0.2);
     box-shadow: 
-      0 8px 32px rgba(0, 0, 0, 0.08),
-      inset 0 1px 0 rgba(255, 255, 255, 0.5),
-      inset 0 -1px 0 rgba(255, 255, 255, 0.1),
-      inset 0 0 80px rgba(150, 180, 255, 0.04);
+      0 8px 32px hsl(0 0% 0% / 0.08),
+      inset 0 1px 0 hsl(0 0% 100% / 0.5),
+      inset 0 -1px 0 hsl(0 0% 100% / 0.1),
+      inset 0 0 80px hsl(var(--accent) / 0.04);
     position: relative;
     overflow: hidden;
   }
@@ -374,8 +463,8 @@
     inset: 0;
     background: radial-gradient(
       ellipse at top right,
-      rgba(255, 255, 255, 0.25),
-      rgba(200, 220, 255, 0.12),
+      hsl(0 0% 100% / 0.25),
+      hsl(var(--accent) / 0.12),
       transparent 70%
     );
     pointer-events: none;
@@ -392,7 +481,7 @@
     background: linear-gradient(
       90deg,
       transparent,
-      rgba(255, 255, 255, 0.5),
+      hsl(0 0% 100% / 0.5),
       transparent
     );
     pointer-events: none;
@@ -406,13 +495,13 @@
   
   /* Notification card glass effect */
   .glass-notification {
-    background: rgba(255, 255, 255, 0.12);
+    background: hsl(0 0% 100% / 0.12);
     backdrop-filter: blur(40px) saturate(180%);
     -webkit-backdrop-filter: blur(40px) saturate(180%);
-    border: 1px solid rgba(255, 255, 255, 0.15);
+    border: 1px solid hsl(0 0% 100% / 0.15);
     box-shadow: 
-      0 4px 16px rgba(0, 0, 0, 0.06),
-      inset 0 1px 0 rgba(255, 255, 255, 0.4);
+      0 4px 16px hsl(0 0% 0% / 0.06),
+      inset 0 1px 0 hsl(0 0% 100% / 0.4);
     position: relative;
     overflow: hidden;
   }
@@ -423,7 +512,7 @@
     inset: 0;
     background: radial-gradient(
       ellipse at top left,
-      rgba(255, 255, 255, 0.2),
+      hsl(0 0% 100% / 0.2),
       transparent 60%
     );
     pointer-events: none;
