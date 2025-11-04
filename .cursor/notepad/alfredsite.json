@@ -1,0 +1,20 @@
+{
+    "context": {
+      "project": "Alfred SITE",
+      "macro_active": "Macro_2",
+      "phase_active": "Phase_2_Diagnostic",
+      "subphase_active": "2.1_AuditStructure",
+      "mode": "strict"
+    },
+    "imports": [
+      "core.global",
+      "site.workflow",
+      "dev.architecture",
+      "validation.ai"
+    ],
+    "last_check": {
+      "date": "2025-11-03",
+      "status": "IN_PROGRESS",
+      "summary": "Audit structure en cours."
+    }
+  }

@@ -1,0 +1,14 @@
+name: Core Global
+description: >
+  Règle de base pour toutes les actions sur le projet Alfred SITE.
+  Garantit la cohérence, la clarté et la structure 3C (Context → Command → Check).
+
+alwaysApply: true
+
+instructions:
+  - Toujours formater la réponse selon le schéma :
+      Context → Command → Check.
+  - Fournir des explications concises et factuelles.
+  - Ne jamais dépasser le périmètre de la tâche demandée.
+  - Utiliser un ton professionnel, précis, sans langage décoratif.
+  - Optimiser la clarté et la structure du résultat plutôt que le volume de texte.
