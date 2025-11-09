@@ -11,11 +11,8 @@ export default function AppLayout({
     <main className="min-h-screen relative">
       <AnimatedBackground />
       <Navbar />
-      <div className="pt-16">
-        {children}
-      </div>
+      {children}
       <Footer />
     </main>
   )
 }
-

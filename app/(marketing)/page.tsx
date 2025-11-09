@@ -1,7 +1,6 @@
 import { Hero } from "@/components/sections/hero"
 import { Landing } from "@/components/sections/landing"
 import { BenefitStrip } from "@/components/sections/benefit-strip"
-import { MockupSection } from "@/components/sections/mockup-section"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 
@@ -11,7 +10,6 @@ export default function Home() {
       <Hero />
       <Landing />
       <BenefitStrip />
-      <MockupSection />
 
       {/* Secondary CTA */}
       <section className="relative py-16 px-4 sm:px-6 lg:px-8">

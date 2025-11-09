@@ -1,0 +1,53 @@
+## description: Base rule for all actions on the Alfred SITE project. Ensures consistency, clarity, and 3C structure (Context → Command → Check).
+
+alwaysApply: true
+
+# Global Directives
+
+- Always format the response according to the schema: **Context → Command → Check**
+
+- Provide concise and factual explanations.
+
+- Never exceed the scope of the requested task.
+
+- Use a professional, precise tone, without decorative language.
+
+- Optimize clarity and structure of the result rather than volume of text.
+
+- storybook-ui.mdc:
+
+Storyboard-only UI testing workflow – generation and addition of stories without modification of production code.
+
+    globs: ["src/components/**/*.stories.tsx", "src/components/**/*.stories.jsx"]
+
+    alwaysApply: true
+
+    # Story Placement and Naming
+
+    - For each component under `src/components/<ComponentName>/`, create a single story file: `<ComponentName>.stories.tsx`.
+
+    - Place the story **in the same folder** as the component.
+
+    - **Never** modify the component's implementation file.
+
+    # Mandatory Content
+
+    - Include a `Default` story (main state).
+
+    - Add at least two variants (`Loading`, `Error` or `Empty`).
+
+    - Use `args` and Storybook Controls for interactive props.
+
+    - Mock all external dependencies: stories must never call real APIs.
+
+    # Tests & Accessibility
+
+    - Prepare each story for visual tests (Playwright, snapshots).
+
+    - Add a variant demonstrating accessibility compliance (keyboard focus, ARIA, etc.).
+
+    # Documentation
+
+    - Enable `docs: { page: true }` for each story.
+
+    - Add this sentence as the first line: "This story belongs to the Design System component library."

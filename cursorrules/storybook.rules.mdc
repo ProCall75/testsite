@@ -1,0 +1,79 @@
+---
+
+alwaysApply: true
+
+---
+
+# 🎨 Storybook — Phase 3.1
+
+## Objective
+
+Execute, document, and test exclusively in Storybook.
+
+No verification, creation, or validation should rely on direct source code.
+
+---
+
+## Cursor Rules
+
+- **Source of Truth**
+
+  - Storybook = unique visual and functional reference.
+
+  - ALL source code (`src/`, `app/`, `lib/`, `components/`, etc.) is frozen execution support, NEVER a repository. Even if I tell you to redo anything without specifying if it's in story or source, consider that you MUST NEVER TOUCH ANY SOURCE CODE, only Storybook.
+
+- **Components**
+
+  - Reuse only components already exposed in Storybook.
+
+  - If a component doesn't exist yet, create a `WIP` story in
+
+    `stories/Design System/Components/` (never in `src/components`).
+
+- **Tokens**
+
+  - Use the values present in
+
+    `stories/Design System/Tokens/` as the official reference.
+
+  - Do not modify or read `lib/constants/tokens.ts` during phase 3.1.
+
+- **Accessibility**
+
+  - Provide at least one story variant with `aria-label`, `tabIndex`, and keyboard focus.
+
+- **Tests**
+
+  - All validations (visual, design, consistency, accessibility) are done via stories.
+
+  - No direct source code verification.
+
+- **Exclusions**
+
+  - No creation or modification in ANY source code directories (`src/`, `app/`, `lib/`, `components/`, `hooks/`, etc.).
+
+  - No addition of new tokens outside Storybook.
+
+  - No testing or preview outside Storybook environment.
+
+---
+
+## Examples
+
+Good:
+
+> Create a "Button – Accessible" story in `stories/Design System/Components/Buttons.stories.tsx`
+
+> and reference the tokens from `stories/Design System/Tokens/Typography.stories.tsx`.
+
+❌ Bad:
+
+> Modify `src/components/ui/button.tsx` to test a style or token.
+
+---
+
+## Context
+
+Phase: Macro 3.1 — Routing & Design Consistency
+
+Design system: frozen (commit

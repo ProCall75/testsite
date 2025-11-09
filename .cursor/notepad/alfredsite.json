@@ -1,20 +1,18 @@
 {
-    "context": {
-      "project": "Alfred SITE",
-      "macro_active": "Macro_2",
-      "phase_active": "Phase_2_Diagnostic",
-      "subphase_active": "2.1_AuditStructure",
-      "mode": "strict"
-    },
-    "imports": [
-      "core.global",
-      "site.workflow",
-      "dev.architecture",
-      "validation.ai"
-    ],
-    "last_check": {
-      "date": "2025-11-03",
-      "status": "IN_PROGRESS",
-      "summary": "Audit structure en cours."
-    }
+  "context": {
+    "project": "Alfred SITE",
+    "macro_active": "Macro_3",
+    "phase_active": "Phase_3.1_RoutageEtCohérenceDesign",
+    "subphase_active": "3.1.2_TestStorybook",
+    "mode": "strict"
+  },
+  "imports": [
+    "core.global",
+    "storybook.rules"
+  ],
+  "last_check": {
+    "date": "2025-11-05",
+    "status": "ACTIVE",
+    "summary": "Session Storybook-only en cours — règle storybook.rules.yaml appliquée (alwaysApply:true). Objectif : test et documentation des composants visuels sans altération du code de production."
   }
+}

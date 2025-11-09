@@ -40,6 +40,7 @@ export function Hero() {
                 variant="glass-blue"
                 size="lg"
                 className="w-full sm:w-auto px-8 py-6 text-base"
+                style={{ borderRadius: '12px' }}
                 asChild
               >
                 <Link href="/inscription">Discuter de vive voix avec Alfred</Link>
@@ -48,6 +49,7 @@ export function Hero() {
                 variant="glass-secondary"
                 size="lg"
                 className="w-full sm:w-auto px-8 py-6 text-base"
+                style={{ borderRadius: '12px' }}
                 asChild
               >
                 <Link href="#fonctionnalites">Découvrir les offres</Link>
