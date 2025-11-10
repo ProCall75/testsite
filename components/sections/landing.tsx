@@ -1,44 +1,50 @@
 "use client"
 
 import React from "react"
-import { Card, CardContent } from "../ui/card"
-
-const features = [
-  {
-    title: "Réception intelligente",
-    description: "Alfred répond comme vous.",
-    icon: (
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
-      </svg>
-    ),
-  },
-  {
-    title: "Agenda auto",
-    description: "Vos rendez-vous gérés sans effort.",
-    icon: (
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <rect x="3" y="4" width="18" height="18" rx="2" ry="2" stroke="currentColor" strokeWidth="2" fill="none"/>
-        <line x1="16" y1="2" x2="16" y2="6" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-        <line x1="8" y1="2" x2="8" y2="6" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-        <line x1="3" y1="10" x2="21" y2="10" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-        <path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01M16 18h.01" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-      </svg>
-    ),
-  },
-  {
-    title: "Notifications",
-    description: "SMS ou WhatsApp instantanés.",
-    icon: (
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
-        <path d="M8 10h.01M12 10h.01M16 10h.01" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-      </svg>
-    ),
-  },
-]
+import { Phone, Calendar, MessageSquare, Users, Clock, CheckCircle } from 'lucide-react'
+import { motion } from 'motion/react'
+import { GoldenOrb } from "@/components/shared/golden-orb"
 
 export function Landing() {
+  const features = [
+    {
+      name: "Réception IA",
+      icon: Phone,
+      description: "Alfred répond automatiquement aux appels avec une voix naturelle et professionnelle, 24h/24.",
+      gradient: "from-blue-400 to-blue-600"
+    },
+    {
+      name: "Agenda intelligent",
+      icon: Calendar,
+      description: "Prise, modification et annulation automatique des rendez-vous. Synchronisation avec vos outils existants.",
+      gradient: "from-green-400 to-green-600"
+    },
+    {
+      name: "Équipe connectée",
+      icon: Users,
+      description: "Vos collaborateurs reçoivent automatiquement les informations importantes en temps réel.",
+      gradient: "from-purple-400 to-purple-600"
+    },
+    {
+      name: "Suivi temps réel",
+      icon: Clock,
+      description: "Tableau de bord en temps réel avec toutes les métriques importantes de votre activité.",
+      gradient: "from-orange-400 to-orange-600"
+    },
+    {
+      name: "Communication multi-canal",
+      icon: MessageSquare,
+      description: "SMS, WhatsApp, email... Alfred informe vos clients par leur canal préféré.",
+      gradient: "from-indigo-400 to-indigo-600"
+    },
+    {
+      name: "Validation automatique",
+      icon: CheckCircle,
+      description: "Validation automatique des données et détection intelligente d'anomalies.",
+      gradient: "from-red-400 to-red-600"
+    }
+  ]
+
   return (
     <section
       id="fonctionnalites"
@@ -55,24 +61,60 @@ export function Landing() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {features.map((feature, index) => (
-            <Card
-              key={index}
-              className="glass-base border-none p-6 hover:shadow-lg transition-all duration-300 group"
+            <div
+              key={feature.name}
+              className="group relative overflow-hidden rounded-lg bg-card p-6 shadow-sm border transition-all hover:shadow-md"
             >
-              <CardContent className="p-0">
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue/20 to-gold/20 flex items-center justify-center mb-4 text-blue group-hover:scale-110 transition-transform duration-300">
-                  {feature.icon}
-                </div>
-                <h3 className="text-xl font-semibold text-foreground mb-2">
-                  {feature.title}
+              <div className={`absolute inset-0 bg-gradient-to-br ${feature.gradient} opacity-5`} />
+              <div className="relative">
+                <feature.icon className="h-8 w-8 text-primary mb-4" />
+                <h3 className="text-lg font-semibold text-foreground mb-2">
+                  {feature.name}
                 </h3>
-                <p className="text-foreground/70">{feature.description}</p>
-              </CardContent>
-            </Card>
+                <p className="text-sm text-muted-foreground">
+                  {feature.description}
+                </p>
+              </div>
+            </div>
           ))}
         </div>
+
+        {/* Section avec activité récente animée */}
+        <div className="mt-24">
+          <h3 className="text-3xl font-semibold text-foreground mb-12 text-center">
+            Activité récente
+          </h3>
+          <div className="flex flex-col items-center gap-4">
+            {[
+              { key: "event-1", title: "Rendez-vous confirmé", subtitle: "Marie Dubois - Demain 14h" },
+              { key: "event-2", title: "Appel reçu", subtitle: "Jean Martin - Il y a 2h" },
+              { key: "event-3", title: "Message relayé", subtitle: "Sophie Durand - Il y a 5h" },
+              { key: "event-4", title: "Rendez-vous créé", subtitle: "Pierre Bernard - Hier" },
+            ].map((notification, index) => (
+              <motion.div
+                key={notification.key}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{
+                  delay: index * 1.5,
+                  duration: 0.5,
+                  type: "spring",
+                  stiffness: 100
+                }}
+                className="flex items-center gap-4 p-4 bg-card rounded-xl border border-border w-1/3"
+              >
+                <GoldenOrb size="mini" />
+                <div className="flex-1">
+                  <p className="text-sm font-medium text-foreground">{notification.title}</p>
+                  <p className="text-xs text-muted-foreground">{notification.subtitle}</p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+
       </div>
     </section>
   )

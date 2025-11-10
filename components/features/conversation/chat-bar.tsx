@@ -1,6 +1,7 @@
 "use client"
 
-import React, { useState } from "react"
+import React, { useState, useEffect, useRef } from "react"
+import { motion, AnimatePresence } from "framer-motion"
 import { cn } from "../../../lib/utils"
 
 interface ChatBarProps {
@@ -9,9 +10,46 @@ interface ChatBarProps {
   className?: string
 }
 
+const placeholders = [
+  "Comment tu gères mes appels ?",
+  "Tu prends les rendez-vous automatiquement ?",
+  "Tu fonctionnes pour plusieurs collègues ?",
+  "Tu peux répartir les appels selon les spécialités ?",
+  "Je peux tester sans carte bancaire ?"
+]
+
 export function ChatBar({ onInteraction, onSend, className }: ChatBarProps) {
   const [isFocused, setIsFocused] = useState(false)
   const [value, setValue] = useState("")
+  const [currentPlaceholder, setCurrentPlaceholder] = useState(0)
+  const intervalRef = useRef<NodeJS.Timeout | null>(null)
+
+  useEffect(() => {
+    const startAnimation = () => {
+      intervalRef.current = setInterval(() => {
+        setCurrentPlaceholder((prev) => (prev + 1) % placeholders.length)
+      }, 6000)
+    }
+
+    const handleVisibilityChange = () => {
+      if (document.visibilityState !== "visible" && intervalRef.current) {
+        clearInterval(intervalRef.current)
+        intervalRef.current = null
+      } else if (document.visibilityState === "visible") {
+        startAnimation()
+      }
+    }
+
+    startAnimation()
+    document.addEventListener("visibilitychange", handleVisibilityChange)
+
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current)
+      }
+      document.removeEventListener("visibilitychange", handleVisibilityChange)
+    }
+  }, [])
 
   const handleFocus = () => {
     setIsFocused(true)
@@ -53,15 +91,30 @@ export function ChatBar({ onInteraction, onSend, className }: ChatBarProps) {
     >
       <input
         type="text"
-        placeholder="Discuter avec Alfred…"
         value={value}
-        className="w-full bg-transparent text-sm text-foreground placeholder:text-foreground/50 outline-none"
+        className="w-full bg-transparent text-sm text-foreground outline-none pr-8"
         onFocus={handleFocus}
         onBlur={handleBlur}
         onChange={handleChange}
         onKeyDown={handleKeyDown}
         aria-label="Chat avec Alfred"
       />
+      {!value && (
+        <div className="absolute inset-0 flex items-center rounded-full pointer-events-none px-4">
+          <AnimatePresence mode="wait">
+            <motion.span
+              key={`placeholder-${currentPlaceholder}`}
+              initial={{ y: 5, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: -15, opacity: 0 }}
+              transition={{ duration: 0.3, ease: "linear" }}
+              className="text-sm text-foreground/50"
+            >
+              {placeholders[currentPlaceholder]}
+            </motion.span>
+          </AnimatePresence>
+        </div>
+      )}
       <div className="absolute right-4 top-1/2 -translate-y-1/2">
         <svg
           width="18"
@@ -72,36 +125,11 @@ export function ChatBar({ onInteraction, onSend, className }: ChatBarProps) {
           className="text-gold"
         >
           <path
-            d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3Z"
-            fill="currentColor"
-            fillOpacity="0.6"
-          />
-          <path
-            d="M19 10v1a7 7 0 0 1-14 0v-1"
+            d="M12 19V5M7 10l5-5 5 5"
             stroke="currentColor"
             strokeWidth="2"
             strokeLinecap="round"
             strokeLinejoin="round"
-            fillOpacity="0.6"
-          />
-          <line
-            x1="12"
-            y1="19"
-            x2="12"
-            y2="23"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            fillOpacity="0.6"
-          />
-          <line
-            x1="8"
-            y1="23"
-            x2="16"
-            y2="23"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
             fillOpacity="0.6"
           />
         </svg>

@@ -1,12 +1,15 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import React from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { cn } from "../../lib/utils/utils";
 import { Hero } from "../../components/sections/hero";
 import { Footer } from "../../components/layout/footer";
 import { Button } from "../../components/ui/button";
 import { GoldenOrb } from "../../components/shared/golden-orb";
 import { Carousel, Card } from "../../components/ui/apple-cards-carousel";
+import { ChatBar } from "../../components/features/conversation/chat-bar";
 
-// Import du composant LayoutTextFlip depuis les stories
+// Import du composant LayoutTextFlip avec animations avancées
 const LayoutTextFlip = ({
   text = "Build Amazing",
   words = ["Landing Pages", "Component Blocks", "Page Sections", "3D Shaders"],
@@ -28,18 +31,36 @@ const LayoutTextFlip = ({
 
   return (
     <div className="flex items-center justify-center">
-      <span className="text-3xl font-semibold tracking-tight drop-shadow-lg mr-4 font-[Fraunces]">
+      <motion.span
+        layoutId="subtext"
+        className="text-3xl font-semibold tracking-tight drop-shadow-lg mr-4 font-[Fraunces]"
+      >
         {text}
-      </span>
+      </motion.span>
 
-      <span
+      <motion.span
+        layout
         className="relative w-fit overflow-hidden rounded-md bg-white/40 px-4 py-2 font-sans text-3xl font-semibold tracking-tight text-amber-900 shadow-sm dark:bg-neutral-900/40 dark:text-amber-100 backdrop-blur-sm"
         style={{ border: '1px solid hsl(47, 67%, 52%, 0.6)', marginLeft: '5px' }}
       >
-        <span className="inline-block whitespace-nowrap bg-gradient-to-r from-amber-600 to-yellow-600 bg-clip-text text-transparent dark:from-amber-400 dark:to-yellow-400">
-          {words[currentIndex]}
-        </span>
-      </span>
+        <AnimatePresence mode="popLayout">
+          <motion.span
+            key={currentIndex}
+            initial={{ y: -40, filter: "blur(10px)" }}
+            animate={{
+              y: 0,
+              filter: "blur(0px)",
+            }}
+            exit={{ y: 50, filter: "blur(10px)", opacity: 0 }}
+            transition={{
+              duration: 0.5,
+            }}
+            className={cn("inline-block whitespace-nowrap bg-gradient-to-r from-amber-600 to-yellow-600 bg-clip-text text-transparent dark:from-amber-400 dark:to-yellow-400")}
+          >
+            {words[currentIndex]}
+          </motion.span>
+        </AnimatePresence>
+      </motion.span>
     </div>
   );
 };
@@ -298,6 +319,13 @@ type Story = StoryObj;
 export const Default: Story = {
   render: () => {
     const containerRef = React.useRef<HTMLDivElement>(null);
+    const [isChatActive, setIsChatActive] = React.useState(false);
+    const [isChatBarFocused, setIsChatBarFocused] = React.useState(false);
+
+    const handleChatInteraction = (active: boolean) => {
+      setIsChatActive(active);
+      setIsChatBarFocused(active);
+    };
 
     return (
       <div className="space-y-0">
@@ -309,8 +337,51 @@ export const Default: Story = {
         >
           <ScrollableNavbar containerRef={containerRef} />
 
-          {/* Hero Section */}
-          <Hero />
+          {/* Hero Section with Enhanced ChatBar */}
+          <section
+            className="relative flex min-h-screen items-center justify-center px-4 pt-16 sm:px-6 lg:px-8"
+            aria-label="Section principale"
+          >
+            <div className="mx-auto w-full max-w-7xl">
+              <div className="flex flex-col items-center gap-12 lg:grid lg:grid-cols-2 lg:items-center lg:gap-16 xl:gap-20">
+                {/* Left Side: Orb + Enhanced Chat Bar */}
+                <div className="flex flex-col items-center gap-6 w-full lg:items-center lg:w-auto">
+                  <div className={`transition-transform duration-300 ${isChatBarFocused ? 'scale-105' : ''}`}>
+                    <GoldenOrb isActive={isChatActive} />
+                  </div>
+                  <ChatBar onInteraction={handleChatInteraction} className="w-full max-w-md" />
+                </div>
+
+                {/* Right Side: Header (Left-aligned) */}
+                <div className="flex flex-col items-center text-center w-full lg:items-start lg:text-left lg:w-auto">
+                  <h1 className="text-glow font-serif text-4xl font-normal leading-tight tracking-tight text-foreground sm:text-5xl md:text-6xl lg:text-7xl">
+                    Bonjour, je suis Alfred.
+                  </h1>
+                  <p className="mt-6 max-w-lg text-lg leading-relaxed text-foreground/70 sm:text-xl md:text-2xl">
+                    Votre assistant vocal plug-and-play pour TPE et indépendants.
+                  </p>
+                  <div className="mt-8 flex flex-col items-center gap-4 w-full sm:flex-row lg:justify-start lg:w-auto">
+                    <Button
+                      variant="glass-blue"
+                      size="lg"
+                      className="w-full sm:w-auto px-8 py-6 text-base"
+                      style={{ borderRadius: '12px' }}
+                    >
+                      Discuter de vive voix avec Alfred
+                    </Button>
+                    <Button
+                      variant="glass-secondary"
+                      size="lg"
+                      className="w-full sm:w-auto px-8 py-6 text-base"
+                      style={{ borderRadius: '12px' }}
+                    >
+                      Découvrir les offres
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
 
           {/* Espace vertical pour permettre beaucoup de scroll */}
           <div className="py-32 space-y-32">

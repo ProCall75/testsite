@@ -25,7 +25,7 @@
     --input: 0 0% 90%;
     --ring: 47 67% 52%;
     --radius: 0.5rem;
-    
+
     /* Typography tokens */
     --font-sans: 'Inter', 'SF Pro Display', 'Söhne', 'system-ui', 'sans-serif';
     --font-serif: 'var(--font-fraunces)', 'Fraunces', 'serif';
@@ -33,7 +33,7 @@
     --font-weight-medium: 500;
     --font-weight-semibold: 600;
     --font-weight-bold: 700;
-    
+
     /* Glass effect tokens - Base */
     --glass-bg: hsl(0 0% 100% / 0.35);
     --glass-blur: blur(20px) saturate(180%);
@@ -41,7 +41,7 @@
     --glass-white-opacity-low: hsl(0 0% 100% / 0.15);
     --glass-white-opacity-mid: hsl(0 0% 100% / 0.32);
     --glass-white-opacity-high: hsl(0 0% 100% / 0.42);
-    
+
     /* Glass effect tokens - Gold (derived from primary) */
     --glass-gold-base: hsl(var(--primary) / 0.3);
     --glass-gold-light: hsl(var(--primary-light) / 0.2);
@@ -49,7 +49,7 @@
     --glass-gold-border: hsl(var(--primary) / 0.6);
     --glass-gold-border-hover: hsl(var(--primary) / 0.75);
     --glass-gold-glow: hsl(var(--primary) / 0.2);
-    
+
     /* Glass effect tokens - Blue (derived from accent) */
     --glass-blue-base: hsl(var(--accent) / 0.3);
     --glass-blue-light: hsl(var(--accent-light) / 0.2);
@@ -57,19 +57,19 @@
     --glass-blue-border: hsl(var(--accent) / 0.6);
     --glass-blue-border-hover: hsl(var(--accent) / 0.75);
     --glass-blue-glow: hsl(var(--accent) / 0.2);
-    
+
     /* Legacy glass variables (converted to use tokens) */
     --glass-gold: hsl(var(--primary) / 0.3);
     --inner-glow: hsl(0 0% 100% / 0.15);
-    
+
     /* Depth shadows with inset highlights */
     --shadow-s: inset 0 1px 2px hsl(0 0% 100% / 0.18), 0 1px 2px hsl(0 0% 0% / 0.18), 0 2px 4px hsl(0 0% 0% / 0.08);
     --shadow-m: inset 0 1px 2px hsl(0 0% 100% / 0.3), 0 2px 4px hsl(0 0% 0% / 0.18), 0 4px 8px hsl(0 0% 0% / 0.08);
     --shadow-l: inset 0 1px 2px hsl(0 0% 100% / 0.4), 0 4px 6px hsl(0 0% 0% / 0.18), 0 6px 10px hsl(0 0% 0% / 0.08);
-    
+
     --navbar-glass-bg: hsl(0 0% 100% / 0.25);
     --navbar-glass-blur: blur(20px) saturate(160%);
-    
+
     /* SVG gradient tokens */
     --svg-line-color: hsl(0 0% 78% / 0.25);
     --svg-line-subtle: hsl(0 0% 78% / 0.18);
@@ -81,10 +81,10 @@
     --svg-primary-stroke: hsl(var(--primary) / 0.25);
     --particle-primary-glow: hsl(var(--primary) / 0.8);
     --particle-accent-glow: hsl(var(--accent) / 0.6);
-    
+
     /* Component-specific background tokens */
     --conversation-bg: hsl(47 30% 96%);
-    
+
     /* Nebula glass effect tokens */
     --nebula-accent-light: hsl(220 20% 85% / 0.12);
     --nebula-accent-subtle: hsl(220 20% 85% / 0.06);
@@ -97,7 +97,7 @@
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
-  
+
   .dark {
     /* Color tokens - Dark mode */
     --background: 0 0% 5%;
@@ -119,7 +119,7 @@
     --border: 0 0% 20%;
     --input: 0 0% 20%;
     --ring: 47 67% 52%;
-    
+
     /* Glass effect tokens - Dark mode adjustments */
     --glass-bg: hsl(0 0% 100% / 0.15);
     --glass-border: hsl(0 0% 100% / 0.15);
@@ -136,18 +136,21 @@
     --sidebar-border: 240 3.7% 15.9%;
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
-  
+
   * {
     @apply border-border;
   }
-  
+
   body {
     @apply bg-background text-foreground;
     font-feature-settings: "rlig" 1, "calt" 1;
   }
-  
+
   html {
     scroll-behavior: smooth;
+  }
+  .theme {
+    --animate-meteor: meteor 5s linear infinite;
   }
 }
 
@@ -159,7 +162,7 @@
     border: 1px solid var(--glass-border);
     box-shadow: var(--shadow-m);
   }
-  
+
   .glass-gold {
     background: linear-gradient(
       135deg,
@@ -180,12 +183,12 @@
     overflow: hidden;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
-  
+
   .glass-gold > * {
     position: relative;
     z-index: 1;
   }
-  
+
   .glass-gold::before {
     content: '';
     position: absolute;
@@ -202,11 +205,11 @@
     transition: left 0.5s ease;
     z-index: 0;
   }
-  
+
   .glass-gold:hover::before {
     left: 100%;
   }
-  
+
   .glass-navbar {
     background: var(--navbar-glass-bg);
     backdrop-filter: var(--navbar-glass-blur);
@@ -214,7 +217,7 @@
     border: 1px solid var(--glass-border);
     box-shadow: var(--shadow-s);
   }
-  
+
   .glass-button {
     background: var(--glass-white-opacity-mid);
     backdrop-filter: blur(20px) saturate(180%);
@@ -227,7 +230,7 @@
     transition: all 0.3s ease;
     color: hsl(var(--foreground));
   }
-  
+
   .glass-button:hover {
     background: var(--glass-white-opacity-high);
     backdrop-filter: blur(25px) saturate(200%);
@@ -238,7 +241,7 @@
       0 2px 4px hsl(0 0% 0% / 0.12),
       0 4px 8px hsl(0 0% 0% / 0.08);
   }
-  
+
   .glass-gold:hover {
     background: linear-gradient(
       135deg,
@@ -255,7 +258,7 @@
       0 0 16px var(--glass-gold-glow);
     transform: translateY(-0.5px);
   }
-  
+
   .glass-blue {
     background: linear-gradient(
       135deg,
@@ -276,12 +279,12 @@
     overflow: hidden;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
-  
+
   .glass-blue > * {
     position: relative;
     z-index: 1;
   }
-  
+
   .glass-blue::before {
     content: '';
     position: absolute;
@@ -298,7 +301,7 @@
     transition: left 0.5s ease;
     z-index: 0;
   }
-  
+
   .glass-blue:hover {
     background: linear-gradient(
       135deg,
@@ -315,21 +318,21 @@
       0 0 16px var(--glass-blue-glow);
     transform: translateY(-0.5px);
   }
-  
+
   .glass-blue:hover::before {
     left: 100%;
   }
-  
+
   .text-glow {
     text-shadow: 
       0 0 20px hsl(0 0% 100% / 0.1),
       0 0 40px hsl(0 0% 100% / 0.05);
   }
-  
+
   .inner-glow {
     box-shadow: inset 0 1px 0 var(--inner-glow);
   }
-  
+
   /* Nebula Glassmorphism Styles */
   .glass-nebula {
     background: hsl(0 0% 100% / 0.15);
@@ -343,7 +346,7 @@
     position: relative;
     overflow: hidden;
   }
-  
+
   .glass-nebula::before {
     content: '';
     position: absolute;
@@ -356,7 +359,7 @@
     pointer-events: none;
     z-index: 0;
   }
-  
+
   .glass-nebula::after {
     content: '';
     position: absolute;
@@ -373,12 +376,12 @@
     pointer-events: none;
     z-index: 0;
   }
-  
+
   .glass-nebula > * {
     position: relative;
     z-index: 1;
   }
-  
+
   .glass-nebula-card {
     background: linear-gradient(
       135deg,
@@ -398,7 +401,7 @@
     overflow: hidden;
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   }
-  
+
   .glass-nebula-card::before {
     content: '';
     position: absolute;
@@ -412,7 +415,7 @@
     pointer-events: none;
     z-index: 0;
   }
-  
+
   .glass-nebula-card::after {
     content: '';
     position: absolute;
@@ -429,12 +432,12 @@
     pointer-events: none;
     z-index: 0;
   }
-  
+
   .glass-nebula-card > * {
     position: relative;
     z-index: 1;
   }
-  
+
   .glass-nebula-card:hover {
     transform: translateY(-4px);
     box-shadow: 
@@ -444,7 +447,7 @@
       inset 0 0 50px hsl(var(--accent) / 0.08);
     border-color: hsl(0 0% 100% / 0.3);
   }
-  
+
   .glass-nebula-mockup {
     background: linear-gradient(
       135deg,
@@ -463,7 +466,7 @@
     position: relative;
     overflow: hidden;
   }
-  
+
   .glass-nebula-mockup::before {
     content: '';
     position: absolute;
@@ -477,7 +480,7 @@
     pointer-events: none;
     z-index: 0;
   }
-  
+
   .glass-nebula-mockup::after {
     content: '';
     position: absolute;
@@ -494,12 +497,12 @@
     pointer-events: none;
     z-index: 0;
   }
-  
+
   .glass-nebula-mockup > * {
     position: relative;
     z-index: 1;
   }
-  
+
   /* Notification card glass effect */
   .glass-notification {
     background: hsl(0 0% 100% / 0.12);
@@ -512,7 +515,7 @@
     position: relative;
     overflow: hidden;
   }
-  
+
   .glass-notification::before {
     content: '';
     position: absolute;
@@ -525,7 +528,7 @@
     pointer-events: none;
     z-index: 0;
   }
-  
+
   .glass-notification > * {
     position: relative;
     z-index: 1;
@@ -735,3 +738,18 @@
   animation: celestial-glow 3s ease-in-out infinite;
 }
 
+@theme inline {
+  @keyframes meteor {
+  0% {
+    transform: rotate(var(--angle)) translateX(0);
+    opacity: 1;
+    }
+  70% {
+    opacity: 1;
+    }
+  100% {
+    transform: rotate(var(--angle)) translateX(-500px);
+    opacity: 0;
+    }
+  }
+}
