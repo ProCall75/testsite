@@ -36,7 +36,15 @@ npm install
 
 ## Documentation
 
+### Phase 5 — Reconfiguration Complète (Terminée)
+
+- `PHASE5-ETAT-INITIAL.md` : État initial avant reconfiguration
+- `PHASE5-BLOC3-RAPPORT.md` : Standardisation imports & alias
+- `PHASE5-BLOC4-RAPPORT.md` : Corrections types, lint et cohérence
+- `macro-to-do.md.md` : Plan de travail macros
+
+### Documentation Historique
+
 - `PHASE2-AUDIT-FINAL.md` : Audit structure complet
 - `PHASE3-AUDIT-DEPENDENCIES.md` : Audit dépendances
-- `PHASE4-BILAN-NETTOYAGE.md` : Bilan du nettoyage Phase 4
-- `macro-to-do.md.md` : Plan de travail macros
+- `PHASE4-BILAN-FINAL.md` : Bilan du nettoyage Phase 4

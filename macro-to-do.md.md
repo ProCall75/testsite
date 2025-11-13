@@ -258,207 +258,28 @@ Elle respecte strictement :
 	•	la charge cognitive minimale pour Cursor,
 	•	l’ordre chronologique exact de la To-Do détaillée.
 
-PHASE 4 — Nettoyage des fichiers obsolètes
+Context
+Phase 4 marque la fin du nettoyage du socle Alfred Reception. L’objectif était d’éliminer tous les résidus du design précédent, de réduire drastiquement la surface technique, et d’obtenir une base minimale, cohérente, traçable, conforme au Système Alfred avant d’attaquer Macro 1.
+Le travail inclut : purge des composants, suppression Storybook, nettoyage dépendances, vérification node_modules, audit arborescence, confirmation des fichiers autorisés.
 
-To-Do — Version Alfred (optimisée Cursor)
+Command
+Condense le résultat de la phase en points stricts et opérationnels :
+	1.	Arborescence réduite à l’essentiel (pages, hooks, lib, configs). Tout le design legacy a été supprimé : components/, stories/, System/, registry/, .storybook/, scripts/.
+	2.	Dépendances ramenées à 16 packages (3 deps / 13 devDeps). Nettoyage complet : ~45 packages supprimés, prune/dedupe validés, aucun résidu.
+	3.	Code source nettoyé : suppression de 33 fichiers, arborescence ramenée à 37 fichiers, suppression totale des composants UI legacy.
+	4.	Script de vérification systématique exécuté : aucun fichier illégitime, aucun dossier résiduel, aucune dépendance non listée.
+	5.	Build, lint, type-check et tests opérationnels.
+	6.	Point unique à retenir : il reste uniquement des références textuelles acceptables dans la documentation.
+	7.	Statut : socle technique minimal atteint, base validée pour Macro 1 (Architecture & Structure Globale).
 
-⸻
+Check
+Le nettoyage est réellement complet : aucune pollution design, aucune dépendance fantôme, aucune incohérence dans l’arborescence ou node_modules.
+Rien de ce qui a été supprimé n’est prévu dans des blocs futurs : aucun autre bloc ne réintroduit Storybook, magicui, Radix, scripts internes, ou composants UI → donc pas de conflit temporel avec la chronologie Alfred.
+La base fournie est compatible et exploitable directement par ChatGPT-1 pour la suite.
 
-BLOC 1 — Préparation & État Initial
-
-Tâches
-	1.	Vérifier branche active rebuild, working tree clean.
-	2.	Vérifier présence des fichiers d’audit :
-	•	PHASE2-AUDIT-FINAL.md
-	•	PHASE3-AUDIT-DEPENDENCIES.md
-	3.	Capturer l’état initial :
-	•	Nombre de fichiers dans components/, stories/, lib/constants/, scripts/
-	•	Liste des dépendances (npm list --depth=0)
-	•	Taille node_modules
-	•	Résultat npm run build (pages, First Load JS)
-
-Validation
-	•	Branche OK
-	•	Build OK
-	•	Métriques initiales documentées
-
-⸻
-
-BLOC 2 — Suppression des Composants Design
-
-Tâches
-	1.	Supprimer tous les dossiers et fichiers :
-	•	components/features/**
-	•	components/ui/**
-	•	components/shared/**
-	•	components/layout/**
-	•	components/sections/** (y compris hero.tsx, conforme audit officiel)
-	2.	Supprimer le dossier components/ s’il est vide.
-
-Validation
-	•	26 fichiers supprimés
-	•	Dossiers supprimés
-	•	components/ absent
-
-⸻
-
-BLOC 3 — Suppression Hooks, Scripts, Tokens & Storybook
-
-Tâches
-	1.	Supprimer hook design : hooks/use-scroll-navbar.tsx
-	2.	Supprimer scripts design :
-	•	scripts/validate-no-hardcode.ts
-	•	scripts/validate-theme.ts
-	3.	Supprimer tokens design :
-	•	lib/constants/colors.ts
-	•	lib/constants/tokens.ts
-	•	lib/constants/index.ts
-	4.	Supprimer dossier Storybook : stories/
-	5.	Supprimer scripts npm design dans package.json :
-	•	validate:theme, validate:no-hardcode, validate
-	6.	Supprimer scripts npm Storybook :
-	•	storybook, build-storybook
-
-Validation
-	•	Dossiers design supprimés
-	•	Scripts supprimés
-	•	Tokens supprimés
-	•	Aucun résidu Storybook
-
-⸻
-
-BLOC 4 — Suppression des Dépendances Design (~45 packages)
-
-Tâches
-	1.	Supprimer utilitaires UI : clsx, tailwind-merge
-	2.	Supprimer UI/animations/icons (9 packages)
-	3.	Supprimer primitives Radix UI (15 packages)
-	4.	Supprimer Storybook & tests navigateur (8 packages)
-	5.	Supprimer theming/form (3 packages)
-	6.	Supprimer charts/DnD/table (6 packages)
-	7.	Supprimer divers : sonner, react-intersection-observer
-	8.	Supprimer dev-design : @types/canvas-confetti, tsx
-
-Validation
-	•	~45 packages supprimés
-	•	package.json ne contient plus aucun package design
-
-⸻
-
-BLOC 5 — Nettoyage Configuration (ESLint, Tailwind, Vitest, Utils)
-
-Tâches
-	1.	Vérifier ESLint (Option A installée en Phase 3).
-	2.	Nettoyer tailwind.config.ts :
-	•	Supprimer tokens design (extend.colors, fontFamily, borderRadius)
-	•	Corriger content : retirer components/**/* et src/**/*, ajouter hooks/**/* et lib/**/*
-	3.	Vérifier vitest.config.ts minimal (sans Storybook/Playwright).
-	4.	Neutraliser lib/utils/utils.ts et lib/utils/index.ts (déjà fait Phase 3).
-
-Validation
-	•	Config Tailwind propre
-	•	ESLint stable
-	•	Vitest minimal fonctionnel
-
-⸻
-
-BLOC 6 — Vérifications Finales
-
-Tâches
-	1.	Ajouter les scripts techniques :
-	•	type-check, format, test
-	2.	Lancer vérifications :
-	•	npm run type-check
-	•	npm run lint
-	•	npm run build
-	3.	Vérifier arborescence finale :
-	•	components/ absent
-	•	stories/ absent
-	•	lib/constants/ absent
-	•	hooks/use-outside-click.tsx présent
-	•	lib/types/ présent
-	•	lib/utils/ présent
-	•	app/ conforme
-
-Validation
-	•	Type-check OK
-	•	Lint OK
-	•	Build OK
-	•	Arborescence propre
-
-⸻
-
-BLOC X — Vérification Résidus Design & Global CSS
-
-But
-S'assurer qu'aucun fragment de design, style ou ressource visuelle ne subsiste dans le socle après les suppressions des blocs 2 à 6.
-Garantir que app/ et les fichiers globaux (CSS, layouts, pages spéciales) soient totalement neutres et conformes à la vision "socle technique pur".
-
-Tâches
-	1.	Inspection du dossier app/
-	•	Lister tous les fichiers app/**.
-	•	Vérifier l'absence d'imports issus de components/, styles/, ui/ ou shared/.
-	•	Supprimer ou neutraliser tout import résiduel.
-	•	Confirmer que chaque page contient uniquement export default function Page() { return null }.
-	2.	Inspection du layout racine (app/layout.tsx)
-	•	Supprimer toute référence à des fonts custom, animations, classes design, images, metadata ou éléments visuels.
-	•	Vérifier que le layout ne contient que :
-export default function RootLayout({ children }) {
-  return <html lang="fr"><body>{children}</body></html>;
-}
-	3.	Vérification des pages spéciales
-	•	Examiner et neutraliser si nécessaire :
-	•	app/loading.tsx
-	•	app/error.tsx
-	•	app/not-found.tsx
-	•	S'assurer qu'elles retournent des composants neutres (return null).
-	4.	Analyse du dossier public/
-	•	Supprimer toutes les images, SVG, mockups, icônes ou ressources visuelles inutiles.
-	•	Conserver uniquement les fichiers techniques (ex. favicon minimal si requis par Next).
-	5.	Nettoyage de app/globals.css
-	•	Supprimer toutes les variables CSS design (border, input, ring, background, primary, muted, accent, etc.).
-	•	Supprimer fonts custom (@font-face, Google Fonts, etc.).
-	•	Supprimer animations custom ou classes décoratives.
-	•	Conserver uniquement :
-	•	resets,
-	•	tailwind base/components/utilities,
-	•	styles neutres techniques (html/body).
-	6.	Vérification des classes Tailwind résiduelles
-	•	Rechercher dans app/** toute classe Tailwind spécifique au design (bg-primary, text-accent, animate-*, etc.).
-	•	Supprimer ou remplacer par des classes neutres (bg-transparent, text-current, etc.).
-	7.	Croisement métrique fichiers supprimés
-	•	Comparer le nombre de fichiers supprimés avec les métriques initiales (PHASE4-BILAN-NETTOYAGE.md).
-	•	Identifier tout écart (26 vs 27) et documenter la cause.
-
-Validation
-	•	Aucun import, token ou ressource design résiduel dans app/**.
-	•	layout.tsx, globals.css, loading.tsx, error.tsx, not-found.tsx neutres.
-	•	public/ vidé de toute ressource visuelle.
-	•	Classes Tailwind = neutres et minimales.
-	•	Écart métrique justifié dans PHASE4-BILAN-NETTOYAGE.md.
-
-⸻
-
-BLOC 7 — Documentation & Finalisation
-
-Tâches
-	1.	Générer PHASE4-BILAN-NETTOYAGE.md (avant/après).
-	2.	Générer Résumé 3C Phase 4.
-	3.	Vérifier conformité avec audits Phase 2 & 3.
-	4.	Commit final :
-	•	message : “Phase 4 — Nettoyage socle technique (34 fichiers + ~45 packages supprimés)”
-	5.	Arrêt pour validation GPT-1.
-
-Validation
-	•	Documentation complète
-	•	Commit créé
-	•	Phase terminée
-
-⸻
-
-PHASE 4 — Version Alfred : VALIDÉE
-
-Lisible, compacte, homogène, parfaitement exploitable par Cursor.
+Synthèse exploitable
+Phase 4 fournit un socle minimal strict, parfaitement aligné avec le Tampon et prêt pour l’exécution de Macro 1. Aucun reliquat design, aucune dette cachée, aucune dépendance illicite.
+Le terrain est propre. On peut lancer l’architecture.
 ---
 
 ### **Phase 5 — Reconfiguration de la base de code**
@@ -480,6 +301,135 @@ C’est cette étape qui transforme le nettoyage en socle stable.
 - Vérifier compilation complète et cohérence structurelle.
 
 ---
+
+Voici le découpage optimal en blocs exécutables, strictement chronologiques, garantissant l’efficacité maximale sans perte de granularité, et permettant un contrôle clair après chaque segment.
+
+Chaque bloc = un pipeline cohérent, autonome, sans dépendances croisées.
+Chaque fin de bloc = check GPT-1 obligatoire.
+
+⸻
+
+BLOC 1 — Audit & État initial
+
+Objectif : figer l’état du dépôt avant toute modification.
+
+Étapes incluses :
+	1.	Vérifier branche rebuild + working tree propre
+	2.	Documenter l’arborescence actuelle → PHASE5-ETAT-INITIAL.md
+	3.	Vérifier configuration TS (tsconfig.json) alias @/*
+	4.	Vérifier configuration Next.js (next.config.js)
+	5.	Auditer imports relatifs (./, ../)
+	6.	Auditer imports absolus incorrects
+	7.	Vérifier cohérence noms de fichiers
+	8.	Vérifier cohérence noms de dossiers
+	9.	Vérifier absence de components/ résiduel
+	10.	Vérifier absence de styles/ / css/ résiduel
+
+Fin de bloc → STOP pour validation GPT-1
+
+⸻
+
+BLOC 2 — Vérification Structure & Répartition Dossiers
+
+Objectif : garantir que la structure est conforme aux conventions avant de toucher aux imports.
+
+Étapes incluses :
+7. Vérifier cohérence exports utils (lib/utils/*)
+8. Vérifier cohérence exports lib/types
+16. Vérifier que hooks/ est à la racine
+17. Vérifier que lib/ contient uniquement types/ + utils/
+18. Vérifier structure conforme Next.js App Router
+21. Vérifier cohérence extensions .ts / .tsx
+22. Vérifier fichiers de config présents et valides
+23. Vérifier .gitignore
+37. Vérifier tailwind.config.ts chemins
+38. Vérifier postcss.config.js
+39. Vérifier vitest.config.ts
+40. Vérifier .eslintrc.json
+41. Vérifier next.config.js obsolescences
+
+Fin de bloc → STOP pour validation GPT-1
+
+⸻
+
+BLOC 3 — Standardisation Imports & Alias
+
+Objectif : nettoyer et aligner tous les imports.
+
+Étapes incluses :
+9. Vérifier imports du hook use-outside-click
+10. Vérifier imports layouts
+11. Vérifier imports pages
+12. Vérifier app/globals.css import
+13. Standardiser imports de globals.css
+28. Vérifier cohérence imports (relatif vs alias)
+29. Choisir convention import globale
+30. Appliquer la convention au projet
+31. Vérifier cohérence exports nommés
+32. Vérifier exports par défaut
+33. Vérifier cohérence exports types
+35. Vérifier export correcte du hook
+36. Tester import du hook dans une page/layout
+50. Vérifier cohérence chemins dans configs
+
+Fin de bloc → STOP pour validation GPT-1
+
+⸻
+
+BLOC 4 — Corrections Types, Lint et Cohérence Technique
+
+Objectif : stabiliser entièrement le socle technique.
+
+Étapes incluses :
+24. Exécuter npm run type-check
+25. Corriger toutes erreurs TS
+26. Exécuter npm run lint
+27. Corriger toutes erreurs ESLint
+51. Exécuter npm run lint -- --fix
+52. Vérification manuelle imports post-fix
+53. Exécuter npm run type-check final
+
+Fin de bloc → STOP pour validation GPT-1
+
+⸻
+
+BLOC 5 — Build Complet & Vérifications Finales
+
+Objectif : garantir que la base est totalement stable, prête pour Macro 1.
+
+Étapes incluses :
+42. Exécuter npm run build
+43. Corriger erreurs build
+44. Vérifier build .next/
+45. Vérifier structure finale
+46. Comparer arborescence finale avec PHASE4-BILAN-FINAL.md
+47. Vérifier absence fichiers temporaires
+48. Vérifier documentation à jour
+49. Mettre à jour README si nécessaire
+54. Ré-exécuter npm run build final
+55. Vérifier démarrage npm run dev
+57. Vérifier préparation pour Macro 1
+
+Fin de bloc → STOP pour validation GPT-1
+
+⸻
+
+BLOC 6 — Documentation & Commit Final
+
+Objectif : produire la trace officielle de Phase 5 et finaliser.
+
+Étapes incluses :
+56. Documenter conventions d’import adoptées
+58. Créer PHASE5-RECONFIGURATION-FINALE.md
+59. Vérifier working tree propre
+60. Commit final feat(phase5): reconfiguration complète de la base de code
+
+Fin de bloc → STOP pour validation GPT-1
+→ Phase 5 terminée
+
+⸻
+
+Si tu veux : je prépare la commande Cursor pour exécuter bloc 1 immédiatement.
 
 ### **Phase 6 — Stabilisation & Documentation**
 
