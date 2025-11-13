@@ -1,88 +1,42 @@
-# Alfred.ai Hero Page
+# Alfred Reception — Socle Technique
 
-A premium Liquid Glass hero section for Alfred.ai built with Next.js, ShadCN UI, and Tailwind CSS.
+Socle technique minimal pour le projet Alfred Reception.
 
-## Features
+## Stack Technique
 
-- **Liquid Glass Design**: Translucent, layered interface with realistic light diffusion and soft edge highlights
-- **Apple-inspired Aesthetics**: Clean, premium design with subtle animations
-- **Fully Responsive**: Optimized for all screen sizes from mobile to desktop
-- **Accessible**: WCAG compliant with proper semantic HTML and ARIA labels
+- **Next.js** 14.2.0 (App Router)
+- **React** 18.3.0
+- **TypeScript** 5.9.3
+- **Tailwind CSS** 3.4.1
+- **Vitest** 4.0.6 (tests unitaires)
+- **ESLint** 8.56.0
 
-## Tech Stack
-
-- Next.js 14+ (App Router)
-- TypeScript
-- Tailwind CSS
-- ShadCN UI
-- Radix UI primitives
-
-## Getting Started
-
-### Install Dependencies
+## Installation
 
 ```bash
 npm install
 ```
 
-### Run Development Server
+## Scripts Disponibles
 
-```bash
-npm run dev
-```
+- `npm run dev` : Serveur de développement (port 3001)
+- `npm run build` : Build de production
+- `npm run start` : Serveur de production
+- `npm run lint` : Vérification ESLint
+- `npm run type-check` : Vérification TypeScript
+- `npm run test` : Tests unitaires (Vitest)
 
-Open [http://localhost:3000](http://localhost:3000) to view the page.
-
-### Build for Production
-
-```bash
-npm run build
-npm start
-```
-
-## Project Structure
+## Structure du Projet
 
 ```
-/app
-  /layout.tsx          # Root layout with metadata and fonts
-  /page.tsx            # Main page component
-  /globals.css         # Global styles and glass effect utilities
-/components
-  /ui                  # ShadCN components (button, card)
-  /navbar.tsx          # Navigation bar component
-  /hero.tsx            # Hero section component
-  /golden-orb.tsx      # Golden orb decorative element
-/lib
-  /utils.ts            # Utility functions (cn helper)
-/tailwind.config.ts    # Tailwind configuration
-/components.json       # ShadCN configuration
+/app              # Routes Next.js (App Router)
+/hooks            # Hooks React techniques
+/lib              # Utilitaires et types TypeScript
 ```
 
-## Design System
+## Documentation
 
-### Colors
-
-- Background: `#FFF9F2` (warm cream)
-- Foreground: `#1A1A1A` (dark gray)
-- Gold Accent: `#D4AF37`
-
-### Typography
-
-- Primary Font: Inter (with SF Pro Display and Söhne as fallbacks)
-- Font weights: Medium (headlines), Regular (body)
-
-### Glass Effects
-
-The design uses custom CSS utilities for liquid glass effects:
-- `.glass-base`: Base glass surface
-- `.glass-gold`: Gold-accented glass
-- `.glass-button`: Button glass variant
-- `.glass-navbar`: Navbar-specific glass
-
-## Customization
-
-To modify colors, fonts, or glass effects, edit:
-- `tailwind.config.ts` for color palette and theme
-- `app/globals.css` for CSS variables and glass utilities
-- Component files for specific styling adjustments
-
+- `PHASE2-AUDIT-FINAL.md` : Audit structure complet
+- `PHASE3-AUDIT-DEPENDENCIES.md` : Audit dépendances
+- `PHASE4-BILAN-NETTOYAGE.md` : Bilan du nettoyage Phase 4
+- `macro-to-do.md.md` : Plan de travail macros

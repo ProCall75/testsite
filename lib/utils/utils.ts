@@ -1,7 +1,2 @@
-import { type ClassValue, clsx } from "clsx"
-import { twMerge } from "tailwind-merge"
-
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs))
-}
-
+// Utilitaires techniques pour le socle Alfred Reception
+// Ce fichier sera réintroduit avec des utilitaires nécessaires au fur et à mesure des macros
