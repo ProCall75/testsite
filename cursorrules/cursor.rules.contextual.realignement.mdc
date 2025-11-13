@@ -1,0 +1,42 @@
+---
+alwaysApply: true
+---
+meta:
+name: "cursor.rules.contextual.realignement"
+version: "1.0"
+scope: "contextual"
+owner: "[Alfred.ai]"
+
+description: >
+Cette règle informe Cursor que la méthodologie de travail a été revue
+et que l’équipe est actuellement focalisée uniquement sur la Macro 0 du plan Front Alfred Reception.
+Aucun travail visuel ou de design n’est en cours.
+L’objectif immédiat est la stabilisation du socle technique avant toute autre macro.
+
+context:
+
+- Le système Alfred (GPT-2 → GPT-1 → Cursor) est validé et fonctionnel.
+- Le plan global Front v4 est en place, mais le projet a été réorganisé.
+- L’équipe se concentre exclusivement sur la Macro 0 : audit, nettoyage et préparation du socle.
+- Les macros de design, UI et identité visuelle (7–8) ne sont pas actives.
+- L’état de projet actuel correspond à un travail de fond technique et structurel.
+
+directives:
+
+- Traiter la Macro 0 comme unique priorité.
+- Ignorer toute instruction antérieure liée au design, au visuel ou au contenu marketing.
+- Si aucune incohérence structurelle n’est détectée, le design de la Hero Section actuelle peut être conservé comme référence visuelle de la future Landing Page.
+- Ne rien extrapoler ni reconstruire à partir d’éléments de design existants.
+- Tout travail d’exécution doit se limiter à la base technique (code, arborescence, dépendances, configuration).
+
+goal:
+
+- S’assurer que Cursor comprenne la réorientation complète du projet.
+- Garantir qu’il n’interprète plus le front comme un chantier visuel ou UI.
+- Maintenir une cohérence stricte avec la nouvelle chronologie (Macro 0 en cours).
+
+check:
+
+- Cursor ne déclenche aucune To-Do liée au design.
+- Cursor comprend que seul le nettoyage et la consolidation du socle sont actifs.
+- Cursor sait que la Hero Section est tolérée uniquement comme élément de référence visuelle.

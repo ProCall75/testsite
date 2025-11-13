@@ -1,0 +1,106 @@
+meta:
+name: "cursor.rules.todo.directive"
+version: "3.2-front"
+scope: "workflow_todo"
+owner: "[Alfred.ai](http://alfred.ai/)"
+
+description: >
+Règle [Alfred.ai](http://alfred.ai/) pour la génération et l’exécution directive des To-Do.
+Chaque macro contient une liste de phases claires et concises.
+Chaque phase contient une To-Do directive chronologique et explicite.
+Le modèle exécute, le validateur humain contrôle.
+
+principles:
+
+- Source unique : ⁠ /@.cursor/plans/macro-to-do-rebuild-front-plan.md ⁠.
+- Chaque macro contient une liste de phases claires et concises.
+- Chaque phase = liste ordonnée d’actions concrètes côté front.
+- Une seule To-Do active à la fois.
+- Validation humaine obligatoire avant exécution et avant commit.
+- Zéro création de fichier en dehors du plan directeur.
+
+workflow:
+
+step_1_planification:
+description: "Créer une To-Do directive au début de chaque phase dans le plan directeur."
+format:
+- "📋TODO-START Phase X"
+- "1. Créer ou modifier le fichier React/TS concerné (src/.../NomDuFichier.tsx)."
+- "   - Implémenter la logique ou le composant décrit."
+- "2. Ajouter ou mettre à jour le test correspondant dans tests/front/.../NomDuTest.test.tsx."
+- "3. Mettre à jour les imports et exports si nécessaires."
+- "4. Vérifier la compilation (tsc --noEmit) et le rendu local."
+- "5. Documenter la modification directement dans le plan directeur."
+- "📋TODO-END Phase X"
+rules:
+- Les tâches doivent être claires, séquentielles et auto-suffisantes.
+- Chaque tâche décrit précisément l’action, le chemin et le contenu attendu.
+- Aucune improvisation ni génération libre.
+- Toute To-Do doit se terminer par : "✅ Validation humaine requise avant implémentation."
+
+step_2_validation:
+description: "Validation humaine obligatoire avant toute exécution."
+rules:
+- Attendre validation explicite.
+- Ne jamais exécuter sans approbation.
+- Une seule To-Do directive active à la fois.
+
+step_3_execution:
+description: "Exécuter les tâches de la To-Do validée dans l’ordre indiqué."
+actions:
+- Suivre strictement la numérotation (1, 2, 3…).
+- Implémenter chaque étape telle qu’écrite.
+- Rédiger un résumé 3C : Context / Command / Check.
+- S’arrêter avant commit.
+- Attendre la commande 'OK commit'.
+
+step_4_commit_and_next:
+description: "Commit local validé puis passage automatique à la phase suivante."
+actions:
+- Commit local avec message : ⁠ Commit Phase X — [Nom Phase] ⁠.
+- Marquer ⁠ [x] Phase X terminée ⁠ dans le plan directeur.
+- Ajouter le résumé 3C sous la phase.
+- Supprimer la To-Do détaillée de la phase validée et la remplacer par le résumé 3C final (nettoyage automatique après validation humaine).
+- Passer automatiquement à la phase suivante.
+- Créer la To-Do directive suivante sans exécution, en attente de validation humaine.
+auto_update_notepad:
+description: "Met à jour automatiquement le notepad après commit."
+command: "npm run update-phase"
+goal: "Synchroniser la macro_active et la phase_active avec la prochaine phase non cochée."
+
+step_5_macro_completion:
+description: "Clôture complète de la macro après la dernière phase."
+actions:
+- Ajouter :
+- "✅ Check global Macro — [Nom Macro]"
+- "- Tests fonctionnels validés (unitaires prioritaires)"
+- "- Cohérence Supabase / mock vérifiée"
+- "- Architecture front conforme"
+- "- Prêt pour Macro suivante"
+- Une fois validée, préparer automatiquement la nouvelle liste de phases pour la macro suivante, *sans exécution immédiate* (attente validation humaine).
+
+testing_and_docs:
+description: "Normes de tests et documentation appliquées automatiquement à chaque phase."
+structure:
+- "tests/unit/macro_<id>/phase_<id>/"
+- "tests/integration/macro_<id>/phase_<id>/"
+- "tests/e2e/macro_<id>/"
+conventions:
+- "Créer le dossier de tests dès la création de la sous-phase."
+- "Nommer les fichiers selon la To-Do (ex: test_phase7_onboarding.test.tsx)."
+- "Ajouter entête standard dans chaque test : ⁠ # Macro X / Phase Y / Sous-phase Z ⁠."
+- "Documenter la fin de phase avec un résumé 3C complété d’un mini-retour qualité :"
+- "Quality: Stable / À corriger | Debt: Points à reprendre | Alignment: Cohérent / à revoir | Next: Focus suivant"
+goals:
+- "Tests unitaires obligatoires dès Macros 0.5–3, intégration à partir de Macro 2, E2E dès 7.5."
+- "Assurer cohérence entre le plan directeur et les tests front."
+- "Garantir documentation vivante et lisible dans le plan directeur."
+
+check:
+
+- La macro active contient une liste de phases claires et concises.
+- Chaque phase inclut une To-Do directive numérotée.
+- Double validation humaine avant exécution et commit.
+- Aucune création de fichier hors plan directeur.
+- Historique complet des tâches, résumés 3C et commits conservé dans le plan directeur.
+- Format et lisibilité conformes aux standards Notion / Linear / SaaS.
