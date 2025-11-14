@@ -1,9 +1,9 @@
 {
   "context": {
     "project": "Alfred Reception",
-    "macro_active": "Macro_3",
+    "macro_active": "Macro_1",
     "phase_active": "A",
-    "subphase_active": "Setup_Cursor"
+    "subphase_active": "Initialisation"
   },
   "imports": [
     "core.global",
@@ -13,8 +13,17 @@
     "validation.ai"
   ],
   "last_check": {
-    "date": "2025-11-03",
+    "date": "2025-11-13",
     "status": "OK",
-    "summary": "Dernier 3C validé par ChatGPT"
+    "summary": "Macro 0.5 terminée — commit final 29bf8f4 validé et poussé. Prêt pour lancement Macro 1."
+  },
+  "git": {
+    "branch": "rebuild",
+    "commit_last": "29bf8f4",
+    "status": "synced_cloud"
+  },
+  "macro_1": {
+    "objective": "Poser l’architecture front complète : arborescence Next.js, layouts, routing, conventions, structure modulaire. Préparer le squelette pour l’intégration des macros 2-3.",
+    "role_for_front": "Fournir l’ossature stable du projet avant tout ajout de logique, mocks ou data."
   }
 }

@@ -2,6 +2,9 @@
   - **Objectif général**
 
 ---
+Avant de générer la To-Do ou la documentation,
+relis strictement les documents des phases précédentes
+et aligne-toi dessus. Ne duplique rien.
 
 Macro 0.5 — Audit & Nettoyage
 
@@ -19,456 +22,391 @@ Cette macro constitue le point zéro technique du rebuild et prépare la future 
 
 ⸻
 
-🧩 Phases
+## ✅ Macro 0.5 — Terminée
 
-Phase 1 — Préparation du chantier
+**Statut** : ✅ **COMPLÉTÉE** — Prêt pour Macro 1
 
-Résumé 3C final Phase 1 ✅
+**Résumé 3C complet** : Voir [`MACRO0.5-RESUME-3C.md`](./MACRO0.5-RESUME-3C.md)
 
-**Context** : Phase 1 — Préparation du chantier complétée. Objectif : sécuriser le terrain avant toute action sur la base du code.
+**Résultats** :
+
+- ✅ Structure conforme Next.js App Router (100% App Router prouvé)
+- ✅ Imports standardisés avec alias `@/`
+- ✅ Types corrigés (aucun `any` explicite)
+- ✅ Build stable (12 routes générées)
+- ✅ Lint et type-check passent sans erreur
+- ✅ Documentation complète
+
+**Phases complétées** :
+
+- Phase 1 — Préparation du chantier
+- Phase 2 — Nettoyage du code
+- Phase 3 — Réorganisation de l'arborescence
+- Phase 4 — Configuration et validation
+- Phase 5+6 — Reconfiguration finale & documentation
+
+
+
+# **Macro 1 — Architecture Produit & Structure Finale**
+
+### **🎯**
+
+### **Objectif général**
+
+La **Macro 1** finalise **l’architecture produit** (et non l’architecture technique générique, déjà établie en Macro 0.5).
+
+Elle définit la structure interne, les layouts, et la hiérarchie des domaines du produit Alfred Reception — basés sur :
+
+- les parcours réels (onboarding, dashboard, settings),
+- la navigation cible,
+- la cohérence future avec les mocks (Macros 2 → 6),
+- la vision long terme du produit.
+
+### **🔧**
+
+### **Contenu**
+
+Cette macro :
+
+- définit les **layouts définitifs** (Root, App, Marketing) avec leurs responsabilités ;
+- stabilise les **routes finales** du produit (structure, segments, futurs modules) ;
+- prépare la structure des domaines :
+    - /app/(app)/onboarding/…
+    - /app/(app)/dashboard/…
+    - /app/(app)/settings/…
+    - /app/(marketing)/…
+- formalise la **navigation globale** (client-side & server components) ;
+- définit l’arbo prête pour Macro 2 (types / data), Macro 4 (onboarding), Macro 5 (dashboard).
+
+### **🧱**
+
+### **Rôle pour le front**
+
+Elle crée **le squelette fonctionnel du produit**, pas du code générique.
+
+C'est la fondation pour tous les écrans simulés à venir.
+
+---
+
+### **📋 Phases stratégiques**
+
+> **⚠️ RÈGLE CRITIQUE — Macro 1 = STRUCTURE STATIQUE UNIQUEMENT**
+> 
+> Macro 1 définit **le squelette fonctionnel**, pas l'UI ni la logique métier.
+> 
+> **INTERDICTIONS ABSOLUES** :
+> - ❌ Sidebar/Header dans AppLayout → Macro 5 (Dashboard) + Macro 7 (Design System)
+> - ❌ Header/Footer dans MarketingLayout → Macro 8 (Marketing & SEO)
+> - ❌ Navigation globale → Macro 7 (Design System)
+> - ❌ Protection routes/Auth → Macro 3 (Authentification)
+> - ❌ Providers auth/analytics/UX → Macros futures
+> - ❌ Metadata avancées (viewport, OG, SEO) → Macro 8
+> 
+> **AUTORISÉ** :
+> - ✅ Créer layouts vides (`<main>{children}</main>`)
+> - ✅ Metadata minimales (title/description génériques)
+> - ✅ HTML structurel de base
+> - ✅ Documentation des responsabilités
+> - ✅ Structuration de l'arborescence
+
+**Phase 1 — Définition des layouts et responsabilités (STRUCTURE ONLY)** ✅
+
+- [x] RootLayout : définir metadata minimales dans `app/layout.tsx` (title/description génériques uniquement)
+- [x] RootLayout : structurer HTML minimal dans `app/layout.tsx` (`<html lang="fr">`, `<body>`)
+- [x] RootLayout : intégrer UNIQUEMENT les providers autorisés (ex : theme provider structurel) → Aucun provider auth / analytics / UX
+- [x] AppLayout : créer un layout minimal dans `app/(app)/layout.tsx` (pas de sidebar/header) → `<main>{children}</main>`
+- [x] MarketingLayout : créer un layout minimal dans `app/(marketing)/layout.tsx` (pas de header/footer) → `<main>{children}</main>`
+- [x] Documenter la hiérarchie d'imbrication des layouts (Root → Groups → Pages)
+- [x] Documenter la séparation claire des responsabilités entre layouts (Root = structure globale ; App = domaine app ; Marketing = domaine marketing)
+
+**Résumé 3C — Phase 1** :
+
+**Context** : Phase 1 de Macro 1 définit les layouts structurels uniquement, sans UI ni logique métier, conformément à la Vision Alfred et à la chronologie inter-macros.
 
 **Command** :
-
-- Tâches 1-3 : Audit Git, commit modifications (`a6ec336`), création branche `rebuild` + push sur `origin/rebuild`
-- Tâches 4-6 : Vérification backup existant (`/Users/marwane/testsite/testsite-design-backup`), validation GitHub (`remotes/origin/rebuild`), vérification Cursor workspace + intégrité rules (3 fichiers actifs)
-- Tâche 7 : Validations finales (historique Git, branches, backup accessible)
+- Ajout metadata minimales (title/description génériques) dans `app/layout.tsx`
+- Vérification HTML structurel (`<html lang="fr">`, `<body>`) déjà conforme
+- Vérification layouts App et Marketing déjà minimaux (`<main>{children}</main>`)
+- Aucun provider ajouté (conforme aux règles)
+- Documentation créée : `MACRO1-PHASE1-LAYOUTS.md` (hiérarchie + responsabilités)
 
 **Check** :
+- ✅ Type-check passe sans erreur
+- ✅ Layouts conformes (structure uniquement, aucune UI)
+- ✅ Aucun empiètement sur Macros futures
+- ✅ Documentation complète et claire
+- ✅ Prêt pour Phase 2
 
-- ✅ Branche `rebuild` active et tracking `origin/rebuild`
-- ✅ Backup design accessible et synchronisé (HEAD `a6ec336` identique)
-- ✅ GitHub : branche `rebuild` présente sur remote
-- ✅ Cursor : workspace `/Users/marwane/testsite/testsite` configuré, 3 rules actives (208 lignes total)
-- ✅ Working tree : clean, prêt pour Phase 2
+**Phase 2 — Conventions globales : routing, nommage, segments dynamiques** ✅
 
-**Phase 1 terminée** — Terrain sécurisé, validation humaine requise avant Phase 2.
+- [x] Analyser les conventions Next.js App Router actuelles (route groups, layouts, pages, segments dynamiques)
+- [x] Définir conventions de nommage pour les fichiers de routes
+- [x] Définir conventions de nommage pour les dossiers de routes
+- [x] Définir conventions de nommage pour les composants de page
+- [x] Définir conventions pour les segments dynamiques
+- [x] Définir conventions pour les fichiers spéciaux Next.js
+- [x] Documenter toutes les conventions dans `MACRO1-PHASE2-CONVENTIONS.md`
 
-📋TODO-END Phase 1
+**Résumé 3C — Phase 2** :
 
-✅ Validation humaine requise avant implémentation.
+**Context** : Phase 2 de Macro 1 définit les conventions strictes de routing, nommage et segments dynamiques pour Next.js App Router, sans créer de fichiers ni modifier de routes.
 
-⸻
+**Command** :
+- Analyse des conventions Next.js App Router actuelles (route groups, fichiers spéciaux)
+- Définition conventions nommage : fichiers (kebab-case), dossiers (kebab-case), composants (PascalCase + suffixe)
+- Définition conventions segments dynamiques : `[id]`, `[slug]`, `[...slug]`, `[[...slug]]`
+- Définition conventions fichiers spéciaux : `loading.tsx`, `error.tsx`, `not-found.tsx`, `route.ts`
+- Documentation créée : `MACRO1-PHASE2-CONVENTIONS.md` (strict minimum, essentiel uniquement)
 
-Phase 2 — Audit de la structure projet
+**Check** :
+- ✅ Documentation uniquement (aucun fichier route/composant créé)
+- ✅ Conventions définies et documentées
+- ✅ Aucune modification de routes ou layouts
+- ✅ Aucune anticipation de la structure des domaines
+- ✅ Documentation strict minimum (pas de remplissage)
+- ✅ Prêt pour Phase 3
 
-But : Analyser l'architecture technique pour préparer le nettoyage total du design.
-Pourquoi : Identifier tous les éléments UI/design à supprimer avant Macro 1, conserver uniquement le socle technique.
-Actions principales :
-• CONSERVER toutes les routes (marketing, app, API) mais vider leur contenu design (réduire à `export default function Page() { return null }`).
-• Marquer TOUS les composants, sections, layouts, tokens design pour SUPPRESSION TOTALE.
-• Conserver le socle technique (routes structure, config, types purs, utilitaires, middlewares).
-• Générer rapport d'audit phase2-structure-report.md avec plan de nettoyage complet.
+**Phase 3 — Architecture des route groups et hiérarchie complète** ✅
 
-Instruction GPT-2 — Structuration To-Do Phase 2 (VERSION FINALE)
+- [x] Analyser les route groups existants `(app)` et `(marketing)` pour confirmer leur rôle structurel
+- [x] Définir l'architecture des route groups (rôle, périmètre, boundaries, nommage)
+- [x] Définir la hiérarchie Layout → Group → Segments (niveaux, propagation, limites)
+- [x] Définir la séparation des domaines (app, marketing, futurs)
+- [x] Définir la structure attendue de Phase 4 (onboarding, dashboard, settings, marketing)
+- [x] Établir les interdictions obligatoires
+- [x] Produire `MACRO1-PHASE3-ROUTEGROUPS.md` (architecture, hiérarchie, boundaries, structure Phase 4, interdictions)
 
-Format strict Alfred.
-Ordre inchangé.
-Aucune reformulation des étapes.
-Seulement des BLOCS LOGIQUES ajoutés comme demandé.
+**Résumé 3C — Phase 3** :
 
-⸻
+**Context** : Phase 3 de Macro 1 définit l'architecture complète des route groups, la hiérarchie Layout → Group → Segments, et les boundaries entre domaines, sans création de fichiers ni routes.
 
-PHASE 2 — AUDIT DE LA STRUCTURE PROJET
+**Command** :
+- Analyse route groups existants `(app)` et `(marketing)` : rôle structurel confirmé
+- Architecture route groups définie : rôle/périmètre `(app)` (domaine authentifié), `(marketing)` (domaine public), boundaries strictes, convention nommage internal English
+- Hiérarchie définie : Layout Root → Group → Segments → Pages (4 niveaux max), règles propagation, limites profondeur
+- Séparation domaines définie : `(app)` (onboarding, dashboard, settings), `(marketing)` (landing, pricing, signup), règles domaines futurs
+- Structure Phase 4 définie : onboarding `[step]`, dashboard `[id]`, settings `[tab]`, marketing `[slug]`, règles segments dynamiques par domaine
+- Interdictions établies : route groups visibles URL, français noms internes, mélange domaines, segments dynamiques incohérents
+- Documentation créée : `MACRO1-PHASE3-ROUTEGROUPS.md` (architecture, hiérarchie, boundaries, structure Phase 4, interdictions)
 
-To-Do regroupée en blocs (prête pour Cursor)
+**Check** :
+- ✅ Documentation uniquement (aucun fichier route/composant/layout créé)
+- ✅ Travail 100% conceptuel et structurel
+- ✅ Conventions Phase 2 respectées (internal English, kebab-case, PascalCase)
+- ✅ Structure Phase 4 définie sans création
+- ✅ Architecture complète et validée
+- ✅ Prêt pour Phase 4
 
-# Phase 2 — Résumé 3C
+**Phase 4 — Structure des domaines fonctionnels (app + marketing)** ✅
 
-**Date** : Phase 2 — Audit de la structure projet  
-**Branche** : `rebuild`  
-**Statut** : ✅ Terminé
+- [x] Créer structure onboarding `(app)/onboarding/` : `[step]/page.tsx`, `complete/page.tsx`
+- [x] Créer structure dashboard `(app)/dashboard/` : `[id]/page.tsx`, `analytics/page.tsx`
+- [x] Créer structure settings `(app)/settings/` : `page.tsx`, `[tab]/page.tsx`, `profile/page.tsx`
+- [x] Créer structure offer `(marketing)/offer/[slug]/` : `[slug]/page.tsx`
+- [x] Vérifier conformité (composants PascalCase + Page, kebab-case, internal English, composants vides)
+
+**Résumé 3C — Phase 4** :
+
+**Context** : Phase 4 de Macro 1 crée la structure complète des domaines fonctionnels (app + marketing) selon la définition Phase 3, sans UI ni logique métier.
+
+**Command** :
+- Structure onboarding créée : `onboarding/[step]/page.tsx` (OnboardingStepPage), `onboarding/complete/page.tsx` (OnboardingCompletePage)
+- Structure dashboard créée : `dashboard/[id]/page.tsx` (DashboardDetailPage), `dashboard/analytics/page.tsx` (DashboardAnalyticsPage)
+- Structure settings créée : `settings/page.tsx` (SettingsPage), `settings/[tab]/page.tsx` (SettingsTabPage), `settings/profile/page.tsx` (SettingsProfilePage)
+- Structure offer créée : `offer/[slug]/page.tsx` (OfferDetailPage)
+- Vérification conformité : tous composants PascalCase + suffixe `Page`, dossiers kebab-case, internal English, composants vides (`return null` uniquement)
+- Pages marketing existantes vérifiées : pricing, signup, payment, voice-demo, dashboard-preview conformes
+
+**Check** :
+- ✅ Structure conforme Phase 3 exactement (pas d'invention)
+- ✅ Composants vides uniquement (`return null`)
+- ✅ Conventions Phase 2 respectées (internal English, kebab-case, PascalCase)
+- ✅ Type-check : OK (aucune erreur)
+- ✅ Aucune UI ni logique métier ajoutée
+- ✅ Prêt pour Phase 5
+
+**Phase 5 — Navigation globale (server/client , redirections)** ✅
+
+- [x] Définir règles navigation globale (Server Components par défaut, Client Components si interactivité requise, aucun composant à créer)
+- [x] Définir règles redirection structurelle (concept uniquement, pas de middleware/rewrites/redirects, points d'entrée app vs marketing)
+- [x] Définir navigation interne (Onboarding → Dashboard → Settings, structure conceptuelle, pas de useRouter/Link/UI)
+- [x] Définir navigation marketing (Landing → Pricing → Signup → Offer, structure conceptuelle, aucune UI)
+- [x] Produire `MACRO1-PHASE5-NAVIGATION.md` (règles Server vs Client, redirection conceptuelle, navigation globale app vs marketing, interdictions)
+
+**Résumé 3C — Phase 5** :
+
+**Context** : Phase 5 de Macro 1 définit les règles de navigation globale et de redirection structurelle, sans implémentation ni UI.
+
+**Command** :
+- Règles navigation globale définies : Server Components par défaut, Client Components uniquement si interactivité requise (non implémentée Macro 1), aucun composant navigation à créer
+- Règles redirection structurelle définies : redirections internes concept uniquement (pas d'auth, pas de logique), pas de middleware/rewrites/redirects Next.js, points d'entrée app vs marketing documentés
+- Navigation interne définie : Onboarding → Dashboard → Settings (structure conceptuelle), navigation programmatique non autorisée (pas de useRouter, pas de Link, pas d'UI)
+- Navigation marketing définie : Landing → Pricing → Signup → Offer (structure conceptuelle), aucune UI, aucun composant ou lien
+- Documentation créée : `MACRO1-PHASE5-NAVIGATION.md` (règles Server vs Client, redirection conceptuelle, navigation globale app vs marketing, interdictions)
+
+**Check** :
+- ✅ Documentation minimale uniquement (aucun composant créé)
+- ✅ Pas de navigation réelle (structure conceptuelle seulement)
+- ✅ Pas d'auth (Macro 3), pas d'UI (Macro 7)
+- ✅ Pas de répétition des Phases 1–4
+- ✅ Prêt pour Phase 6
+
+**Phase 6 — Validation structurelle & préparation Macro 2**
+
+📋 TODO-START Phase 6
+
+1. Vérifier cohérence architecture Phase 3 vs structure Phase 4 :
+   - Comparer structure attendue Phase 3 (onboarding, dashboard, settings, marketing) avec fichiers créés Phase 4
+   - **Si page non-créée** : Noter comme manque critique, lister le fichier manquant avec chemin complet, décrire l'ajustement nécessaire (créer fichier `page.tsx` avec composant vide `return null`)
+   - Vérifier que tous les segments dynamiques Phase 4 correspondent aux définitions Phase 3 (`[step]`, `[id]`, `[tab]`, `[slug]`)
+   - **Si segment dynamique incohérent** : Noter comme violation critique, lister le segment problématique, décrire l'ajustement nécessaire
+   - Vérifier profondeur d'imbrication (maximum 4 niveaux : Root → Group → Segment → Page)
+   - **Si profondeur >4 niveaux détectée** : Noter comme violation très critique Phase 3, lister le chemin problématique, décrire l'ajustement nécessaire (restructurer pour respecter limite)
+   - Vérifier séparation domaines (app vs marketing, aucune route croisée)
+   - **Si route croisée détectée** : Noter comme violation très critique, lister la route problématique, décrire l'ajustement nécessaire (déplacer vers domaine correct)
+
+2. Vérifier conventions Phase 2 :
+   - Vérifier nommage dossiers (kebab-case pour segments statiques)
+   - **Si nommage dossier incorrect** : Noter comme violation haute priorité, lister le dossier problématique, décrire l'ajustement nécessaire (renommer en kebab-case)
+   - Vérifier nommage composants (PascalCase avec suffixe `Page` ou `Layout`)
+   - **Si nommage composant incorrect** : Noter comme violation haute priorité, lister le composant problématique, décrire l'ajustement nécessaire (renommer selon convention)
+   - Vérifier internal English rule (aucun français dans noms internes)
+   - **Si français détecté** : Noter comme violation haute priorité, lister l'élément problématique, décrire l'ajustement nécessaire (traduire en anglais)
+   - Vérifier segments dynamiques (camelCase pour paramètres : `[id]`, `[step]`, `[tab]`, `[slug]`)
+   - **Si segment dynamique incorrect** : Noter comme violation haute priorité, lister le segment problématique, décrire l'ajustement nécessaire (corriger nommage)
+
+3. Vérifier layouts Phase 1 :
+   - Vérifier RootLayout (metadata minimales, HTML de base, aucun provider non autorisé)
+   - Vérifier AppLayout (structure minimale `<main>{children}</main>`, aucune UI)
+   - Vérifier MarketingLayout (structure minimale `<main>{children}</main>`, aucune UI)
+   - Vérifier hiérarchie d'imbrication (RootLayout → Group Layout → Page)
+
+4. Vérifier navigation Phase 5 :
+   - Vérifier que toutes les pages sont Server Components par défaut (pas de `'use client'` sauf exception documentée)
+   - **Si `'use client'` détecté** : Noter comme violation critique, lister le fichier problématique, décrire l'ajustement nécessaire (supprimer `'use client'`, logique, UI, retourner `null`)
+   - Vérifier qu'aucun composant navigation n'est créé
+   - **Si composant navigation créé** : Noter comme violation haute priorité, lister le composant problématique, décrire l'ajustement nécessaire (supprimer, Macro 7)
+   - Vérifier cohérence parcours conceptuels (Onboarding → Dashboard → Settings, Landing → Pricing → Signup → Offer)
+   - **Si parcours erroné** : Noter comme violation très critique, décrire le parcours problématique, décrire l'ajustement nécessaire (corriger structure routes)
+   - Vérifier points d'entrée app vs marketing
+   - **Si point d'entrée incorrect** : Noter comme violation très critique, lister le point problématique, décrire l'ajustement nécessaire
+
+5. Identifier incohérences et ajustements structurels nécessaires :
+   - **Prioriser les incohérences** : Critiques (pages manquantes, profondeur >4, routes croisées, parcours erronés) → Hautes (conventions nommage, Server Components, composants navigation) → Moyennes (autres ajustements)
+   - Lister routes manquantes par rapport à Phase 3 (avec chemin complet et ajustement nécessaire)
+   - Lister routes inutiles ou non définies Phase 3 (avec chemin complet et ajustement nécessaire)
+   - Lister violations conventions Phase 2 (nommage, segments dynamiques) avec priorité et ajustement nécessaire
+   - Lister violations Macro 1 (UI, logique, interactivité dans pages Phase 4) avec priorité et ajustement nécessaire
+   - Documenter ajustements conceptuels nécessaires AVANT Macro 2 (format : fichier/élément → problème → priorité → ajustement nécessaire)
+
+6. Préparation Macro 2 (vérifications uniquement, pas création) :
+   - Identifier chemins de types nécessaires (où seront définis les types pour Macro 2)
+   - Identifier chemins de mock data nécessaires (où seront définis les mocks pour Macro 2)
+   - **Valider que les chemins types/mocks sont alignés et documentés** : Vérifier cohérence des chemins identifiés avec structure existante
+   - **Confirmer que les dossiers correspondants existent ou planifiés** : Vérifier existence `lib/types/` et `lib/mocks/` (ou planification création Macro 2)
+   - Vérifier que la structure Phase 4 permet l'intégration types/mocks Macro 2
+   - Documenter dépendances structurelles Macro 1 → Macro 2
+
+7. Produire documentation minimale `MACRO1-PHASE6-VALIDATION.md` :
+   - Format markdown avec titre, date, version (traçabilité)
+   - Liste de vérifications (cohérence Phase 3, conventions Phase 2, layouts Phase 1, navigation Phase 5)
+   - Incohérences identifiées avec priorisation (critiques → hautes → moyennes) : routes manquantes (avec chemin complet et ajustement), routes inutiles (avec chemin complet et ajustement), violations (avec fichier/élément, problème, priorité, ajustement nécessaire)
+   - Ajustements structurels nécessaires (conceptuels uniquement, pas d'implémentation) : format standardisé fichier/élément → problème → priorité → ajustement nécessaire
+   - Confirmation ou corrections du squelette Macro 1
+   - Préparation Macro 2 (chemins types/data avec validation existence/planification dossiers, dépendances structurelles)
+  
+
+📋 TODO-END Phase 6 ✅
+
+- [x] Vérifier cohérence architecture Phase 3 vs structure Phase 4 (tous fichiers présents, segments dynamiques conformes, profondeur ≤4 niveaux, séparation domaines)
+- [x] Vérifier conventions Phase 2 (nommage dossiers kebab-case, nommage composants PascalCase+suffixe, internal English, segments dynamiques camelCase)
+- [x] Vérifier layouts Phase 1 (RootLayout metadata minimales, AppLayout/MarketingLayout structure minimale, hiérarchie d'imbrication)
+- [x] Vérifier navigation Phase 5 (Server Components par défaut, aucun composant navigation, parcours conceptuels, points d'entrée)
+- [x] Identifier incohérences et ajustements structurels (2 violations identifiées : nommage Home, Server Component onboarding)
+- [x] Préparation Macro 2 (chemins types `lib/types/`, chemins mocks `lib/mocks/`, intégration structure Phase 4, dépendances structurelles)
+- [x] Produire `MACRO1-PHASE6-VALIDATION.md` (format markdown avec titre/date/version, liste vérifications, incohérences, ajustements, préparation Macro 2)
+
+**Résumé 3C — Phase 6** :
+
+**Context** : Phase 6 de Macro 1 valide la structure complète créée en Phase 4, vérifie la cohérence avec les phases précédentes (Phase 1 à Phase 5), et prépare Macro 2.
+
+**Command** :
+- Cohérence Phase 3 vs Phase 4 vérifiée : tous fichiers présents, segments dynamiques conformes (`[step]`, `[id]`, `[tab]`, `[slug]`), profondeur 3-4 niveaux respectée partout (limite 4 respectée), séparation domaines app vs marketing respectée, aucune route manquante/inutile
+- Conventions Phase 2 vérifiées : nommage dossiers kebab-case conforme, nommage composants PascalCase+suffixe conforme (1 violation haute priorité : `Home` devrait être `HomePage`), internal English respecté, segments dynamiques camelCase conformes
+- Layouts Phase 1 vérifiés : RootLayout metadata minimales conforme, AppLayout/MarketingLayout structure minimale conforme, hiérarchie d'imbrication correcte
+- Navigation Phase 5 vérifiée : Server Components par défaut (5 violations critiques dans 1 fichier : `onboarding/page.tsx` contient `'use client'`, imports React hooks, logique interactive, UI JSX), aucun composant navigation créé, parcours conceptuels cohérents, points d'entrée documentés
+- Incohérences identifiées avec priorisation : 1 violation CRITIQUE (`onboarding/page.tsx` : Server Component + UI + logique), 1 violation HAUTE PRIORITÉ (`marketing/page.tsx` : nommage `Home`), aucune route manquante/inutile
+- Ajustements structurels documentés avec format standardisé : correction CRITIQUE violation Server Component + UI + logique dans `onboarding/page.tsx` (supprimer `'use client'`, imports, logique, UI, retourner `null`), correction HAUTE PRIORITÉ nommage `Home` → `HomePage` dans `marketing/page.tsx`
+- Préparation Macro 2 : chemins types identifiés (`lib/types/` existe et prêt), chemins mocks identifiés (`lib/mocks/` planifié pour Macro 2), validation existence/planification dossiers effectuée, intégration structure Phase 4 vérifiée, dépendances structurelles Macro 1 → Macro 2 documentées
+- Documentation créée : `MACRO1-PHASE6-VALIDATION.md` (format markdown avec titre/date/version, liste vérifications complète, incohérences avec priorisation détaillées, ajustements conceptuels format standardisé, préparation Macro 2 avec validation dossiers)
+
+**Check** :
+- ✅ Travail 100% conceptuel (aucune création fichiers .tsx)
+- ✅ Validation structurelle uniquement (cohérence routes/domains/layout/navigation vérifiée)
+- ✅ Aucune UI, navigation, auth, logique métier ou data (vérifications uniquement)
+- ✅ Vérification phases précédentes complète (Phase 1, 2, 3, 4, 5)
+- ✅ Préparation Macro 2 complète (chemins types/data identifiés avec validation existence, dépendances documentées)
+- ✅ Aucune duplication des Phases 1–5
+- ✅ Aucune redéfinition des règles déjà établies
+- ✅ Aucune incohérence avec documentation précédente
+- ✅ Détection précise toutes anomalies (2 violations : 1 critique, 1 haute priorité)
+- ⚠️ Structure Macro 1 nécessite 2 ajustements avant Macro 2 (1 critique urgent, 1 haute priorité)
 
 ---
 
-## Context
+- **Macro 2 — Contrats d'API & Mock Data**
+
+  **Phase 1 — Types & Contrats**
+
+  📋 TODO-START Macro 2 Phase 1
+
+  1. Analyser la structure Flood v3.6 / Supabase pour identifier les entités principales :
+     - Identifier les tables principales (users, salons, teams, services, etc.)
+     - Identifier les relations entre entités
+     - Identifier les types de données et contraintes
+     - Documenter la structure attendue dans `MACRO2-PHASE1-TYPES.md`
+
+  2. Définir les types TypeScript pour chaque domaine fonctionnel :
+     - Types pour domaine Onboarding (salon, équipe, services, intégrations)
+     - Types pour domaine Dashboard (métriques, activités, ressources)
+     - Types pour domaine Settings (profil, préférences, équipe)
+     - Types pour domaine Marketing (offres, pricing, signup)
+     - Types pour authentification (user, session, auth state)
+     - Créer les interfaces dans `lib/types/` avec organisation par domaine
+
+  3. Définir les contrats d'API (interfaces de données) :
+     - Contrats pour requêtes GET (lecture)
+     - Contrats pour requêtes POST/PUT/DELETE (écriture)
+     - Contrats pour réponses API
+     - Contrats pour erreurs et états de chargement
+     - Documenter dans `lib/types/api.ts` ou fichiers séparés par domaine
+
+  4. Valider la cohérence des types :
+     - Vérifier que tous les types sont compatibles avec la structure Phase 4 (segments dynamiques `[step]`, `[id]`, `[tab]`, `[slug]`)
+     - Vérifier que les types correspondent aux domaines fonctionnels définis Macro 1
+     - Vérifier la compilation TypeScript (`tsc --noEmit`)
+     - Documenter les dépendances types → structure routes
+
+  5. Produire documentation minimale `MACRO2-PHASE1-TYPES.md` :
+     - Structure Flood v3.6 / Supabase analysée
+     - Types définis par domaine fonctionnel
+     - Contrats d'API définis
+     - Validation cohérence effectuée
+     - Prêt pour Phase 2 (Mock Data)
+
+  📋 TODO-END Macro 2 Phase 1
+
+  ⚠️ Validation humaine obligatoire avant exécution.
+
+  **Règles strictes Macro 2 Phase 1** :
+  - ✅ Types et contrats uniquement (aucune implémentation de logique métier)
+  - ✅ Aucune création de mock data (Phase 2)
+  - ✅ Aucune UI, navigation, auth, logique métier
+  - ✅ Types alignés avec structure Macro 1 Phase 4
+  - ✅ Compilation TypeScript validée
+  - ❌ Pas de duplication des types existants
+  - ❌ Pas d'anticipation Phase 2 (mocks)
 
-**Objectif** : Analyser l'architecture technique du projet Next.js pour préparer le nettoyage total du design avant Macro 1 (Architecture & Structure Globale).
-
-**Contexte initial** :
-
-- Projet Next.js 14 avec route groups (marketing) et (app)
-- 26 composants UI/design présents (features, UI, shared, layouts, sections)
-- Design system complet avec tokens, Storybook, scripts de validation
-- Routes marketing/app fonctionnelles mais liées au design actuel
-
-**Vision Macro 0.5** : Obtenir un socle technique minimal, sans aucun élément UI/design, pour repartir sur une base propre avant Macro 1.
-
----
-
-## Command
-
-**Exécution** : Audit structurel complet en 10 blocs logiques
-
-**Blocs exécutés** :
-
-1. **Préparation** : Vérification branche `rebuild` active, workspace Cursor synchronisé
-2. **Audit routes** : Cartographie 9 pages (7 marketing + 2 app) → CONSERVÉES (contenu vidé)
-3. **Cartographie features** : 7 composants identifiés → SUPPRESSION TOTALE
-4. **Audit UI & Shared** : 10 composants identifiés → SUPPRESSION TOTALE
-5. **Audit Layouts & Sections** : 9 composants identifiés → SUPPRESSION TOTALE
-6. **Audit hooks** : 1 conservé (use-outside-click), 1 supprimé (use-scroll-navbar)
-7. **Audit librairie** : Tokens design supprimés, utils/types techniques conservés
-8. **Audit config** : 5 configs conservées, Storybook supprimé
-9. **Audit assets & API** : Aucun asset/middleware/API présent
-10. **Rapport & Plan** : Génération `PHASE2-AUDIT-FINAL.md` avec métriques complètes
-
-**Ajustements post-audit** :
-
-- Scripts validation (validate-no-hardcode.ts, validate-theme.ts) → SUPPRESSION (liés design)
-- Packages Radix UI (@radix-ui/\*) → SUPPRESSION (primitives UI non nécessaires)
-- Hook use-outside-click → CONSERVÉ (technique pur confirmé)
-
----
-
-## Check
-
-**Résultats finaux** :
-
-**Éléments à supprimer** : 34 fichiers/dossiers
-
-- 26 composants (features: 7, UI: 8, shared: 2, layouts: 3, sections: 6)
-- 1 hook (use-scroll-navbar)
-- 3 fichiers lib/constants (colors, tokens, index)
-- 2 scripts validation (validate-no-hardcode, validate-theme)
-- 1 dossier Storybook (stories/)
-- 1 hook lié design
-
-**Éléments conservés** : 18 fichiers
-
-- 9 routes (contenu vidé : `export default function Page() { return null }`)
-- 1 hook technique (use-outside-click)
-- 3 fichiers lib (types/index.ts, utils/utils.ts, utils/index.ts)
-- 5 fichiers config (next.config.js, tailwind.config.ts, tsconfig.json, vitest.config.ts, postcss.config.js)
-
-**Dépendances à nettoyer** :
-
-- Packages design : framer-motion, @react-spring/web, canvas-confetti, react-device-frameset, magicui-cli, motion, @tabler/icons-react, lucide-react
-- Packages Radix UI : @radix-ui/\* (suppression totale)
-- Packages Storybook : @storybook/\*, storybook
-
-**Métriques** :
-
-- Routes : 9 conservées (contenu vidé) | 0 supprimées
-- Composants : 0 conservés | 26 supprimés
-- Hooks : 1 conservé | 1 supprimé
-- Lib : 3 conservés | 3 supprimés
-- Config : 5 conservés | 0 supprimés
-- Scripts : 0 conservés | 2 supprimés
-- Storybook : 0 conservé | 1 supprimé
-
-**Documentation générée** :
-
-- ✅ `PHASE2-AUDIT-FINAL.md` — Documentation finale complète (arborescence avant/après, listes, métriques)
-
-**Conformité** :
-
-- ✅ 100% conforme à la Vision Macro 0.5
-- ✅ Front totalement technique, sans tokens, UI, scripts visuels ni dépendances décoratives
-- ✅ Routes conservées (structure Next.js essentielle)
-- ✅ Socle technique minimal prêt pour Macro 1
-
----
-
-**Phase 2 terminée** — Prêt pour Phase 3 (Suppressions ciblées + vidage contenu des routes)
-
-⸻
-
-
-Phase 3 — Audit des dépendances & configuration
-
-But : Évaluer la cohérence technique du socle (packages, versions, scripts).
-Pourquoi : Prévenir les conflits et garantir un socle à jour et cohérent.
-Actions principales :
-• Vérifier versions : Next.js, TypeScript, Tailwind, PostCSS, Supabase SDK.
-• Examiner scripts NPM, tsconfig, eslint, tailwind.config.
-• Identifier doublons, dépendances inutiles ou incohérentes.
-
-Voici exactement ta To-Do Phase 3, strictement identique, sans aucune modification, sans aucune reformulation, sans aucun déplacement, simplement découpée en blocs selon le découpage optimal que j’ai validé.
-
-Ordre 100 % respecté.
-Texte 100 % intact.
-Uniquement des titres de blocs ajoutés.
-
-Phase 3 — Audit Dépendances & Configuration — Bilan 3C
-
-Context
-
-Audit complet des dépendances, scripts et fichiers de configuration pour établir un socle technique minimal, stable et dépourvu de design, préalable aux Macros 2 (Contrats + Mock Data) et 3 (Auth Supabase).
-
-⸻
-
-Command
-• Vérification des versions (Next, React, TS, Tailwind, Vitest)
-• Analyse et nettoyage des configurations (tsconfig, tailwind.config, next.config, postcss.config, vitest.config)
-• Audit complet du package.json : dépendances à conserver, mettre à jour, supprimer
-• Création configuration ESLint minimale
-• Réécriture vitest.config sans Storybook/Playwright
-• Neutralisation des utils orphelins (cn())
-• Préparation liste des dépendances et scripts à supprimer (Phase 4)
-
-⸻
-
-Check
-• 13 packages conservés (socle Next + React + TS + Tailwind + Vitest)
-• 1 mise à jour critique : TypeScript → ^6.1.x
-• ~45 packages supprimables : design, Storybook, Radix, DnD, theming, charts, utils non utilisés
-• Configurations validées : tsconfig, next.config, postcss.config
-• Configurations nettoyées ou à nettoyer : tailwind.config (tokens design), vitest.config (réécrit), ESLint (créé propre)
-• Scripts : 5 à supprimer (design/Storybook), 3 à ajouter (type-check, format, test)
-• Compatibilité complète : Next.js 14.2.0, React 18.3.x, Tailwind 3.4.x, Vitest 4.x
-
-⸻
-
-Synthèse
-
-Phase 3 établit un socle technique propre, stable et minimal, débarrassé de toute dette UI.
-Le projet est prêt pour :
-• Phase 4 : suppression massive des dépendances/fichiers design
-• Macro 2 : génération types Flood + mock data
-• Macro 3 : intégration Supabase (auth mockée)
-
-
-
-### **Phase 4 — Nettoyage des fichiers obsolètes**
-
-**BUT**
-
-Éliminer le superflu pour repartir d’une base minimale propre.
-
-**POURQUOI**
-
-Un code encombré augmente la dette technique et ralentit le rebuild.
-
-Conserver uniquement la **Hero Section** assure un repère visuel sans détourner du socle technique.
-
-**Actions principales**
-
-- se baser sur PHASE2-AUDIT-FINAL
-- Supprimer composants, pages et assets non essentiels.
-- Conserver la Hero Section comme référence visuelle.
-- Vérifier que la compilation reste fonctionnelle après nettoyage.
-- Comparer les resultats du nettoyage vs PHASE2-AUDIT-FINAL
-
-
-Voici la version Alfred finale, compacte, structurée, et parfaitement optimisée pour Cursor.
-Elle respecte strictement :
-	•	la Vision Alfred,
-	•	les conventions Blocs/Tâches,
-	•	la granularité optimale (7 blocs max),
-	•	la charge cognitive minimale pour Cursor,
-	•	l’ordre chronologique exact de la To-Do détaillée.
-
-Context
-Phase 4 marque la fin du nettoyage du socle Alfred Reception. L’objectif était d’éliminer tous les résidus du design précédent, de réduire drastiquement la surface technique, et d’obtenir une base minimale, cohérente, traçable, conforme au Système Alfred avant d’attaquer Macro 1.
-Le travail inclut : purge des composants, suppression Storybook, nettoyage dépendances, vérification node_modules, audit arborescence, confirmation des fichiers autorisés.
-
-Command
-Condense le résultat de la phase en points stricts et opérationnels :
-	1.	Arborescence réduite à l’essentiel (pages, hooks, lib, configs). Tout le design legacy a été supprimé : components/, stories/, System/, registry/, .storybook/, scripts/.
-	2.	Dépendances ramenées à 16 packages (3 deps / 13 devDeps). Nettoyage complet : ~45 packages supprimés, prune/dedupe validés, aucun résidu.
-	3.	Code source nettoyé : suppression de 33 fichiers, arborescence ramenée à 37 fichiers, suppression totale des composants UI legacy.
-	4.	Script de vérification systématique exécuté : aucun fichier illégitime, aucun dossier résiduel, aucune dépendance non listée.
-	5.	Build, lint, type-check et tests opérationnels.
-	6.	Point unique à retenir : il reste uniquement des références textuelles acceptables dans la documentation.
-	7.	Statut : socle technique minimal atteint, base validée pour Macro 1 (Architecture & Structure Globale).
-
-Check
-Le nettoyage est réellement complet : aucune pollution design, aucune dépendance fantôme, aucune incohérence dans l’arborescence ou node_modules.
-Rien de ce qui a été supprimé n’est prévu dans des blocs futurs : aucun autre bloc ne réintroduit Storybook, magicui, Radix, scripts internes, ou composants UI → donc pas de conflit temporel avec la chronologie Alfred.
-La base fournie est compatible et exploitable directement par ChatGPT-1 pour la suite.
-
-Synthèse exploitable
-Phase 4 fournit un socle minimal strict, parfaitement aligné avec le Tampon et prêt pour l’exécution de Macro 1. Aucun reliquat design, aucune dette cachée, aucune dépendance illicite.
-Le terrain est propre. On peut lancer l’architecture.
----
-
-### **Phase 5 — Reconfiguration de la base de code**
-
-**BUT**
-
-Réorganiser le projet et réaligner toutes les configurations.
-
-**POURQUOI**
-
-Après suppression du superflu, il faut rétablir une cohérence interne : imports, chemins, arborescence et règles.
-
-C’est cette étape qui transforme le nettoyage en socle stable.
-
-**Actions principales**
-
-- Réorganiser les dossiers (components, lib, hooks, styles).
-- Corriger imports/exports et alias (@/, ~).
-- Vérifier compilation complète et cohérence structurelle.
-
----
-
-Voici le découpage optimal en blocs exécutables, strictement chronologiques, garantissant l’efficacité maximale sans perte de granularité, et permettant un contrôle clair après chaque segment.
-
-Chaque bloc = un pipeline cohérent, autonome, sans dépendances croisées.
-Chaque fin de bloc = check GPT-1 obligatoire.
-
-⸻
-
-BLOC 1 — Audit & État initial
-
-Objectif : figer l’état du dépôt avant toute modification.
-
-Étapes incluses :
-	1.	Vérifier branche rebuild + working tree propre
-	2.	Documenter l’arborescence actuelle → PHASE5-ETAT-INITIAL.md
-	3.	Vérifier configuration TS (tsconfig.json) alias @/*
-	4.	Vérifier configuration Next.js (next.config.js)
-	5.	Auditer imports relatifs (./, ../)
-	6.	Auditer imports absolus incorrects
-	7.	Vérifier cohérence noms de fichiers
-	8.	Vérifier cohérence noms de dossiers
-	9.	Vérifier absence de components/ résiduel
-	10.	Vérifier absence de styles/ / css/ résiduel
-
-Fin de bloc → STOP pour validation GPT-1
-
-⸻
-
-BLOC 2 — Vérification Structure & Répartition Dossiers
-
-Objectif : garantir que la structure est conforme aux conventions avant de toucher aux imports.
-
-Étapes incluses :
-7. Vérifier cohérence exports utils (lib/utils/*)
-8. Vérifier cohérence exports lib/types
-16. Vérifier que hooks/ est à la racine
-17. Vérifier que lib/ contient uniquement types/ + utils/
-18. Vérifier structure conforme Next.js App Router
-21. Vérifier cohérence extensions .ts / .tsx
-22. Vérifier fichiers de config présents et valides
-23. Vérifier .gitignore
-37. Vérifier tailwind.config.ts chemins
-38. Vérifier postcss.config.js
-39. Vérifier vitest.config.ts
-40. Vérifier .eslintrc.json
-41. Vérifier next.config.js obsolescences
-
-Fin de bloc → STOP pour validation GPT-1
-
-⸻
-
-BLOC 3 — Standardisation Imports & Alias
-
-Objectif : nettoyer et aligner tous les imports.
-
-Étapes incluses :
-9. Vérifier imports du hook use-outside-click
-10. Vérifier imports layouts
-11. Vérifier imports pages
-12. Vérifier app/globals.css import
-13. Standardiser imports de globals.css
-28. Vérifier cohérence imports (relatif vs alias)
-29. Choisir convention import globale
-30. Appliquer la convention au projet
-31. Vérifier cohérence exports nommés
-32. Vérifier exports par défaut
-33. Vérifier cohérence exports types
-35. Vérifier export correcte du hook
-36. Tester import du hook dans une page/layout
-50. Vérifier cohérence chemins dans configs
-
-Fin de bloc → STOP pour validation GPT-1
-
-⸻
-
-BLOC 4 — Corrections Types, Lint et Cohérence Technique
-
-Objectif : stabiliser entièrement le socle technique.
-
-Étapes incluses :
-24. Exécuter npm run type-check
-25. Corriger toutes erreurs TS
-26. Exécuter npm run lint
-27. Corriger toutes erreurs ESLint
-51. Exécuter npm run lint -- --fix
-52. Vérification manuelle imports post-fix
-53. Exécuter npm run type-check final
-
-Fin de bloc → STOP pour validation GPT-1
-
-⸻
-
-BLOC 5 — Build Complet & Vérifications Finales
-
-Objectif : garantir que la base est totalement stable, prête pour Macro 1.
-
-Étapes incluses :
-42. Exécuter npm run build
-43. Corriger erreurs build
-44. Vérifier build .next/
-45. Vérifier structure finale
-46. Comparer arborescence finale avec PHASE4-BILAN-FINAL.md
-47. Vérifier absence fichiers temporaires
-48. Vérifier documentation à jour
-49. Mettre à jour README si nécessaire
-54. Ré-exécuter npm run build final
-55. Vérifier démarrage npm run dev
-57. Vérifier préparation pour Macro 1
-
-Fin de bloc → STOP pour validation GPT-1
-
-⸻
-
-BLOC 6 — Documentation & Commit Final
-
-Objectif : produire la trace officielle de Phase 5 et finaliser.
-
-Étapes incluses :
-56. Documenter conventions d’import adoptées
-58. Créer PHASE5-RECONFIGURATION-FINALE.md
-59. Vérifier working tree propre
-60. Commit final feat(phase5): reconfiguration complète de la base de code
-
-Fin de bloc → STOP pour validation GPT-1
-→ Phase 5 terminée
-
-⸻
-
-Si tu veux : je prépare la commande Cursor pour exécuter bloc 1 immédiatement.
-
-### **Phase 6 — Stabilisation & Documentation**
-
-**BUT**
-
-Valider la stabilité du code et documenter la nouvelle base.
-
-**POURQUOI**
-
-La documentation garantit que la macro 0.5 laisse une trace claire pour les macros suivantes.
-
-C’est le passage de l’audit à un système exploitable et maintenable.
-
-**Actions principales**
-
-- Générer le résumé 3C global de la macro.
-- Documenter l’arborescence finale et les décisions techniques.
-- Vérifier build complet (npm run build).
-- Préparer la transition vers la **Macro 1 — Architecture & Structure Globale**.
-
----
-
-## **🧠**
-
-## **Rôle pour Alfred Reception**
-
-Cette macro rétablit les fondations.
-
-Elle garantit que tout le travail ultérieur (architecture, contrats, mock data) reposera sur un socle propre, documenté et conforme aux règles du Système Alfred.
-
-> À la fin de cette macro,
-> 
-> 
-> **le projet doit être compilable, lisible et stable**
->
-
----
-
-- **Macro 2 — Contrats d’API & Mock Data**
   - **Objectif général**
     La **Macro 2** établit la couche contractuelle du front.
     Elle garantit que les types, schémas et données factices reflètent exactement la structure Flood v3.6.
@@ -477,8 +415,7 @@ Elle garantit que tout le travail ultérieur (architecture, contrats, mock data)
     - génère les mock data pour chaque domaine fonctionnel ;
     - teste la compilation et la cohérence des types sans backend réel.
     🎯 **Rôle pour le front :**
-    Elle permet de simuler intégralement le produit et d’avancer sur le design sans dépendre du backend.
-    ⚠️ **Rappel Phase 3** : Ajouter `@supabase/supabase-js@^2.81.1` en fin de Macro 2 → début Macro 3 (nécessaire pour Macro 3 - Authentification).
+    Elle permet de simuler intégralement le produit et d'avancer sur le design sans dépendre du backend.
 
 ---
 
@@ -492,33 +429,38 @@ Elle garantit que tout le travail ultérieur (architecture, contrats, mock data)
     - prépare le terrain pour une future connexion réelle.
     🎯 **Rôle pour le front :**
     Elle garantit que le routage et la sécurité utilisateur fonctionnent avant d’introduire des données réelles.
-    ⚠️ **Rappel Phase 3** : Intégrer `@supabase/supabase-js@^2.81.1` au début de Macro 3 (ajouté en fin Macro 2).
 
 ---
 
 - **Macro 4 — Onboarding (mock data)**
-  - **Objectif général**
-    La **Macro 4** construit le flux d’installation et de configuration du client.
-    Elle guide l’utilisateur dans la création de son “cerveau IA” à partir des mock data.
-    Cette macro :
-    - conçoit le wizard multi-étapes (infos, services, équipe, validation) ;
-    - relie chaque étape aux données simulées Supabase ;
-    - valide l’expérience utilisateur en mode déconnecté.
-    🎯 **Rôle pour le front :**
-    Elle permet de tester et d’itérer sur l’expérience d’onboarding avant intégration réelle.
+  ### **🎯 Objectif général**
+  Construire le wizard d’onboarding basé sur mock data, en suivant l’histoire produit :
+  - salon → équipe → services → intégrations → validation
+  ### **🔧 Ajustements nécessaires**
+  Les routes /onboarding/ existent déjà (créées automatiquement lors de Macro 0.5).
+  → Cette macro doit **remplacer** ou **compléter** ces routes selon la structure définie en Macro 1.
+  → Normaliser le wizard pour être compatible avec les données mock de Macro 2.
+  ### **🧱 Rôle pour le front**
+  Simuler la création du “cerveau IA” avant les vraies données Supabase.
+  ***
+  - **Macro 5 — Dashboard (mock data)**
+    - **Objectif général**
+      La **Macro 5** met en place le cœur visuel du produit : le tableau de bord.
+      Elle représente l’activité du salon ou de l’équipe en données simulées.
+      Cette macro :
+      - définit le layout principal (sidebar, header, overview) ;
+      - affiche les cartes et métriques à partir des mocks ;
+      - valide la lisibilité et la structure du dashboard.
+      🎯 **Rôle pour le front :**
+      Elle concrétise la promesse produit d’Alfred Reception et sert de base pour la future intégration data réelle.
 
----
+#
 
-- **Macro 5 — Dashboard (mock data)**
-  - **Objectif général**
-    La **Macro 5** met en place le cœur visuel du produit : le tableau de bord.
-    Elle représente l’activité du salon ou de l’équipe en données simulées.
-    Cette macro :
-    - définit le layout principal (sidebar, header, overview) ;
-    - affiche les cartes et métriques à partir des mocks ;
-    - valide la lisibilité et la structure du dashboard.
-    🎯 **Rôle pour le front :**
-    Elle concrétise la promesse produit d’Alfred Reception et sert de base pour la future intégration data réelle.
+#
+
+# **(légèrement ajustée)**
+
+###
 
 ---
 
@@ -545,7 +487,6 @@ Elle garantit que tout le travail ultérieur (architecture, contrats, mock data)
     - harmonise le rendu sur l’ensemble du front.
     🎯 **Rôle pour le front :**
     Elle apporte cohérence et continuité visuelle avant passage à la data réelle.
-    ⚠️ **Rappel Phase 3** : Migration Tailwind CSS 3.4.x → Tailwind 4.x prévue dans cette macro (breaking changes, supprime PostCSS, utilise LightningCSS). Mettre à jour PostCSS en même temps.
 
 ---
 

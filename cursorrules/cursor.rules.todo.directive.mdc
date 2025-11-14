@@ -1,106 +1,151 @@
 meta:
-name: "cursor.rules.todo.directive"
-version: "3.2-front"
-scope: "workflow_todo"
-owner: "[Alfred.ai](http://alfred.ai/)"
+  name: "cursor.rules.todo.directive"
+  version: "3.3-front"
+  scope: "workflow_todo"
+  owner: "Alfred.ai"
 
 description: >
-Règle [Alfred.ai](http://alfred.ai/) pour la génération et l’exécution directive des To-Do.
-Chaque macro contient une liste de phases claires et concises.
-Chaque phase contient une To-Do directive chronologique et explicite.
-Le modèle exécute, le validateur humain contrôle.
+  Directive strictement séquentielle de génération et d’exécution des To-Do dans le cadre du Système Alfred.
+  Cette règle empêche toute anticipation, tout empiètement inter-phases, et garantit que Cursor applique
+  uniquement les tâches explicitement autorisées dans le plan directeur macro-to-do.md.
 
 principles:
 
-- Source unique : ⁠ /@.cursor/plans/macro-to-do-rebuild-front-plan.md ⁠.
-- Chaque macro contient une liste de phases claires et concises.
-- Chaque phase = liste ordonnée d’actions concrètes côté front.
-- Une seule To-Do active à la fois.
-- Validation humaine obligatoire avant exécution et avant commit.
-- Zéro création de fichier en dehors du plan directeur.
+  # ————————————————————————————————————————
+  # 🧭 SOURCE DE VÉRITÉ
+  # ————————————————————————————————————————
+  - "La seule source de vérité pour Cursor : /@.cursor/plans/macro-to-do.md"
+  - "Aucune autre référence ne doit piloter les To-Do."
+  - "Cursor doit toujours vérifier la macro_active et la phase_active avant toute génération."
+
+  # ————————————————————————————————————————
+  # 🧩 GESTION DES PHASES
+  # ————————————————————————————————————————
+  - "Une macro = plusieurs phases. Une phase = une To-Do directive unique."
+  - "Une seule To-Do peut exister et être exécutée à la fois."
+  - "Les phases se déroulent séquentiellement et ne doivent jamais être mélangées."
+
+  # ————————————————————————————————————————
+  # 🚫 INTERDITS ABSOLUS
+  # ————————————————————————————————————————
+  - "Cursor ne doit jamais anticiper une phase future."
+  - "Cursor ne doit jamais revenir sur une phase passée."
+  - "Cursor ne doit jamais créer de fichiers ou logique métier qui n’est pas explicitement demandé."
+  - "Cursor ne doit jamais implémenter d’UI, provider, logique métier, navigation ou auth
+     si la phase ne l’autorise pas explicitement."
+  - "Cursor doit refuser toute tâche non prévue dans macro-to-do.md."
 
 workflow:
 
-step_1_planification:
-description: "Créer une To-Do directive au début de chaque phase dans le plan directeur."
-format:
-- "📋TODO-START Phase X"
-- "1. Créer ou modifier le fichier React/TS concerné (src/.../NomDuFichier.tsx)."
-- "   - Implémenter la logique ou le composant décrit."
-- "2. Ajouter ou mettre à jour le test correspondant dans tests/front/.../NomDuTest.test.tsx."
-- "3. Mettre à jour les imports et exports si nécessaires."
-- "4. Vérifier la compilation (tsc --noEmit) et le rendu local."
-- "5. Documenter la modification directement dans le plan directeur."
-- "📋TODO-END Phase X"
-rules:
-- Les tâches doivent être claires, séquentielles et auto-suffisantes.
-- Chaque tâche décrit précisément l’action, le chemin et le contenu attendu.
-- Aucune improvisation ni génération libre.
-- Toute To-Do doit se terminer par : "✅ Validation humaine requise avant implémentation."
+  # ————————————————————————————————————————
+  step_1_planification:
+    description: >
+      Générer la To-Do directive **uniquement** pour la phase_active.
+      Cursor doit vérifier systématiquement que les tâches proposées :
+        - appartiennent strictement au périmètre de cette phase,
+        - ne chevauchent pas de tâches de phases suivantes,
+        - ne réintroduisent pas des éléments déjà traités en phases précédentes.
 
-step_2_validation:
-description: "Validation humaine obligatoire avant toute exécution."
-rules:
-- Attendre validation explicite.
-- Ne jamais exécuter sans approbation.
-- Une seule To-Do directive active à la fois.
+    rules:
+      - "NE JAMAIS produire une To-Do pour toute la macro."
+      - "NE JAMAIS inclure une tâche dont l'exécution relève d'une macro future."
+      - "TOUJOURS vérifier les dépendances inter-phases dans macro-to-do.md."
+      - "TOUJOURS proposer des tâches minimales, atomiques, et strictement structurelles."
+      - "Aucune création de composant, provider, logique métier ou navigation si non demandé."
 
-step_3_execution:
-description: "Exécuter les tâches de la To-Do validée dans l’ordre indiqué."
-actions:
-- Suivre strictement la numérotation (1, 2, 3…).
-- Implémenter chaque étape telle qu’écrite.
-- Rédiger un résumé 3C : Context / Command / Check.
-- S’arrêter avant commit.
-- Attendre la commande 'OK commit'.
+    format:
+      - "📋 TODO-START Phase X"
+      - "1. Action concrète, avec chemin de fichier exact si nécessaire."
+      - "2. Action suivante, strictement liée au périmètre de la phase."
+      - "…"
+      - "📋 TODO-END Phase X"
+      - "⚠️ Validation humaine obligatoire avant exécution."
 
-step_4_commit_and_next:
-description: "Commit local validé puis passage automatique à la phase suivante."
-actions:
-- Commit local avec message : ⁠ Commit Phase X — [Nom Phase] ⁠.
-- Marquer ⁠ [x] Phase X terminée ⁠ dans le plan directeur.
-- Ajouter le résumé 3C sous la phase.
-- Supprimer la To-Do détaillée de la phase validée et la remplacer par le résumé 3C final (nettoyage automatique après validation humaine).
-- Passer automatiquement à la phase suivante.
-- Créer la To-Do directive suivante sans exécution, en attente de validation humaine.
-auto_update_notepad:
-description: "Met à jour automatiquement le notepad après commit."
-command: "npm run update-phase"
-goal: "Synchroniser la macro_active et la phase_active avec la prochaine phase non cochée."
+  # ————————————————————————————————————————
+  step_2_validation:
+    description: "La validation humaine (GPT-1) est requise AVANT toute exécution."
+    rules:
+      - "Attendre VALIDATION HUMAINE explicite."
+      - "Aucune action sans validation."
+      - "Une seule To-Do active à la fois."
 
-step_5_macro_completion:
-description: "Clôture complète de la macro après la dernière phase."
-actions:
-- Ajouter :
-- "✅ Check global Macro — [Nom Macro]"
-- "- Tests fonctionnels validés (unitaires prioritaires)"
-- "- Cohérence Supabase / mock vérifiée"
-- "- Architecture front conforme"
-- "- Prêt pour Macro suivante"
-- Une fois validée, préparer automatiquement la nouvelle liste de phases pour la macro suivante, *sans exécution immédiate* (attente validation humaine).
+  # ————————————————————————————————————————
+  step_3_execution:
+    description: "Exécution stricte, séquentielle, sans improvisation."
+    actions:
+      - "Suivre rigoureusement la numérotation."
+      - "Appliquer exactement ce qui est écrit."
+      - "Ne rien ajouter, ne rien modifier hors To-Do."
+      - "Rédiger un résumé 3C complet : Context / Command / Check."
+      - "S'arrêter AVANT le commit et attendre 'OK commit'."
+
+  # ————————————————————————————————————————
+  step_4_commit_and_next:
+    description: "Commit + nettoyage de la phase, puis passage automatique."
+    actions:
+      - "Commit local : “Commit Phase X — [Nom Phase]”."
+      - "Marquer '[x] Phase X terminée' dans macro-to-do.md."
+      - "Remplacer intégralement la To-Do par le résumé 3C validé."
+      - "Activer automatiquement la phase suivante, SANS exécuter la To-Do."
+      - "Attendre validation humaine pour générer la prochaine To-Do."
+
+  auto_update_notepad:
+    description: "Synchronisation automatique du notepad Cursor."
+    command: "npm run update-phase"
+
+  # ————————————————————————————————————————
+  step_5_macro_completion:
+    description: "Clôture propre et vérifiée."
+    actions:
+      - "Ajouter : '✅ Macro complétée — [Nom Macro]'"
+      - "- Architecture conforme"
+      - "- Cohérence structurelle vérifiée"
+      - "- Prêt pour Macro suivante"
+      - "Générer la liste des phases de la macro suivante, SANS To-Do,"
+      - "Attendre validation humaine pour démarrer la nouvelle macro."
 
 testing_and_docs:
-description: "Normes de tests et documentation appliquées automatiquement à chaque phase."
-structure:
-- "tests/unit/macro_<id>/phase_<id>/"
-- "tests/integration/macro_<id>/phase_<id>/"
-- "tests/e2e/macro_<id>/"
-conventions:
-- "Créer le dossier de tests dès la création de la sous-phase."
-- "Nommer les fichiers selon la To-Do (ex: test_phase7_onboarding.test.tsx)."
-- "Ajouter entête standard dans chaque test : ⁠ # Macro X / Phase Y / Sous-phase Z ⁠."
-- "Documenter la fin de phase avec un résumé 3C complété d’un mini-retour qualité :"
-- "Quality: Stable / À corriger | Debt: Points à reprendre | Alignment: Cohérent / à revoir | Next: Focus suivant"
-goals:
-- "Tests unitaires obligatoires dès Macros 0.5–3, intégration à partir de Macro 2, E2E dès 7.5."
-- "Assurer cohérence entre le plan directeur et les tests front."
-- "Garantir documentation vivante et lisible dans le plan directeur."
+
+  description: "Normes minimales de tests et de documentation."
+  goals:
+    - "Cohérence du 3C pour chaque phase."
+    - "Documentation vivante, lisible et stricte."
+    - "Zéro divergence entre code exécuté et plan directeur."
 
 check:
+  - "macro-to-do.md est toujours aligné avec la macro_active."
+  - "Aucune anticipation d'une phase future."
+  - "Aucune régression dans les phases déjà complétées."
+  - "Aucune création de fichier hors plan."
+  - "Résumé 3C systématique."
+  - "Lisibilité et cohérence vérifiées."
 
-- La macro active contient une liste de phases claires et concises.
-- Chaque phase inclut une To-Do directive numérotée.
-- Double validation humaine avant exécution et commit.
-- Aucune création de fichier hors plan directeur.
-- Historique complet des tâches, résumés 3C et commits conservé dans le plan directeur.
-- Format et lisibilité conformes aux standards Notion / Linear / SaaS.
+  # ————————————————————————————————————————
+# 🔁 EXECUTION CONTINUITY RULE (DOC + CODE)
+# ————————————————————————————————————————
+
+Cursor MUST ALWAYS read and use the output of all previously completed phases
+(documentation AND code) before generating or executing any new To-Do.
+
+Expected behavior:
+1. Cursor must align with all decisions, structures, conventions, and boundaries
+   produced in previous phases.
+2. Cursor must use existing code and folders as the reference state.
+3. Cursor must NOT regenerate, duplicate, or redefine what already exists.
+4. Cursor must NOT contradict previous phases.
+5. If previous documentation is incomplete, Cursor MUST:
+   - rely on the existing codebase,
+   - follow the current phase’s constraints,
+   - complete only what is strictly required for the active phase,
+   - NEVER anticipate future phases.
+6. If inconsistency is detected, Cursor must warn GPT-1 instead of improvising.
+
+This rule applies to ALL tasks, including:
+- generation of To-Do,
+- execution of To-Do,
+- code changes,
+- folder creation,
+- naming decisions,
+- architectural structures.
+
+# ————————————————————————————————————————

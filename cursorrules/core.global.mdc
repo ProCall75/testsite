@@ -18,6 +18,16 @@ identity:
     - Optimiser la performance et la consommation de tokens.
     - Ne jamais omettre d’expliquer ou de vérifier une étape.
 
+
+# Minimal Documentation Rule
+Cursor must only document what is strictly required for the current phase.
+No extended explanations.
+No repetition of Phase 1–4 content.
+No deep examples.
+No guides.
+No tutorials.
+Generate only the structural rules necessary for future execution.
+
 communication:
   format: "3C (Context, Command, Check)"
   tone: "Technique, neutre, précis"
@@ -61,3 +71,66 @@ security:
   audit:
     - "Journaliser actions critiques"
     - "Export RGPD sur demande"
+
+
+    # ————————————————————————————————————————
+# 🌍 INTERNAL ENGLISH RULE — ALFRED FRONTEND
+# ————————————————————————————————————————
+
+## PRINCIPLE
+All internal frontend structures MUST use English.
+This includes:
+- folder names
+- route segments (internal)
+- file names
+- component names
+- layout names
+- dynamic segment parameters
+- utilities, hooks, helpers
+
+No French is ever allowed inside the codebase.
+
+Marketing-level public URLs may remain French for SEO (`/tarifs`, `/inscription`, etc.),
+BUT their INTERNAL implementation MUST use English folder names 
+(e.g. `/tarifs` → `app/(marketing)/pricing/page.tsx`).
+
+## HARD REQUIREMENTS
+- Never create or maintain folders or files in French.
+- Never name components, layouts, or functions in French.
+- All dynamic route parameters MUST be English (`[id]`, `[teamId]`, `[serviceId]`, etc.).
+- Internal route segments ALWAYS kebab-case English (`pricing/`, `signup/`, `dashboard/`).
+
+## ROUTING TRANSLATION RULE
+If a French marketing URL exists at the public level:
+- the folder MUST use its English meaning:
+  - `/tarifs` → `pricing`
+  - `/inscription` → `signup`
+  - `/offre` → `offer`
+  - `/paiement` → `payment`
+  - `/demo-vocale` → `voice-demo`
+  - `/tableau-de-bord-apercu` → `dashboard-preview`
+- The page file MUST be `page.tsx` inside this English folder.
+
+## AUTO-ADJUSTMENT MANDATE
+Cursor MUST:
+1. Translate ALL existing French internal folders into English immediately.
+2. Preserve public-facing French URLs using `generateStaticParams`, 
+   `generateMetadata`, or `route segment mapping` ONLY when explicitly required.
+3. Ensure all future routes, segments, files, and components use English internally.
+
+## PERMANENT RESTRICTED ACTIONS
+- ❌ No internal folder in French.
+- ❌ No dynamic segment in French (e.g. `[idSalon]`).
+- ❌ No component or layout named in French.
+- ❌ No marketing slug implemented directly as a French folder.
+
+## ENFORCEMENT
+If Cursor receives any instruction that would generate French filenames,
+folders, components, or route segments, Cursor MUST:
+- reject the task,
+- warn GPT-1,
+- propose an English alternative.
+
+# ————————————————————————————————————————
+# END INTERNAL ENGLISH RULE
+# ————————————————————————————————————————
