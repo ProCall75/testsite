@@ -1,0 +1,94 @@
+# =====================================================
+# RULES MACRO 2 — EXECUTION RULESET
+# =====================================================
+
+# 1. Source de vérité obligatoire
+Cursor doit utiliser exclusivement le fichier :
+    macro2.support
+comme référence pour :
+    - les tables autorisées
+    - les colonnes autorisées
+    - les types et interfaces TS
+
+Aucune autre source ne doit être consultée.
+
+Interdictions absolues :
+    - Ne pas lire les anciens seeds onboarding
+    - Ne pas utiliser le schéma Supabase Flood
+    - Ne pas déduire de colonnes manquantes
+    - Ne pas réintroduire les colonnes rejetées
+    - Ne pas reconstruire de tables SQL
+
+DOCS/macro2.support = unique référence.
+
+# 2. Structure à produire pour Macro 2
+Cursor doit produire exclusivement :
+    - des Domain Models front
+    - un mock database schema
+    - des fichiers de mock data
+    - une couche API mock
+
+Aucune autre forme de donnée n'est autorisée.
+
+# 3. Respect strict des colonnes whitelistes
+Pour chaque table :
+    - Ne générer que les colonnes listées dans macro2.support
+    - Ne pas renommer les colonnes
+    - Ne pas ajouter d’attribut non mentionné
+    - Ne pas créer d'entités supplémentaires
+
+Les noms de types TS doivent être exactement ceux fournis.
+
+# 4. Domain Models
+Les Domain Models doivent être construits uniquement à partir :
+    - des types et colonnes whitelistes
+    - des relations explicites dans macro2.support
+
+Interdictions :
+    - Ne pas inventer de relations
+    - Ne pas fusionner des données sans logique de mapping
+    - Ne pas créer de Domain Model absent du support
+
+# 5. Mock Database Schema
+Le mockDB doit :
+    - suivre les noms de collections dérivés des tables
+    - utiliser les Domain Models ou types bruts définis
+    - respecter les relations front-friendly
+
+Interdictions :
+    - Ne pas reproduire la structure SQL originale
+    - Ne pas créer de structure imbriquée incohérente
+    - Ne pas mélanger les tables dans un seul fichier
+
+# 6. Mock Data
+Les données mock doivent :
+    - être cohérentes avec les types
+    - respecter les IDs et relations définies
+    - ne pas contenir de champs non whitelistés
+
+Interdictions :
+    - Ne pas introduire de logique backend
+    - Ne pas ajouter de données techniques hors périmètre
+    - Ne pas générer d'objets partiels
+
+# 7. API Mock Layer
+Les fonctions d'accès (get, list, update…) doivent :
+    - utiliser le mockDB
+    - retourner les Domain Models ou types définis
+    - respecter les signatures cohérentes avec macro2.support
+
+Interdictions :
+    - Ne pas utiliser des requêtes SQL
+    - Ne pas créer de endpoints non prévus
+    - Ne pas introduire d’async inutile sauf simulation
+
+# 8. Stabilité & Validation
+Cursor doit :
+    - vérifier la compilation TS
+    - garantir l’absence d’accès à des colonnes supprimées
+    - garantir la cohérence entre Domain Models, mockDB et API mock
+    - signaler toute divergence avec macro2.support
+
+# =====================================================
+# FIN DES RULES MACRO 2
+# =====================================================

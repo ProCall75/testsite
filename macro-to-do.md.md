@@ -47,375 +47,946 @@ Cette macro constitue le point zéro technique du rebuild et prépare la future 
 
 
 
-# **Macro 1 — Architecture Produit & Structure Finale**
+# **Macro 1 — Architecture Produit & Structure Finale** ✅
 
-### **🎯**
+### **🎯 Objectif général**
 
-### **Objectif général**
+La **Macro 1** finalise **l'architecture produit** (et non l'architecture technique générique, déjà établie en Macro 0.5).
 
-La **Macro 1** finalise **l’architecture produit** (et non l’architecture technique générique, déjà établie en Macro 0.5).
+Elle définit la structure interne, les layouts, et la hiérarchie des domaines du produit Alfred Reception — basés sur les parcours réels (onboarding, dashboard, settings), la navigation cible, et la cohérence future avec les mocks (Macros 2 → 6).
 
-Elle définit la structure interne, les layouts, et la hiérarchie des domaines du produit Alfred Reception — basés sur :
+### **🧱 Rôle pour le front**
 
-- les parcours réels (onboarding, dashboard, settings),
-- la navigation cible,
-- la cohérence future avec les mocks (Macros 2 → 6),
-- la vision long terme du produit.
-
-### **🔧**
-
-### **Contenu**
-
-Cette macro :
-
-- définit les **layouts définitifs** (Root, App, Marketing) avec leurs responsabilités ;
-- stabilise les **routes finales** du produit (structure, segments, futurs modules) ;
-- prépare la structure des domaines :
-    - /app/(app)/onboarding/…
-    - /app/(app)/dashboard/…
-    - /app/(app)/settings/…
-    - /app/(marketing)/…
-- formalise la **navigation globale** (client-side & server components) ;
-- définit l’arbo prête pour Macro 2 (types / data), Macro 4 (onboarding), Macro 5 (dashboard).
-
-### **🧱**
-
-### **Rôle pour le front**
-
-Elle crée **le squelette fonctionnel du produit**, pas du code générique.
-
-C'est la fondation pour tous les écrans simulés à venir.
+Elle crée **le squelette fonctionnel du produit**, pas du code générique. C'est la fondation pour tous les écrans simulés à venir.
 
 ---
 
-### **📋 Phases stratégiques**
+## ✅ Macro 1 — Terminée
 
-> **⚠️ RÈGLE CRITIQUE — Macro 1 = STRUCTURE STATIQUE UNIQUEMENT**
-> 
-> Macro 1 définit **le squelette fonctionnel**, pas l'UI ni la logique métier.
-> 
-> **INTERDICTIONS ABSOLUES** :
-> - ❌ Sidebar/Header dans AppLayout → Macro 5 (Dashboard) + Macro 7 (Design System)
-> - ❌ Header/Footer dans MarketingLayout → Macro 8 (Marketing & SEO)
-> - ❌ Navigation globale → Macro 7 (Design System)
-> - ❌ Protection routes/Auth → Macro 3 (Authentification)
-> - ❌ Providers auth/analytics/UX → Macros futures
-> - ❌ Metadata avancées (viewport, OG, SEO) → Macro 8
-> 
-> **AUTORISÉ** :
-> - ✅ Créer layouts vides (`<main>{children}</main>`)
-> - ✅ Metadata minimales (title/description génériques)
-> - ✅ HTML structurel de base
-> - ✅ Documentation des responsabilités
-> - ✅ Structuration de l'arborescence
+**Statut** : ✅ **COMPLÉTÉE** — Prêt pour Macro 2
 
-**Phase 1 — Définition des layouts et responsabilités (STRUCTURE ONLY)** ✅
+**Résumé 3C complet** : Voir [`MACRO1-PHASE6-VALIDATION.md`](./DOCS/MACRO1-PHASE6-VALIDATION.md)
 
-- [x] RootLayout : définir metadata minimales dans `app/layout.tsx` (title/description génériques uniquement)
-- [x] RootLayout : structurer HTML minimal dans `app/layout.tsx` (`<html lang="fr">`, `<body>`)
-- [x] RootLayout : intégrer UNIQUEMENT les providers autorisés (ex : theme provider structurel) → Aucun provider auth / analytics / UX
-- [x] AppLayout : créer un layout minimal dans `app/(app)/layout.tsx` (pas de sidebar/header) → `<main>{children}</main>`
-- [x] MarketingLayout : créer un layout minimal dans `app/(marketing)/layout.tsx` (pas de header/footer) → `<main>{children}</main>`
-- [x] Documenter la hiérarchie d'imbrication des layouts (Root → Groups → Pages)
-- [x] Documenter la séparation claire des responsabilités entre layouts (Root = structure globale ; App = domaine app ; Marketing = domaine marketing)
+**Résumé 3C — Macro 1** :
 
-**Résumé 3C — Phase 1** :
-
-**Context** : Phase 1 de Macro 1 définit les layouts structurels uniquement, sans UI ni logique métier, conformément à la Vision Alfred et à la chronologie inter-macros.
+**Context** : Macro 1 définit l'architecture produit complète (layouts, routes, conventions, navigation) sans UI ni logique métier, conformément à la Vision Alfred et à la chronologie inter-macros.
 
 **Command** :
-- Ajout metadata minimales (title/description génériques) dans `app/layout.tsx`
-- Vérification HTML structurel (`<html lang="fr">`, `<body>`) déjà conforme
-- Vérification layouts App et Marketing déjà minimaux (`<main>{children}</main>`)
-- Aucun provider ajouté (conforme aux règles)
-- Documentation créée : `MACRO1-PHASE1-LAYOUTS.md` (hiérarchie + responsabilités)
+- **Phase 1** : Layouts structurels définis (RootLayout, AppLayout, MarketingLayout) avec metadata minimales, HTML de base, structure `<main>{children}</main>` uniquement
+- **Phase 2** : Conventions strictes définies (routing, nommage kebab-case/PascalCase, segments dynamiques, internal English rule)
+- **Phase 3** : Architecture route groups complète (`(app)` domaine authentifié, `(marketing)` domaine public), hiérarchie Layout → Group → Segments → Pages (4 niveaux max), boundaries strictes
+- **Phase 4** : Structure domaines fonctionnels créée (onboarding `[step]`, dashboard `[id]`, settings `[tab]`, marketing `[slug]`), tous composants vides (`return null`)
+- **Phase 5** : Règles navigation globale définies (Server Components par défaut, redirections conceptuelles, parcours app/marketing documentés)
+- **Phase 6** : Validation structurelle complète effectuée, 2 violations identifiées et corrigées (1 critique : Server Component + UI + logique dans `onboarding/page.tsx`, 1 haute : nommage `Home` → `HomePage`), préparation Macro 2 (chemins types `lib/types/`, mocks `lib/mocks/` planifiés)
 
 **Check** :
-- ✅ Type-check passe sans erreur
-- ✅ Layouts conformes (structure uniquement, aucune UI)
-- ✅ Aucun empiètement sur Macros futures
-- ✅ Documentation complète et claire
-- ✅ Prêt pour Phase 2
-
-**Phase 2 — Conventions globales : routing, nommage, segments dynamiques** ✅
-
-- [x] Analyser les conventions Next.js App Router actuelles (route groups, layouts, pages, segments dynamiques)
-- [x] Définir conventions de nommage pour les fichiers de routes
-- [x] Définir conventions de nommage pour les dossiers de routes
-- [x] Définir conventions de nommage pour les composants de page
-- [x] Définir conventions pour les segments dynamiques
-- [x] Définir conventions pour les fichiers spéciaux Next.js
-- [x] Documenter toutes les conventions dans `MACRO1-PHASE2-CONVENTIONS.md`
-
-**Résumé 3C — Phase 2** :
-
-**Context** : Phase 2 de Macro 1 définit les conventions strictes de routing, nommage et segments dynamiques pour Next.js App Router, sans créer de fichiers ni modifier de routes.
-
-**Command** :
-- Analyse des conventions Next.js App Router actuelles (route groups, fichiers spéciaux)
-- Définition conventions nommage : fichiers (kebab-case), dossiers (kebab-case), composants (PascalCase + suffixe)
-- Définition conventions segments dynamiques : `[id]`, `[slug]`, `[...slug]`, `[[...slug]]`
-- Définition conventions fichiers spéciaux : `loading.tsx`, `error.tsx`, `not-found.tsx`, `route.ts`
-- Documentation créée : `MACRO1-PHASE2-CONVENTIONS.md` (strict minimum, essentiel uniquement)
-
-**Check** :
-- ✅ Documentation uniquement (aucun fichier route/composant créé)
-- ✅ Conventions définies et documentées
-- ✅ Aucune modification de routes ou layouts
-- ✅ Aucune anticipation de la structure des domaines
-- ✅ Documentation strict minimum (pas de remplissage)
-- ✅ Prêt pour Phase 3
-
-**Phase 3 — Architecture des route groups et hiérarchie complète** ✅
-
-- [x] Analyser les route groups existants `(app)` et `(marketing)` pour confirmer leur rôle structurel
-- [x] Définir l'architecture des route groups (rôle, périmètre, boundaries, nommage)
-- [x] Définir la hiérarchie Layout → Group → Segments (niveaux, propagation, limites)
-- [x] Définir la séparation des domaines (app, marketing, futurs)
-- [x] Définir la structure attendue de Phase 4 (onboarding, dashboard, settings, marketing)
-- [x] Établir les interdictions obligatoires
-- [x] Produire `MACRO1-PHASE3-ROUTEGROUPS.md` (architecture, hiérarchie, boundaries, structure Phase 4, interdictions)
-
-**Résumé 3C — Phase 3** :
-
-**Context** : Phase 3 de Macro 1 définit l'architecture complète des route groups, la hiérarchie Layout → Group → Segments, et les boundaries entre domaines, sans création de fichiers ni routes.
-
-**Command** :
-- Analyse route groups existants `(app)` et `(marketing)` : rôle structurel confirmé
-- Architecture route groups définie : rôle/périmètre `(app)` (domaine authentifié), `(marketing)` (domaine public), boundaries strictes, convention nommage internal English
-- Hiérarchie définie : Layout Root → Group → Segments → Pages (4 niveaux max), règles propagation, limites profondeur
-- Séparation domaines définie : `(app)` (onboarding, dashboard, settings), `(marketing)` (landing, pricing, signup), règles domaines futurs
-- Structure Phase 4 définie : onboarding `[step]`, dashboard `[id]`, settings `[tab]`, marketing `[slug]`, règles segments dynamiques par domaine
-- Interdictions établies : route groups visibles URL, français noms internes, mélange domaines, segments dynamiques incohérents
-- Documentation créée : `MACRO1-PHASE3-ROUTEGROUPS.md` (architecture, hiérarchie, boundaries, structure Phase 4, interdictions)
-
-**Check** :
-- ✅ Documentation uniquement (aucun fichier route/composant/layout créé)
-- ✅ Travail 100% conceptuel et structurel
+- ✅ Structure conforme après ajustements (2 violations corrigées)
+- ✅ Tous fichiers présents, segments dynamiques conformes, profondeur ≤4 niveaux respectée
 - ✅ Conventions Phase 2 respectées (internal English, kebab-case, PascalCase)
-- ✅ Structure Phase 4 définie sans création
-- ✅ Architecture complète et validée
-- ✅ Prêt pour Phase 4
+- ✅ Layouts conformes Phase 1 (structure minimale uniquement)
+- ✅ Navigation Phase 5 conforme (Server Components par défaut)
+- ✅ Aucune route manquante/inutile, séparation domaines respectée
+- ✅ Préparation Macro 2 complète (chemins types/mocks validés, dépendances documentées)
+- ✅ Documentation complète créée (6 fichiers Phase 1-6 dans `DOCS/`)
+- ✅ **Prêt pour Macro 2** (Types & Contrats)
 
-**Phase 4 — Structure des domaines fonctionnels (app + marketing)** ✅
 
-- [x] Créer structure onboarding `(app)/onboarding/` : `[step]/page.tsx`, `complete/page.tsx`
-- [x] Créer structure dashboard `(app)/dashboard/` : `[id]/page.tsx`, `analytics/page.tsx`
-- [x] Créer structure settings `(app)/settings/` : `page.tsx`, `[tab]/page.tsx`, `profile/page.tsx`
-- [x] Créer structure offer `(marketing)/offer/[slug]/` : `[slug]/page.tsx`
-- [x] Vérifier conformité (composants PascalCase + Page, kebab-case, internal English, composants vides)
 
-**Résumé 3C — Phase 4** :
+🧩 Macro 1.5 — Préparation Fonctionnelle des Contrats (Pré-Macro 2)
 
-**Context** : Phase 4 de Macro 1 crée la structure complète des domaines fonctionnels (app + marketing) selon la définition Phase 3, sans UI ni logique métier.
+Voici un Résumé 3C, court, net, calibré pour Cursor,
+pour lui expliquer exactement ce qui a été fait en Macro 1.5.
 
-**Command** :
-- Structure onboarding créée : `onboarding/[step]/page.tsx` (OnboardingStepPage), `onboarding/complete/page.tsx` (OnboardingCompletePage)
-- Structure dashboard créée : `dashboard/[id]/page.tsx` (DashboardDetailPage), `dashboard/analytics/page.tsx` (DashboardAnalyticsPage)
-- Structure settings créée : `settings/page.tsx` (SettingsPage), `settings/[tab]/page.tsx` (SettingsTabPage), `settings/profile/page.tsx` (SettingsProfilePage)
-- Structure offer créée : `offer/[slug]/page.tsx` (OfferDetailPage)
-- Vérification conformité : tous composants PascalCase + suffixe `Page`, dossiers kebab-case, internal English, composants vides (`return null` uniquement)
-- Pages marketing existantes vérifiées : pricing, signup, payment, voice-demo, dashboard-preview conformes
+Aucun bruit.
+Aucune justification.
+Juste la donnée utile à la suite.
 
-**Check** :
-- ✅ Structure conforme Phase 3 exactement (pas d'invention)
-- ✅ Composants vides uniquement (`return null`)
-- ✅ Conventions Phase 2 respectées (internal English, kebab-case, PascalCase)
-- ✅ Type-check : OK (aucune erreur)
-- ✅ Aucune UI ni logique métier ajoutée
-- ✅ Prêt pour Phase 5
+⸻
 
-**Phase 5 — Navigation globale (server/client , redirections)** ✅
+📘 Résumé 3C – Macro 1.5 (version Cursor)
 
-- [x] Définir règles navigation globale (Server Components par défaut, Client Components si interactivité requise, aucun composant à créer)
-- [x] Définir règles redirection structurelle (concept uniquement, pas de middleware/rewrites/redirects, points d'entrée app vs marketing)
-- [x] Définir navigation interne (Onboarding → Dashboard → Settings, structure conceptuelle, pas de useRouter/Link/UI)
-- [x] Définir navigation marketing (Landing → Pricing → Signup → Offer, structure conceptuelle, aucune UI)
-- [x] Produire `MACRO1-PHASE5-NAVIGATION.md` (règles Server vs Client, redirection conceptuelle, navigation globale app vs marketing, interdictions)
+1. Ce que nous avons FAIT
+	•	Identifié les 13 tables front nécessaires (Core + Reception).
+	•	Pour chaque table : sélection des colonnes utiles au front (whitelist).
+	•	Rejet de toutes les colonnes backend-only (timestamps, RLS, techniques).
+	•	Créé les types TypeScript front-driven pour chaque table.
+	•	Préparé un fichier unique (macro2.support) qui contient :
+	•	table → colonnes conservées → interface TS.
+	•	Nettoyé toute source SQL brute pour éviter la pollution.
 
-**Résumé 3C — Phase 5** :
+⸻
 
-**Context** : Phase 5 de Macro 1 définit les règles de navigation globale et de redirection structurelle, sans implémentation ni UI.
+2. Ce que cela SIGNIFIE
+	•	Cursor doit s’appuyer uniquement sur macro2.support.
+	•	Ce fichier représente la totalité des structures de données disponibles pour le front.
+	•	Les types et colonnes listés dans macro2.support sont la seule vérité,
+→ rien d’autre ne doit être relu, déduit ou importé.
+	•	Les données finalisées sont prêtes pour générer :
+	•	Domain Models
+	•	mock database
+	•	API mock layer
+	•	types front
+	•	todos Macro 2
 
-**Command** :
-- Règles navigation globale définies : Server Components par défaut, Client Components uniquement si interactivité requise (non implémentée Macro 1), aucun composant navigation à créer
-- Règles redirection structurelle définies : redirections internes concept uniquement (pas d'auth, pas de logique), pas de middleware/rewrites/redirects Next.js, points d'entrée app vs marketing documentés
-- Navigation interne définie : Onboarding → Dashboard → Settings (structure conceptuelle), navigation programmatique non autorisée (pas de useRouter, pas de Link, pas d'UI)
-- Navigation marketing définie : Landing → Pricing → Signup → Offer (structure conceptuelle), aucune UI, aucun composant ou lien
-- Documentation créée : `MACRO1-PHASE5-NAVIGATION.md` (règles Server vs Client, redirection conceptuelle, navigation globale app vs marketing, interdictions)
+⸻
 
-**Check** :
-- ✅ Documentation minimale uniquement (aucun composant créé)
-- ✅ Pas de navigation réelle (structure conceptuelle seulement)
-- ✅ Pas d'auth (Macro 3), pas d'UI (Macro 7)
-- ✅ Pas de répétition des Phases 1–4
-- ✅ Prêt pour Phase 6
 
-**Phase 6 — Validation structurelle & préparation Macro 2**
+# **Macro 2 — Contrats d'API & Mock Data**
+Voici une version claire, exhaustive, structurée des phases de la Macro 2, en cohérence directe avec son objectif réel.
 
-📋 TODO-START Phase 6
+Aucun smiley.
+Texte strict, précis, opérationnel.
 
-1. Vérifier cohérence architecture Phase 3 vs structure Phase 4 :
-   - Comparer structure attendue Phase 3 (onboarding, dashboard, settings, marketing) avec fichiers créés Phase 4
-   - **Si page non-créée** : Noter comme manque critique, lister le fichier manquant avec chemin complet, décrire l'ajustement nécessaire (créer fichier `page.tsx` avec composant vide `return null`)
-   - Vérifier que tous les segments dynamiques Phase 4 correspondent aux définitions Phase 3 (`[step]`, `[id]`, `[tab]`, `[slug]`)
-   - **Si segment dynamique incohérent** : Noter comme violation critique, lister le segment problématique, décrire l'ajustement nécessaire
-   - Vérifier profondeur d'imbrication (maximum 4 niveaux : Root → Group → Segment → Page)
-   - **Si profondeur >4 niveaux détectée** : Noter comme violation très critique Phase 3, lister le chemin problématique, décrire l'ajustement nécessaire (restructurer pour respecter limite)
-   - Vérifier séparation domaines (app vs marketing, aucune route croisée)
-   - **Si route croisée détectée** : Noter comme violation très critique, lister la route problématique, décrire l'ajustement nécessaire (déplacer vers domaine correct)
+⸻
 
-2. Vérifier conventions Phase 2 :
-   - Vérifier nommage dossiers (kebab-case pour segments statiques)
-   - **Si nommage dossier incorrect** : Noter comme violation haute priorité, lister le dossier problématique, décrire l'ajustement nécessaire (renommer en kebab-case)
-   - Vérifier nommage composants (PascalCase avec suffixe `Page` ou `Layout`)
-   - **Si nommage composant incorrect** : Noter comme violation haute priorité, lister le composant problématique, décrire l'ajustement nécessaire (renommer selon convention)
-   - Vérifier internal English rule (aucun français dans noms internes)
-   - **Si français détecté** : Noter comme violation haute priorité, lister l'élément problématique, décrire l'ajustement nécessaire (traduire en anglais)
-   - Vérifier segments dynamiques (camelCase pour paramètres : `[id]`, `[step]`, `[tab]`, `[slug]`)
-   - **Si segment dynamique incorrect** : Noter comme violation haute priorité, lister le segment problématique, décrire l'ajustement nécessaire (corriger nommage)
+Macro 2 — Contrats d’API & Mock Data
 
-3. Vérifier layouts Phase 1 :
-   - Vérifier RootLayout (metadata minimales, HTML de base, aucun provider non autorisé)
-   - Vérifier AppLayout (structure minimale `<main>{children}</main>`, aucune UI)
-   - Vérifier MarketingLayout (structure minimale `<main>{children}</main>`, aucune UI)
-   - Vérifier hiérarchie d'imbrication (RootLayout → Group Layout → Page)
+Objectif général
 
-4. Vérifier navigation Phase 5 :
-   - Vérifier que toutes les pages sont Server Components par défaut (pas de `'use client'` sauf exception documentée)
-   - **Si `'use client'` détecté** : Noter comme violation critique, lister le fichier problématique, décrire l'ajustement nécessaire (supprimer `'use client'`, logique, UI, retourner `null`)
-   - Vérifier qu'aucun composant navigation n'est créé
-   - **Si composant navigation créé** : Noter comme violation haute priorité, lister le composant problématique, décrire l'ajustement nécessaire (supprimer, Macro 7)
-   - Vérifier cohérence parcours conceptuels (Onboarding → Dashboard → Settings, Landing → Pricing → Signup → Offer)
-   - **Si parcours erroné** : Noter comme violation très critique, décrire le parcours problématique, décrire l'ajustement nécessaire (corriger structure routes)
-   - Vérifier points d'entrée app vs marketing
-   - **Si point d'entrée incorrect** : Noter comme violation très critique, lister le point problématique, décrire l'ajustement nécessaire
+Établir la couche contractuelle complète du front.
+Construire les types, la structure de données et les fonctions simulées permettant au front de fonctionner entièrement sans backend réel.
+Garantir que toutes les données manipulées par le front reposent uniquement sur la référence macro2.support.
 
-5. Identifier incohérences et ajustements structurels nécessaires :
-   - **Prioriser les incohérences** : Critiques (pages manquantes, profondeur >4, routes croisées, parcours erronés) → Hautes (conventions nommage, Server Components, composants navigation) → Moyennes (autres ajustements)
-   - Lister routes manquantes par rapport à Phase 3 (avec chemin complet et ajustement nécessaire)
-   - Lister routes inutiles ou non définies Phase 3 (avec chemin complet et ajustement nécessaire)
-   - Lister violations conventions Phase 2 (nommage, segments dynamiques) avec priorité et ajustement nécessaire
-   - Lister violations Macro 1 (UI, logique, interactivité dans pages Phase 4) avec priorité et ajustement nécessaire
-   - Documenter ajustements conceptuels nécessaires AVANT Macro 2 (format : fichier/élément → problème → priorité → ajustement nécessaire)
+Résultat attendu :
+Une maquette logicielle complète côté front, utilisant une base mock fidèle aux besoins du produit.
 
-6. Préparation Macro 2 (vérifications uniquement, pas création) :
-   - Identifier chemins de types nécessaires (où seront définis les types pour Macro 2)
-   - Identifier chemins de mock data nécessaires (où seront définis les mocks pour Macro 2)
-   - **Valider que les chemins types/mocks sont alignés et documentés** : Vérifier cohérence des chemins identifiés avec structure existante
-   - **Confirmer que les dossiers correspondants existent ou planifiés** : Vérifier existence `lib/types/` et `lib/mocks/` (ou planification création Macro 2)
-   - Vérifier que la structure Phase 4 permet l'intégration types/mocks Macro 2
-   - Documenter dépendances structurelles Macro 1 → Macro 2
+⸻
 
-7. Produire documentation minimale `MACRO1-PHASE6-VALIDATION.md` :
-   - Format markdown avec titre, date, version (traçabilité)
-   - Liste de vérifications (cohérence Phase 3, conventions Phase 2, layouts Phase 1, navigation Phase 5)
-   - Incohérences identifiées avec priorisation (critiques → hautes → moyennes) : routes manquantes (avec chemin complet et ajustement), routes inutiles (avec chemin complet et ajustement), violations (avec fichier/élément, problème, priorité, ajustement nécessaire)
-   - Ajustements structurels nécessaires (conceptuels uniquement, pas d'implémentation) : format standardisé fichier/élément → problème → priorité → ajustement nécessaire
-   - Confirmation ou corrections du squelette Macro 1
-   - Préparation Macro 2 (chemins types/data avec validation existence/planification dossiers, dépendances structurelles)
-  
+Phase 2.1 — Construction des Domain Models Front
 
-📋 TODO-END Phase 6 ✅
+Objectif : transformer les tables whitelists de macro2.support en objets métier exploitables directement par le front.
+Tâches principales :
+	•	Définir les Domain Models à partir des types bruts.
+	•	Agréger les données provenant de plusieurs tables (ex. un Pro).
+	•	Définir les relations front-driven (ex. un service appartient au salon, un pro a des skills).
+	•	Documenter le mapping table → Domain Model.
+	•	Produire les interfaces TS correspondantes.
 
-- [x] Vérifier cohérence architecture Phase 3 vs structure Phase 4 (tous fichiers présents, segments dynamiques conformes, profondeur ≤4 niveaux, séparation domaines)
-- [x] Vérifier conventions Phase 2 (nommage dossiers kebab-case, nommage composants PascalCase+suffixe, internal English, segments dynamiques camelCase)
-- [x] Vérifier layouts Phase 1 (RootLayout metadata minimales, AppLayout/MarketingLayout structure minimale, hiérarchie d'imbrication)
-- [x] Vérifier navigation Phase 5 (Server Components par défaut, aucun composant navigation, parcours conceptuels, points d'entrée)
-- [x] Identifier incohérences et ajustements structurels (2 violations identifiées : nommage Home, Server Component onboarding)
-- [x] Préparation Macro 2 (chemins types `lib/types/`, chemins mocks `lib/mocks/`, intégration structure Phase 4, dépendances structurelles)
-- [x] Produire `MACRO1-PHASE6-VALIDATION.md` (format markdown avec titre/date/version, liste vérifications, incohérences, ajustements, préparation Macro 2)
+Sortie attendue :
+/lib/domain/*.ts contenant les Domain Models finals.
 
-**Résumé 3C — Phase 6** :
+Voici la version parfaite, finale, prête à coller dans Cursor,
+format propre, structuré, strictement Phase 2.1,
+sans service-catalog, sans fuite métier, sans ambiguïté.
 
-**Context** : Phase 6 de Macro 1 valide la structure complète créée en Phase 4, vérifie la cohérence avec les phases précédentes (Phase 1 à Phase 5), et prépare Macro 2.
+C’est la To-Do officielle Phase 2.1.
 
-**Command** :
-- Cohérence Phase 3 vs Phase 4 vérifiée : tous fichiers présents, segments dynamiques conformes (`[step]`, `[id]`, `[tab]`, `[slug]`), profondeur 3-4 niveaux respectée partout (limite 4 respectée), séparation domaines app vs marketing respectée, aucune route manquante/inutile
-- Conventions Phase 2 vérifiées : nommage dossiers kebab-case conforme, nommage composants PascalCase+suffixe conforme (1 violation haute priorité : `Home` devrait être `HomePage`), internal English respecté, segments dynamiques camelCase conformes
-- Layouts Phase 1 vérifiés : RootLayout metadata minimales conforme, AppLayout/MarketingLayout structure minimale conforme, hiérarchie d'imbrication correcte
-- Navigation Phase 5 vérifiée : Server Components par défaut (5 violations critiques dans 1 fichier : `onboarding/page.tsx` contient `'use client'`, imports React hooks, logique interactive, UI JSX), aucun composant navigation créé, parcours conceptuels cohérents, points d'entrée documentés
-- Incohérences identifiées avec priorisation : 1 violation CRITIQUE (`onboarding/page.tsx` : Server Component + UI + logique), 1 violation HAUTE PRIORITÉ (`marketing/page.tsx` : nommage `Home`), aucune route manquante/inutile
-- Ajustements structurels documentés avec format standardisé : correction CRITIQUE violation Server Component + UI + logique dans `onboarding/page.tsx` (supprimer `'use client'`, imports, logique, UI, retourner `null`), correction HAUTE PRIORITÉ nommage `Home` → `HomePage` dans `marketing/page.tsx`
-- Préparation Macro 2 : chemins types identifiés (`lib/types/` existe et prêt), chemins mocks identifiés (`lib/mocks/` planifié pour Macro 2), validation existence/planification dossiers effectuée, intégration structure Phase 4 vérifiée, dépendances structurelles Macro 1 → Macro 2 documentées
-- Documentation créée : `MACRO1-PHASE6-VALIDATION.md` (format markdown avec titre/date/version, liste vérifications complète, incohérences avec priorisation détaillées, ajustements conceptuels format standardisé, préparation Macro 2 avec validation dossiers)
+⸻
 
-**Check** :
-- ✅ Travail 100% conceptuel (aucune création fichiers .tsx)
-- ✅ Validation structurelle uniquement (cohérence routes/domains/layout/navigation vérifiée)
-- ✅ Aucune UI, navigation, auth, logique métier ou data (vérifications uniquement)
-- ✅ Vérification phases précédentes complète (Phase 1, 2, 3, 4, 5)
-- ✅ Préparation Macro 2 complète (chemins types/data identifiés avec validation existence, dépendances documentées)
-- ✅ Aucune duplication des Phases 1–5
-- ✅ Aucune redéfinition des règles déjà établies
-- ✅ Aucune incohérence avec documentation précédente
-- ✅ Détection précise toutes anomalies (2 violations : 1 critique, 1 haute priorité)
-- ⚠️ Structure Macro 1 nécessite 2 ajustements avant Macro 2 (1 critique urgent, 1 haute priorité)
+PHASE 2.1 — TODO (Version Finale Cursor)
+
+Objectif : créer les types bruts (1:1 macro2.support) et les Domain Models agrégés essentiels, sans logique métier.
+
+⸻
+
+1. Créer les types bruts (exact miroir de macro2.support)
+
+Créer le dossier :
+
+/lib/types/
+
+Créer un fichier par TABLE whitelistée, dans cet ordre strict :
+
+client.ts
+subscription.ts
+product.ts
+client-product.ts
+team-member.ts
+reception-config.ts
+reception-details.ts
+reception-service.ts
+reception-integrations.ts
+reception-team-member.ts
+reception-team-member-skill.ts
+reception-team-member-availability.ts
+reception-team-member-stats.ts
+
+Chaque fichier doit :
+	•	exporter exactement l'interface définie dans macro2.support
+	•	ne rien ajouter
+	•	ne rien renommer
+	•	respecter les types primitifs (string, number, boolean, unions littérales)
+	•	ne contenir aucune logique (zéro fonction)
+
+Créer ensuite :
+
+/lib/types/index.ts
+
+qui exporte tous les types bruts.
+
+⸻
+
+2. Créer les Domain Models agrégés (front-driven, sans logique métier)
+
+Créer le dossier :
+
+/lib/domain/
+
+Créer uniquement les fichiers suivants :
+
+pro.ts
+reception.ts
+client-context.ts
+mappings.ts
+index.ts
+
+pro.ts
+
+Agréger sans logique métier :
+	•	TeamMember
+	•	ReceptionTeamMember
+	•	ReceptionTeamMemberStats
+	•	ReceptionTeamMemberSkill[]
+	•	ReceptionTeamMemberAvailability[]
+
+Structure : un objet qui regroupe ces 5 sources.
+
+reception.ts
+
+Agréger :
+	•	ReceptionDetails
+	•	ReceptionConfig
+	•	ReceptionIntegrations
+	•	ReceptionService[]
+
+Nom exact : Reception.
+
+client-context.ts
+
+Agréger sans filtrage ni déduction métier, dans cet ordre :
+	1.	Client
+	2.	Subscription[]
+	3.	ClientProduct[]
+	4.	Reception
+	5.	Pro[]
+
+mappings.ts
+
+Fichier documentaire uniquement.
+Cursor ne doit pas parser son contenu.
+
+Contient :
+	•	table → type brut
+	•	type brut → Domain Model
+	•	relations front-driven (services, pros, skills, availability)
+
+Format libre (objets TS ou simples commentaires).
+
+index.ts
+
+Exporter tous les Domain Models.
+
+⸻
+
+3. Vérifications internes
+	•	Aucun Domain Model ne redéfinit un type brut.
+	•	Aucun Domain Model n’ajoute une propriété absente de macro2.support.
+	•	Tous les Domain Models importent uniquement depuis /lib/types.
+	•	/lib/types contient exactement les 13 fichiers correspondant aux 13 tables.
+	•	/lib/domain contient exactement :
+pro.ts, reception.ts, client-context.ts, mappings.ts, index.ts.
+	•	Tous les fichiers sont bien exportés dans index.ts.
+	•	Zéro logique métier (pas de sélection d’abonnement, pas de règles).
+
+⸻
+
+Phase 2.1 terminée lorsque :
+	•	/lib/types/* = miroir strict de macro2.support
+	•	/lib/domain/* = agrégats front-driven simples, sans règles métier
+	•	mappings.ts = documentaire complété
+	•	Aucun débordement macro 2.2 / 2.3 / 2.4
+	•	Compilation TS valide
+
+⸻
+
+Cette todo est maintenant parfaitement alignée avec Macro 1.5, macro2.support et le pipeline Alfred.
+
+⸻
+
+
+
+
+
+
+
+
+PHASE 2.2 — TODO (Version Finale Cursor)
+
+Objectif : créer la structure du Mock Database Schema (collections vides typées), sans données ni logique métier.
+
+⸻
+
+1. Créer les collections vides (datasets)
+
+Créer le dossier :
+
+/lib/mockdb/collections/
+
+Créer un fichier par TYPE brut présent dans /lib/types (nom de fichier = singulier, kebab-case), dans cet ordre strict :
+
+client.ts
+subscription.ts
+product.ts
+client-product.ts
+team-member.ts
+reception-config.ts
+reception-details.ts
+reception-service.ts
+reception-integration.ts
+reception-team-member.ts
+reception-team-member-skill.ts
+reception-team-member-availability.ts
+reception-team-member-stats.ts
+
+Chaque fichier doit :
+	•	importer le type correspondant depuis @/lib/types (TypeScript, PascalCase, singulier)
+	•	exporter une constante en camelCase au pluriel, typée comme tableau du type
+	•	ne contenir AUCUNE donnée (tableau vide [])
+	•	ne contenir aucune fonction
+	•	ne jamais utiliser PascalCase pour une variable (réservé aux types/classes)
+
+Exemple pour client.ts :
+
+```typescript
+import type { Client } from '@/lib/types'
+
+export const clients: Client[] = []
+```
+
+Exemple pour reception-integration.ts :
+
+```typescript
+import type { ReceptionIntegration } from '@/lib/types'
+
+export const receptionIntegrations: ReceptionIntegration[] = []
+```
+
+Créer ensuite :
+
+/lib/mockdb/collections/index.ts
+
+qui exporte toutes les collections (camelCase, pluriel) dans l'ordre strict :
+
+	•	clients
+	•	subscriptions
+	•	products
+	•	clientProducts
+	•	teamMembers
+	•	receptionConfigs
+	•	receptionDetails
+	•	receptionServices
+	•	receptionIntegrations
+	•	receptionTeamMembers
+	•	receptionTeamMemberSkills
+	•	receptionTeamMemberAvailabilities
+	•	receptionTeamMemberStats
+
+⸻
+
+2. Créer le schema principal
+
+Créer le fichier :
+
+/lib/mockdb/schema.ts
+
+Ce fichier doit :
+	•	importer toutes les collections depuis ./collections
+	•	définir l'interface MockDB qui agrège toutes les collections
+	•	exporter une variable mockDB: MockDB initialisée avec toutes les collections vides
+	•	ne contenir aucune fonction
+	•	ne contenir aucune donnée (seulement la structure)
+
+Structure de l'interface MockDB :
+
+```typescript
+export interface MockDB {
+  clients: Client[]
+  subscriptions: Subscription[]
+  products: Product[]
+  clientProducts: ClientProduct[]
+  teamMembers: TeamMember[]
+  receptionConfigs: ReceptionConfig[]
+  receptionDetails: ReceptionDetails[]
+  receptionServices: ReceptionService[]
+  receptionIntegrations: ReceptionIntegration[]
+  receptionTeamMembers: ReceptionTeamMember[]
+  receptionTeamMemberSkills: ReceptionTeamMemberSkill[]
+  receptionTeamMemberAvailabilities: ReceptionTeamMemberAvailability[]
+  receptionTeamMemberStats: ReceptionTeamMemberStats[]
+}
+```
+
+La variable mockDB doit être initialisée avec toutes les collections importées.
+
+⸻
+
+3. Vérifications internes
+	•	Chaque fichier de collection est au singulier (kebab-case) et correspond à un type dans /lib/types.
+	•	Chaque variable de collection est en camelCase pluriel et typée tableau du type correspondant.
+	•	Tous les fichiers de collections sont vides (tableaux []).
+	•	Aucun fichier ne contient de fonction.
+	•	Aucun fichier ne contient de données (phase 2.3).
+	•	Le schema.ts agrège toutes les collections sans exception.
+	•	Les imports utilisent uniquement @/lib/types.
+	•	Nom de type = PascalCase singulier. Nom de variable/clé = camelCase pluriel.
+	•	Zéro logique métier (pas de transformation, pas de mapping).
+
+⸻
+
+Phase 2.2 terminée lorsque :
+	•	/lib/mockdb/collections/* = 13 fichiers avec collections vides typées
+	•	/lib/mockdb/collections/index.ts = exporte toutes les collections
+	•	/lib/mockdb/schema.ts = interface MockDB + variable mockDB initialisée
+	•	Aucun débordement sur 2.3 / 2.4 / 2.5
+	•	Aucune donnée présente (tableaux vides uniquement)
+	•	Aucune fonction présente
+	•	Compilation TS valide
+
+⸻
+
+PHASE 2.3 — TODO (Version Finale Cursor)
+
+Objectif : générer des données mock cohérentes, complètes et exploitables pour toutes les collections, simulant un salon réel après onboarding.
+
+⸻
+
+1. Créer les fichiers de données mock
+
+Créer le dossier :
+
+/lib/mockdb/data/
+
+Créer un fichier par collection (nom de fichier = singulier, kebab-case, identique à Phase 2.2), dans cet ordre strict :
+
+client.ts
+subscription.ts
+product.ts
+client-product.ts
+team-member.ts
+reception-config.ts
+reception-details.ts
+reception-service.ts
+reception-integration.ts
+reception-team-member.ts
+reception-team-member-skill.ts
+reception-team-member-availability.ts
+reception-team-member-stats.ts
+
+Chaque fichier doit :
+	•	importer le type correspondant depuis @/lib/types
+	•	exporter une constante en camelCase pluriel, typée comme tableau du type, contenant des données mock réalistes
+	•	respecter les types et contraintes définis dans macro2.support.md
+	•	utiliser des IDs cohérents et réutilisables (constantes exportées)
+	•	ne contenir aucune fonction (seulement des données)
+
+⸻
+
+2. Données de base (scénario : salon solo après onboarding)
+
+2.1. client.ts
+
+Créer 1 client (salon solo) :
+	•	id : 'client-1'
+	•	ownerName : nom réaliste
+	•	avatarUrl : URL placeholder ou vide
+	•	name : nom du salon
+	•	email : email réaliste
+	•	phone : numéro français réaliste
+	•	locale : 'fr-FR'
+	•	timezone : 'Europe/Paris'
+
+2.2. subscription.ts
+
+Créer 1 subscription active :
+	•	id : 'sub-1'
+	•	planType : 'solo'
+	•	status : 'active'
+	•	startDate : date récente (ISO string)
+	•	endDate : date future (ISO string)
+	•	billingCycle : 'monthly'
+	•	priceEur : prix réaliste pour solo
+	•	currency : 'EUR'
+	•	autoRenew : true
+
+2.3. product.ts
+
+Créer les produits disponibles (au moins 3) :
+	•	key : 'voice', 'sms', 'calendar' (ou autres produits pertinents)
+	•	label : libellé descriptif
+	•	isActive : true pour tous
+
+2.4. client-product.ts
+
+Lier le client aux produits activés :
+	•	id : unique
+	•	productKey : référence à products
+	•	subscriptionId : 'sub-1'
+
+2.5. reception-config.ts
+
+Créer 1 config (1 seul objet, pas un tableau) :
+	•	assignmentStrategy : 'round-robin' ou 'manual'
+	•	relancesEnabled : true
+	•	feedbackEnabled : true
+	•	notificationsProEnabled : false (solo)
+
+2.6. reception-details.ts
+
+Créer 1 détail (1 seul objet, pas un tableau) :
+	•	address : adresse complète réaliste
+	•	city : ville française
+	•	postalCode : code postal français
+	•	country : 'France'
+	•	openingHours : objet avec horaires (unknown pour l'instant)
+	•	paymentMethods : tableau/objet (unknown pour l'instant)
+	•	logoUrl : URL placeholder ou vide
+	•	description : description du salon
+
+2.7. reception-service.ts
+
+Créer au moins 3 services :
+	•	id : unique
+	•	serviceName : nom réaliste (ex: 'Coupe Homme', 'Coloration', 'Brushing')
+	•	durationMinutes : durée réaliste (30, 60, 90, etc.)
+	•	priceEur : prix réaliste
+	•	category : catégorie (ex: 'Coiffure', 'Coloration', 'Soin')
+	•	description : description courte
+
+2.8. reception-integration.ts
+
+Créer 1 intégration (1 seul objet, pas un tableau) :
+	•	googleCalendarEnabled : true ou false
+	•	outlookCalendarEnabled : false
+	•	telegramEnabled : true ou false
+	•	whatsappEnabled : true ou false
+	•	syncStatus : 'synced' ou 'pending'
+	•	errorMessage : '' (vide si synced)
+
+⸻
+
+3. Données équipe (scénario : salon solo = 1 pro)
+
+3.1. team-member.ts
+
+Créer 1 membre d'équipe (le propriétaire) :
+	•	id : 'team-member-1'
+	•	fullName : nom complet
+	•	roleLabel : 'Propriétaire' ou 'Coiffeur'
+	•	email : email réaliste
+	•	phone : numéro réaliste
+	•	isActive : true
+
+3.2. reception-team-member.ts
+
+Créer 1 entrée pour le pro :
+	•	teamMemberId : 'team-member-1'
+	•	gcalEmail : email Google Calendar ou ''
+	•	gcalIsShared : true si gcalEmail présent
+	•	acceptNewClients : true
+	•	notificationsEnabled : true
+	•	preferredChannel : 'whatsapp' ou 'telegram' ou 'sms'
+	•	fallbackNumber : numéro de secours
+	•	isVisible : true
+
+3.3. reception-team-member-skill.ts
+
+Lier le pro aux services (au moins 2 compétences) :
+	•	id : unique
+	•	teamMemberId : 'team-member-1'
+	•	serviceId : référence à reception-services
+
+3.4. reception-team-member-availability.ts
+
+Créer les disponibilités du pro (au moins 3 créneaux) :
+	•	id : unique
+	•	teamMemberId : 'team-member-1'
+	•	dayOfWeek : 1-7 (1 = lundi)
+	•	startTime : '09:00' format HH:mm
+	•	endTime : '18:00' format HH:mm
+
+3.5. reception-team-member-stats.ts
+
+Créer les stats du pro :
+	•	teamMemberId : 'team-member-1'
+	•	completedBookings : nombre réaliste (ex: 45)
+	•	cancelledBookings : nombre réaliste (ex: 3)
+	•	ratingAvg : moyenne réaliste (ex: 4.8)
+
+⸻
+
+4. Cohérence des IDs
+
+Créer un fichier de constantes :
+
+/lib/mockdb/data/ids.ts
+
+Exporter toutes les constantes d'IDs réutilisables :
+
+```typescript
+export const CLIENT_ID = 'client-1'
+export const SUBSCRIPTION_ID = 'sub-1'
+export const TEAM_MEMBER_ID = 'team-member-1'
+// etc.
+```
+
+Tous les fichiers de données doivent importer et utiliser ces constantes pour garantir la cohérence.
+
+⸻
+
+5. Index des données
+
+Créer /lib/mockdb/data/index.ts
+
+Exporter toutes les données dans l'ordre strict :
+
+export { clients } from './client'
+export { subscriptions } from './subscription'
+export { products } from './product'
+export { clientProducts } from './client-product'
+export { teamMembers } from './team-member'
+export { receptionConfigs } from './reception-config'
+export { receptionDetails } from './reception-details'
+export { receptionServices } from './reception-service'
+export { receptionIntegrations } from './reception-integration'
+export { receptionTeamMembers } from './reception-team-member'
+export { receptionTeamMemberSkills } from './reception-team-member-skill'
+export { receptionTeamMemberAvailabilities } from './reception-team-member-availability'
+export { receptionTeamMemberStats } from './reception-team-member-stats'
+
+⸻
+
+6. Intégration dans mockDB
+
+Modifier /lib/mockdb/schema.ts pour importer les données :
+
+```typescript
+import * as data from './data'
+
+export const mockDB: MockDB = {
+  clients: data.clients,
+  subscriptions: data.subscriptions,
+  // ... toutes les collections
+}
+```
+
+⸻
+
+7. Vérifications internes
+	•	Tous les IDs sont cohérents entre collections (références valides).
+	•	Tous les types respectent les interfaces de /lib/types.
+	•	Toutes les valeurs respectent les contraintes (unions littérales, formats).
+	•	Les relations sont valides (clientProducts → products, skills → services, etc.).
+	•	Les données simulent un salon solo fonctionnel après onboarding.
+	•	Aucune fonction présente (seulement des données).
+	•	Les IDs sont centralisés dans ids.ts et réutilisés partout.
+
+⸻
+
+Phase 2.3 terminée lorsque :
+	•	/lib/mockdb/data/* = 13 fichiers avec données mock réalistes
+	•	/lib/mockdb/data/ids.ts = constantes d'IDs centralisées
+	•	/lib/mockdb/data/index.ts = exporte toutes les données
+	•	/lib/mockdb/schema.ts = mockDB initialisé avec les données
+	•	Cohérence des IDs et relations vérifiée
+	•	Scénario solo fonctionnel simulé
+	•	Compilation TS valide
+	•	Aucun débordement sur 2.4 / 2.5
+
+⸻
+
+PHASE 2.4 — TODO (Version Finale Cursor)
+
+Objectif : créer l'API Mock Layer qui simule les futurs endpoints backend, construisant les Domain Models à partir du mockDB, avec gestion d'erreurs explicite et zéro logique métier.
+
+⸻
+
+RÈGLES OBLIGATOIRES
+
+1. Interdictions strictes :
+	•	Aucune logique métier (pas de filtrage, pas de tri, pas de sélection d'abonnement, pas d'inférence)
+	•	Aucun ! (non-null assertion)
+	•	Aucune mutation du mockDB (lecture seule)
+	•	Aucun endpoint REST, aucune route
+	•	Aucune supposition hors mockDB
+	•	Aucun filtrage silencieux (pas d'exclusion de Pro incomplet)
+
+2. Gestion d'erreurs explicite :
+	•	Les Domain Models structurels (ClientContext, Reception) ne sont jamais nullables
+	•	Si une donnée fondamentale manque → throw une erreur explicite
+	•	Les erreurs doivent indiquer clairement quelle donnée est manquante
+
+3. Null-safety intelligente :
+	•	Utiliser ?? null uniquement pour getProById() (recherche optionnelle)
+	•	Les tableaux peuvent être vides [] (skills[], availability[], services[])
+	•	Les champs structurels du Domain Model doivent throw si absents
+
+4. Types de retour stricts :
+	•	getClientContext() : ClientContext (non-null, throw si incomplet)
+	•	getReception() : Reception (non-null, throw si incomplet)
+	•	getPros() : Pro[] (tous les pros, throw si incomplet)
+	•	getProById() : Pro | null (nullable car recherche optionnelle)
+
+⸻
+
+1. Structure de l'API Mock
+
+Créer le dossier :
+
+/lib/api/mock/
+
+Créer les fichiers suivants :
+
+client-context.ts
+pro.ts
+reception.ts
+index.ts
+
+⸻
+
+2. API ClientContext
+
+Créer /lib/api/mock/client-context.ts
+
+Cette fonction doit :
+	•	importer mockDB depuis @/lib/mockdb/schema
+	•	importer le type ClientContext depuis @/lib/domain
+	•	importer getReception depuis ./reception
+	•	importer getPros depuis ./pro
+	•	exporter une fonction getClientContext() qui retourne ClientContext (non-null)
+	•	construire ClientContext en agrégeant :
+		- client : mockDB.clients[0] (throw si absent)
+		- subscriptions : mockDB.subscriptions (sans filtrage)
+		- clientProducts : mockDB.clientProducts (sans filtrage)
+		- reception : construite via getReception() (non-null, throw si absent)
+		- pros : construits via getPros() (peut être tableau vide)
+
+Règle : ClientContext est un prérequis de l'application. Si une donnée fondamentale manque, throw une erreur explicite.
+
+Exemple de structure :
+
+```typescript
+import { mockDB } from '@/lib/mockdb/schema'
+import type { ClientContext } from '@/lib/domain'
+import { getReception } from './reception'
+import { getPros } from './pro'
+
+export function getClientContext(): ClientContext {
+  const client = mockDB.clients[0]
+  if (!client) {
+    throw new Error('ClientContext: client manquant dans mockDB')
+  }
+
+  const subscriptions = mockDB.subscriptions
+  const clientProducts = mockDB.clientProducts
+  const reception = getReception()
+  const pros = getPros()
+
+  return {
+    client,
+    subscriptions,
+    clientProducts,
+    reception,
+    pros,
+  }
+}
+```
+
+⸻
+
+3. API Pro
+
+Créer /lib/api/mock/pro.ts
+
+Cette fonction doit :
+	•	importer mockDB depuis @/lib/mockdb/schema
+	•	importer le type Pro depuis @/lib/domain
+	•	exporter une fonction getPros() qui retourne Pro[]
+	•	exporter une fonction getProById(teamMemberId: string) qui retourne Pro | null
+	•	pour chaque teamMember dans mockDB.teamMembers :
+		- trouver le ReceptionTeamMember correspondant (teamMemberId) avec find() → throw si absent
+		- trouver le ReceptionTeamMemberStats correspondant (teamMemberId) avec find() → throw si absent
+		- trouver les ReceptionTeamMemberSkill[] correspondants (teamMemberId) avec filter() → [] si vide
+		- trouver les ReceptionTeamMemberAvailability[] correspondants (teamMemberId) avec filter() → [] si vide
+		- construire l'objet Pro agrégé pour TOUS les teamMembers
+		- si reception ou stats sont absents → throw une erreur explicite
+
+Règle : un Pro existe dans la DB, donc toutes ses données doivent être présentes. Aucun filtrage silencieux. Si une sous-table manque, c'est un bug de données → throw.
+
+Exemple de structure :
+
+```typescript
+import { mockDB } from '@/lib/mockdb/schema'
+import type { Pro } from '@/lib/domain'
+
+export function getPros(): Pro[] {
+  const pros: Pro[] = []
+
+  for (const member of mockDB.teamMembers) {
+    const reception = mockDB.receptionTeamMembers.find(
+      (r) => r.teamMemberId === member.id
+    )
+    if (!reception) {
+      throw new Error(`Pro ${member.id}: ReceptionTeamMember manquant`)
+    }
+
+    const stats = mockDB.receptionTeamMemberStats.find(
+      (s) => s.teamMemberId === member.id
+    )
+    if (!stats) {
+      throw new Error(`Pro ${member.id}: ReceptionTeamMemberStats manquant`)
+    }
+
+    const skills = mockDB.receptionTeamMemberSkills.filter(
+      (s) => s.teamMemberId === member.id
+    )
+    const availability = mockDB.receptionTeamMemberAvailabilities.filter(
+      (a) => a.teamMemberId === member.id
+    )
+
+    pros.push({
+      member,
+      reception,
+      stats,
+      skills,
+      availability,
+    })
+  }
+
+  return pros
+}
+
+export function getProById(teamMemberId: string): Pro | null {
+  const pros = getPros()
+  return pros.find((p) => p.member.id === teamMemberId) ?? null
+}
+```
+
+⸻
+
+4. API Reception
+
+Créer /lib/api/mock/reception.ts
+
+Cette fonction doit :
+	•	importer mockDB depuis @/lib/mockdb/schema
+	•	importer le type Reception depuis @/lib/domain
+	•	exporter une fonction getReception() qui retourne Reception (non-null)
+	•	construire Reception en agrégeant :
+		- details : mockDB.receptionDetails[0] (throw si absent)
+		- config : mockDB.receptionConfigs[0] (throw si absent)
+		- integrations : mockDB.receptionIntegrations[0] (throw si absent)
+		- services : mockDB.receptionServices (peut être tableau vide)
+
+Règle : Reception est un prérequis de l'application (noyau du produit). Si details, config ou integrations sont absents → throw une erreur explicite.
+
+Exemple de structure :
+
+```typescript
+import { mockDB } from '@/lib/mockdb/schema'
+import type { Reception } from '@/lib/domain'
+
+export function getReception(): Reception {
+  const details = mockDB.receptionDetails[0]
+  if (!details) {
+    throw new Error('Reception: receptionDetails manquant dans mockDB')
+  }
+
+  const config = mockDB.receptionConfigs[0]
+  if (!config) {
+    throw new Error('Reception: receptionConfigs manquant dans mockDB')
+  }
+
+  const integrations = mockDB.receptionIntegrations[0]
+  if (!integrations) {
+    throw new Error('Reception: receptionIntegrations manquant dans mockDB')
+  }
+
+  const services = mockDB.receptionServices
+
+  return {
+    details,
+    config,
+    integrations,
+    services,
+  }
+}
+```
+
+⸻
+
+5. Index de l'API
+
+Créer /lib/api/mock/index.ts
+
+Exporter toutes les fonctions API :
+
+```typescript
+export { getClientContext } from './client-context'
+export { getPros, getProById } from './pro'
+export { getReception } from './reception'
+```
+
+⸻
+
+6. Vérifications internes
+	•	Toutes les fonctions retournent les types stricts : ClientContext (non-null), Reception (non-null), Pro[], Pro | null
+	•	Toutes les fonctions utilisent uniquement mockDB pour accéder aux données
+	•	Les agrégations respectent la structure définie dans /lib/domain
+	•	Les relations sont correctement résolues (teamMemberId, serviceId, etc.)
+	•	Aucune fonction ne modifie mockDB (lecture seule)
+	•	Toutes les fonctions sont typées correctement
+	•	Zéro ! (non-null assertion) dans tout le code
+	•	Gestion d'erreurs explicite avec throw pour les données structurelles manquantes
+	•	?? null utilisé uniquement pour getProById() (recherche optionnelle)
+	•	Aucune logique métier (pas de filtrage conditionnel, pas de tri, pas de sélection, pas d'exclusion silencieuse)
+	•	Les tableaux vides sont acceptés (skills[], availability[], services[])
+	•	Les erreurs throw indiquent clairement quelle donnée est manquante
+
+⸻
+
+Phase 2.4 terminée lorsque :
+	•	/lib/api/mock/* = 4 fichiers (client-context.ts, pro.ts, reception.ts, index.ts)
+	•	getClientContext() retourne ClientContext (non-null, throw si incomplet)
+	•	getPros() retourne Pro[] avec toutes les relations agrégées (throw si Pro incomplet, aucun filtrage silencieux)
+	•	getProById() retourne Pro | null (nullable car recherche optionnelle)
+	•	getReception() retourne Reception (non-null, throw si incomplet)
+	•	Toutes les fonctions sont exportées dans index.ts
+	•	Aucune modification de mockDB (lecture seule)
+	•	Zéro ! dans tout le code
+	•	Gestion d'erreurs explicite avec throw pour données structurelles manquantes
+	•	?? null utilisé uniquement pour getProById()
+	•	Aucune logique métier (pas de filtrage, pas d'exclusion silencieuse)
+	•	Compilation TS valide
+	•	Aucun débordement sur 2.5
+
+⸻
+
+Phase 2.5 — Validation de Cohérence
+
+Objectif : vérifier que l’ensemble Domain Models + MockDB + API Mock est compatible et opérationnel.
+Tâches principales :
+	•	Vérifier que tout compile sans erreur TypeScript.
+	•	Vérifier que tous les Domain Models sont alimentés correctement.
+	•	Vérifier que les relations fonctionnent.
+	•	Vérifier que les API mock retournent les bons formats.
+	•	Vérifier que rien ne dépend de données non whitelistées.
+	•	Vérifier l’alignement strict avec macro2.support.
+
+Sortie attendue :
+Macro 2 validée, prête à être utilisée par Macro 3, 4, 5, 6.
+
+⸻
+
+Résumé des phases Macro 2
+	•	Phase 2.1 : Domain Models Front
+	•	Phase 2.2 : Mock Database Schema
+	•	Phase 2.3 : Mock Data
+	•	Phase 2.4 : API Mock Layer
+	•	Phase 2.5 : Validation de Cohérence
+
 
 ---
 
-- **Macro 2 — Contrats d'API & Mock Data**
-
-  **Phase 1 — Types & Contrats**
-
-  📋 TODO-START Macro 2 Phase 1
-
-  1. Analyser la structure Flood v3.6 / Supabase pour identifier les entités principales :
-     - Identifier les tables principales (users, salons, teams, services, etc.)
-     - Identifier les relations entre entités
-     - Identifier les types de données et contraintes
-     - Documenter la structure attendue dans `MACRO2-PHASE1-TYPES.md`
-
-  2. Définir les types TypeScript pour chaque domaine fonctionnel :
-     - Types pour domaine Onboarding (salon, équipe, services, intégrations)
-     - Types pour domaine Dashboard (métriques, activités, ressources)
-     - Types pour domaine Settings (profil, préférences, équipe)
-     - Types pour domaine Marketing (offres, pricing, signup)
-     - Types pour authentification (user, session, auth state)
-     - Créer les interfaces dans `lib/types/` avec organisation par domaine
-
-  3. Définir les contrats d'API (interfaces de données) :
-     - Contrats pour requêtes GET (lecture)
-     - Contrats pour requêtes POST/PUT/DELETE (écriture)
-     - Contrats pour réponses API
-     - Contrats pour erreurs et états de chargement
-     - Documenter dans `lib/types/api.ts` ou fichiers séparés par domaine
-
-  4. Valider la cohérence des types :
-     - Vérifier que tous les types sont compatibles avec la structure Phase 4 (segments dynamiques `[step]`, `[id]`, `[tab]`, `[slug]`)
-     - Vérifier que les types correspondent aux domaines fonctionnels définis Macro 1
-     - Vérifier la compilation TypeScript (`tsc --noEmit`)
-     - Documenter les dépendances types → structure routes
-
-  5. Produire documentation minimale `MACRO2-PHASE1-TYPES.md` :
-     - Structure Flood v3.6 / Supabase analysée
-     - Types définis par domaine fonctionnel
-     - Contrats d'API définis
-     - Validation cohérence effectuée
-     - Prêt pour Phase 2 (Mock Data)
-
-  📋 TODO-END Macro 2 Phase 1
-
-  ⚠️ Validation humaine obligatoire avant exécution.
-
-  **Règles strictes Macro 2 Phase 1** :
-  - ✅ Types et contrats uniquement (aucune implémentation de logique métier)
-  - ✅ Aucune création de mock data (Phase 2)
-  - ✅ Aucune UI, navigation, auth, logique métier
-  - ✅ Types alignés avec structure Macro 1 Phase 4
-  - ✅ Compilation TypeScript validée
-  - ❌ Pas de duplication des types existants
-  - ❌ Pas d'anticipation Phase 2 (mocks)
-
-  - **Objectif général**
-    La **Macro 2** établit la couche contractuelle du front.
-    Elle garantit que les types, schémas et données factices reflètent exactement la structure Flood v3.6.
-    Cette macro :
-    - dérive les types et interfaces à partir du schéma Supabase ;
-    - génère les mock data pour chaque domaine fonctionnel ;
-    - teste la compilation et la cohérence des types sans backend réel.
-    🎯 **Rôle pour le front :**
-    Elle permet de simuler intégralement le produit et d'avancer sur le design sans dépendre du backend.
 
 ---
 

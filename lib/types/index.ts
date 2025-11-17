@@ -1,2 +1,13 @@
-// Types TypeScript partagés
-// TODO: Ajouter les types partagés ici
+export type { Client } from './client'
+export type { Subscription } from './subscription'
+export type { Product } from './product'
+export type { ClientProduct } from './client-product'
+export type { TeamMember } from './team-member'
+export type { ReceptionConfig } from './reception-config'
+export type { ReceptionDetails } from './reception-details'
+export type { ReceptionService } from './reception-service'
+export type { ReceptionIntegration } from './reception-integration'
+export type { ReceptionTeamMember } from './reception-team-member'
+export type { ReceptionTeamMemberSkill } from './reception-team-member-skill'
+export type { ReceptionTeamMemberAvailability } from './reception-team-member-availability'
+export type { ReceptionTeamMemberStats } from './reception-team-member-stats'
