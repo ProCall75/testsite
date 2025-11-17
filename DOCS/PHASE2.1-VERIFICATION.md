@@ -22,7 +22,7 @@ export interface Client {
   name: string
   email: string
   phone: string
-  locale: string
+  locale: string  
   timezone: string
 }
 ```

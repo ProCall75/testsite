@@ -694,272 +694,201 @@ Phase 2.3 terminée lorsque :
 
 ⸻
 
-PHASE 2.4 — TODO (Version Finale Cursor)
+PHASE 2.4 — API Mock Layer (Version Macro 2)
 
-Objectif : créer l'API Mock Layer qui simule les futurs endpoints backend, construisant les Domain Models à partir du mockDB, avec gestion d'erreurs explicite et zéro logique métier.
+Objectif : créer l'API Mock Layer qui simule les futurs endpoints backend, assemblant les Domain Models à partir du mockDB. Mock permissif, UI-friendly, zéro logique métier.
 
 ⸻
+Voici la TODO 2.4 réécrite, stabilisée, Cursor-safe, zéro ambiguïté, zéro contradiction, 100% alignée macro 2,
+et 100% compatible avec tout ce qu’il a déjà construit en Phase 2.1, 2.2 et 2.3.
+
+C’est la version que Cursor doit exécuter.
+Elle est rédigée pour empêcher tout dérapage, toute interprétation floue, toute transformation involontaire,
+tout en restant lisible, simple, et impossible à mal comprendre.
+
+⸻
+
+✅ PHASE 2.4 — API Mock Layer (Version Finale Macro 2, Cursor-Safe)
+
+🎯 Objectif
+
+Créer l’API Mock Layer qui assemble les Domain Models à partir du mockDB.
+Mock permissif, UI-friendly, sans logique métier, sans validation,
+et strictement basé sur les fichiers déjà créés en Phase 2.1, 2.2 et 2.3.
+
+⸻
+Voici la même todo, dans le même ordre, avec les mêmes règles, les mêmes étapes, aucune reformulation,
+juste organisée en BLOCs (titres uniquement) pour exécution progressive par Cursor.
+
+⸻
+
+PHASE 2.4 — API Mock Layer
+
+Version blocs — même contenu, même ordre, aucune reformulation
+
+⸻
+
+BLOC 0 — RÈGLES OBLIGATOIRES (à respecter pour toute la phase)
+
+(ne rien exécuter dans ce bloc, juste charger les règles)
 
 RÈGLES OBLIGATOIRES
+	1.	Interdictions strictes :
+• Aucune logique métier (pas de filtrage, pas de tri, pas de sélection, pas d’inférence)
+• Aucun ! (non-null assertion)
+• Aucune mutation du mockDB (lecture seule)
+• Aucun endpoint REST, aucune route
+• Aucune supposition hors mockDB
+• Zéro throw (sauf client absent → pas d’app sans client)
+• Aucune modification des Domain Models dans /lib/domain (assemblage uniquement)
+• Aucune transformation, dérivation ou nettoyage de données
+• Les valeurs sont retournées exactement telles qu’elles apparaissent dans mockDB, ou remplacées par les valeurs par défaut définies
+• Aucun spread sur objets Domain Models
+	2.	Mock permissif (Macro 2) :
+• Domain Models toujours structurellement valides (pas business-valid)
+• Valeurs par défaut pour données manquantes (sauf client)
+• Tableaux vides acceptés partout
+• Si reception/config/integrations manquent → retourner les valeurs par défaut
+• Permet de tester tous les cas UI
+	3.	Null-safety partout :
+• ?? [] pour tableaux
+• ?? null uniquement dans getProById()
+• Valeurs par défaut pour objets manquants
+• Types unknown → as unknown
+	4.	Ordre strict des champs :
+• ClientContext : client, subscriptions, clientProducts, reception, pros
+• Reception : details, config, integrations, services
+• Pro : member, reception, stats, skills, availability
+	5.	Ordre strict des imports :
+	6.	mockDB depuis @/lib/mockdb/schema
+	7.	types domain depuis @/lib/domain
+	8.	fonctions internes depuis ./ (ordre alphabétique)
+	9.	Types de retour :
+• getClientContext() : ClientContext (throw uniquement si client absent)
+• getReception() : Reception (toujours structurellement valide)
+• getPros() : Pro[] (tous les teamMembers)
+• getProById() : Pro | null
 
-1. Interdictions strictes :
-	•	Aucune logique métier (pas de filtrage, pas de tri, pas de sélection d'abonnement, pas d'inférence)
-	•	Aucun ! (non-null assertion)
-	•	Aucune mutation du mockDB (lecture seule)
-	•	Aucun endpoint REST, aucune route
-	•	Aucune supposition hors mockDB
-	•	Aucun filtrage silencieux (pas d'exclusion de Pro incomplet)
-
-2. Gestion d'erreurs explicite :
-	•	Les Domain Models structurels (ClientContext, Reception) ne sont jamais nullables
-	•	Si une donnée fondamentale manque → throw une erreur explicite
-	•	Les erreurs doivent indiquer clairement quelle donnée est manquante
-
-3. Null-safety intelligente :
-	•	Utiliser ?? null uniquement pour getProById() (recherche optionnelle)
-	•	Les tableaux peuvent être vides [] (skills[], availability[], services[])
-	•	Les champs structurels du Domain Model doivent throw si absents
-
-4. Types de retour stricts :
-	•	getClientContext() : ClientContext (non-null, throw si incomplet)
-	•	getReception() : Reception (non-null, throw si incomplet)
-	•	getPros() : Pro[] (tous les pros, throw si incomplet)
-	•	getProById() : Pro | null (nullable car recherche optionnelle)
+STOP après ce bloc.
 
 ⸻
 
-1. Structure de l'API Mock
+BLOC 1 — STRUCTURE DES FICHIERS À CRÉER
 
 Créer le dossier :
-
 /lib/api/mock/
 
-Créer les fichiers suivants :
+Créer les fichiers :
+• client-context.ts
+• pro.ts
+• reception.ts
+• index.ts
 
-client-context.ts
-pro.ts
-reception.ts
-index.ts
-
-⸻
-
-2. API ClientContext
-
-Créer /lib/api/mock/client-context.ts
-
-Cette fonction doit :
-	•	importer mockDB depuis @/lib/mockdb/schema
-	•	importer le type ClientContext depuis @/lib/domain
-	•	importer getReception depuis ./reception
-	•	importer getPros depuis ./pro
-	•	exporter une fonction getClientContext() qui retourne ClientContext (non-null)
-	•	construire ClientContext en agrégeant :
-		- client : mockDB.clients[0] (throw si absent)
-		- subscriptions : mockDB.subscriptions (sans filtrage)
-		- clientProducts : mockDB.clientProducts (sans filtrage)
-		- reception : construite via getReception() (non-null, throw si absent)
-		- pros : construits via getPros() (peut être tableau vide)
-
-Règle : ClientContext est un prérequis de l'application. Si une donnée fondamentale manque, throw une erreur explicite.
-
-Exemple de structure :
-
-```typescript
-import { mockDB } from '@/lib/mockdb/schema'
-import type { ClientContext } from '@/lib/domain'
-import { getReception } from './reception'
-import { getPros } from './pro'
-
-export function getClientContext(): ClientContext {
-  const client = mockDB.clients[0]
-  if (!client) {
-    throw new Error('ClientContext: client manquant dans mockDB')
-  }
-
-  const subscriptions = mockDB.subscriptions
-  const clientProducts = mockDB.clientProducts
-  const reception = getReception()
-  const pros = getPros()
-
-  return {
-    client,
-    subscriptions,
-    clientProducts,
-    reception,
-    pros,
-  }
-}
-```
+STOP après ce bloc.
 
 ⸻
 
-3. API Pro
+BLOC 2 — API ClientContext (client-context.ts)
 
-Créer /lib/api/mock/pro.ts
+Checklist :
+• Importer mockDB depuis @/lib/mockdb/schema (ordre 1)
+• Importer ClientContext depuis @/lib/domain (ordre 2)
+• Importer getReception depuis ./reception (ordre 3)
+• Importer getPros depuis ./pro (ordre 3)
+• Exporter getClientContext() : ClientContext
+• Construire objet avec champs dans l’ordre exact : client, subscriptions, clientProducts, reception, pros
+• client : mockDB.clients[0] → throw si absent (seul throw autorisé)
+• subscriptions : mockDB.subscriptions ?? []
+• clientProducts : mockDB.clientProducts ?? []
+• reception : getReception()
+• pros : getPros() ?? []
 
-Cette fonction doit :
-	•	importer mockDB depuis @/lib/mockdb/schema
-	•	importer le type Pro depuis @/lib/domain
-	•	exporter une fonction getPros() qui retourne Pro[]
-	•	exporter une fonction getProById(teamMemberId: string) qui retourne Pro | null
-	•	pour chaque teamMember dans mockDB.teamMembers :
-		- trouver le ReceptionTeamMember correspondant (teamMemberId) avec find() → throw si absent
-		- trouver le ReceptionTeamMemberStats correspondant (teamMemberId) avec find() → throw si absent
-		- trouver les ReceptionTeamMemberSkill[] correspondants (teamMemberId) avec filter() → [] si vide
-		- trouver les ReceptionTeamMemberAvailability[] correspondants (teamMemberId) avec filter() → [] si vide
-		- construire l'objet Pro agrégé pour TOUS les teamMembers
-		- si reception ou stats sont absents → throw une erreur explicite
-
-Règle : un Pro existe dans la DB, donc toutes ses données doivent être présentes. Aucun filtrage silencieux. Si une sous-table manque, c'est un bug de données → throw.
-
-Exemple de structure :
-
-```typescript
-import { mockDB } from '@/lib/mockdb/schema'
-import type { Pro } from '@/lib/domain'
-
-export function getPros(): Pro[] {
-  const pros: Pro[] = []
-
-  for (const member of mockDB.teamMembers) {
-    const reception = mockDB.receptionTeamMembers.find(
-      (r) => r.teamMemberId === member.id
-    )
-    if (!reception) {
-      throw new Error(`Pro ${member.id}: ReceptionTeamMember manquant`)
-    }
-
-    const stats = mockDB.receptionTeamMemberStats.find(
-      (s) => s.teamMemberId === member.id
-    )
-    if (!stats) {
-      throw new Error(`Pro ${member.id}: ReceptionTeamMemberStats manquant`)
-    }
-
-    const skills = mockDB.receptionTeamMemberSkills.filter(
-      (s) => s.teamMemberId === member.id
-    )
-    const availability = mockDB.receptionTeamMemberAvailabilities.filter(
-      (a) => a.teamMemberId === member.id
-    )
-
-    pros.push({
-      member,
-      reception,
-      stats,
-      skills,
-      availability,
-    })
-  }
-
-  return pros
-}
-
-export function getProById(teamMemberId: string): Pro | null {
-  const pros = getPros()
-  return pros.find((p) => p.member.id === teamMemberId) ?? null
-}
-```
+STOP après ce bloc.
 
 ⸻
 
-4. API Reception
+BLOC 3 — API Reception (reception.ts)
 
-Créer /lib/api/mock/reception.ts
+Checklist :
+• Importer mockDB depuis @/lib/mockdb/schema (ordre 1)
+• Importer Reception depuis @/lib/domain (ordre 2)
+• Exporter getReception() : Reception
+• Construire objet avec champs dans l’ordre exact : details, config, integrations, services
+• details : mockDB.receptionDetails[0] ?? valeur par défaut
+• config : mockDB.receptionConfigs[0] ?? valeur par défaut
+• integrations : mockDB.receptionIntegrations[0] ?? valeur par défaut
+• services : mockDB.receptionServices ?? []
 
-Cette fonction doit :
-	•	importer mockDB depuis @/lib/mockdb/schema
-	•	importer le type Reception depuis @/lib/domain
-	•	exporter une fonction getReception() qui retourne Reception (non-null)
-	•	construire Reception en agrégeant :
-		- details : mockDB.receptionDetails[0] (throw si absent)
-		- config : mockDB.receptionConfigs[0] (throw si absent)
-		- integrations : mockDB.receptionIntegrations[0] (throw si absent)
-		- services : mockDB.receptionServices (peut être tableau vide)
+Valeurs par défaut :
+• details : { address: ‘’, city: ‘’, postalCode: ‘’, country: ‘’, openingHours: {} as unknown, paymentMethods: [] as unknown, logoUrl: ‘’, description: ‘’ }
+• config : { assignmentStrategy: ‘manual’, relancesEnabled: false, feedbackEnabled: false, notificationsProEnabled: false }
+• integrations : { googleCalendarEnabled: false, outlookCalendarEnabled: false, telegramEnabled: false, whatsappEnabled: false, syncStatus: ‘not_synced’, errorMessage: ‘’ }
 
-Règle : Reception est un prérequis de l'application (noyau du produit). Si details, config ou integrations sont absents → throw une erreur explicite.
-
-Exemple de structure :
-
-```typescript
-import { mockDB } from '@/lib/mockdb/schema'
-import type { Reception } from '@/lib/domain'
-
-export function getReception(): Reception {
-  const details = mockDB.receptionDetails[0]
-  if (!details) {
-    throw new Error('Reception: receptionDetails manquant dans mockDB')
-  }
-
-  const config = mockDB.receptionConfigs[0]
-  if (!config) {
-    throw new Error('Reception: receptionConfigs manquant dans mockDB')
-  }
-
-  const integrations = mockDB.receptionIntegrations[0]
-  if (!integrations) {
-    throw new Error('Reception: receptionIntegrations manquant dans mockDB')
-  }
-
-  const services = mockDB.receptionServices
-
-  return {
-    details,
-    config,
-    integrations,
-    services,
-  }
-}
-```
+STOP après ce bloc.
 
 ⸻
 
-5. Index de l'API
+BLOC 4 — API Pro (pro.ts)
 
-Créer /lib/api/mock/index.ts
+Checklist :
+• Importer mockDB depuis @/lib/mockdb/schema (ordre 1)
+• Importer Pro depuis @/lib/domain (ordre 2)
+• Exporter getPros() : Pro[]
+• Exporter getProById(teamMemberId: string) : Pro | null
+• Pour chaque teamMember dans mockDB.teamMembers (TOUS, aucun filtrage) :
+ - Construire Pro avec champs dans l’ordre exact : member, reception, stats, skills, availability
+ - reception : find(…) ?? valeur par défaut
+ - stats : find(…) ?? valeur par défaut
+ - skills : filter(…) ?? []
+ - availability : filter(…) ?? []
+• getProById() : teamMemberId utilisé tel quel
 
-Exporter toutes les fonctions API :
+Valeurs par défaut :
+• reception : { teamMemberId: member.id, gcalEmail: ‘’, gcalIsShared: false, acceptNewClients: true, notificationsEnabled: false, preferredChannel: ‘whatsapp’, fallbackNumber: ‘’, isVisible: true }
+• stats : { teamMemberId: member.id, completedBookings: 0, cancelledBookings: 0, ratingAvg: 0 }
 
-```typescript
-export { getClientContext } from './client-context'
-export { getPros, getProById } from './pro'
-export { getReception } from './reception'
-```
-
-⸻
-
-6. Vérifications internes
-	•	Toutes les fonctions retournent les types stricts : ClientContext (non-null), Reception (non-null), Pro[], Pro | null
-	•	Toutes les fonctions utilisent uniquement mockDB pour accéder aux données
-	•	Les agrégations respectent la structure définie dans /lib/domain
-	•	Les relations sont correctement résolues (teamMemberId, serviceId, etc.)
-	•	Aucune fonction ne modifie mockDB (lecture seule)
-	•	Toutes les fonctions sont typées correctement
-	•	Zéro ! (non-null assertion) dans tout le code
-	•	Gestion d'erreurs explicite avec throw pour les données structurelles manquantes
-	•	?? null utilisé uniquement pour getProById() (recherche optionnelle)
-	•	Aucune logique métier (pas de filtrage conditionnel, pas de tri, pas de sélection, pas d'exclusion silencieuse)
-	•	Les tableaux vides sont acceptés (skills[], availability[], services[])
-	•	Les erreurs throw indiquent clairement quelle donnée est manquante
+STOP après ce bloc.
 
 ⸻
 
-Phase 2.4 terminée lorsque :
-	•	/lib/api/mock/* = 4 fichiers (client-context.ts, pro.ts, reception.ts, index.ts)
-	•	getClientContext() retourne ClientContext (non-null, throw si incomplet)
-	•	getPros() retourne Pro[] avec toutes les relations agrégées (throw si Pro incomplet, aucun filtrage silencieux)
-	•	getProById() retourne Pro | null (nullable car recherche optionnelle)
-	•	getReception() retourne Reception (non-null, throw si incomplet)
-	•	Toutes les fonctions sont exportées dans index.ts
-	•	Aucune modification de mockDB (lecture seule)
-	•	Zéro ! dans tout le code
-	•	Gestion d'erreurs explicite avec throw pour données structurelles manquantes
-	•	?? null utilisé uniquement pour getProById()
-	•	Aucune logique métier (pas de filtrage, pas d'exclusion silencieuse)
-	•	Compilation TS valide
-	•	Aucun débordement sur 2.5
+BLOC 5 — INDEX API (index.ts)
+
+Checklist :
+Exporter exactement :
+• getClientContext depuis ‘./client-context’
+• getPros, getProById depuis ‘./pro’
+• getReception depuis ‘./reception’
+
+STOP après ce bloc.
 
 ⸻
+
+BLOC 6 — VÉRIFICATIONS INTERNES
+
+Checklist :
+• Types stricts respectés
+• Lecture seule de mockDB
+• Ordre strict des champs respecté
+• Ordre strict des imports respecté
+• Relations respectées mais jamais validées
+• Zéro ! partout
+• Zéro throw sauf client absent
+• Null-safety partout
+• Aucune logique métier
+• Valeurs par défaut respectées
+• Aucun spread d’objet
+• getPros() retourne TOUS les teamMembers
+• getProById() retourne Pro | null
+• Compilation TS valide
+• Aucun débordement sur 2.5
+
+STOP après ce bloc.
+
+⸻
+
+Si tu veux maintenant je te génère :
+	•	la version “cursor-proof encore plus compacte”
+	•	ou la version “test automatique Phase 2.4”, similaire à 2.3.
 
 Phase 2.5 — Validation de Cohérence
 
@@ -990,16 +919,486 @@ Résumé des phases Macro 2
 
 ---
 
-- **Macro 3 — Authentification (mockée Supabase)**
-  - **Objectif général**
-    La **Macro 3** implémente le système d’accès et de protection utilisateur.
-    Elle prépare la logique d’authentification à partir des outils Supabase, en mode mocké.
-    Cette macro :
-    - intègre le SDK Supabase et les flux signup/login/logout ;
-    - met en place la redirection selon l’état d’authentification ;
-    - prépare le terrain pour une future connexion réelle.
-    🎯 **Rôle pour le front :**
-    Elle garantit que le routage et la sécurité utilisateur fonctionnent avant d’introduire des données réelles.
+# **Macro 3 — Authentification (mockée Supabase)**
+
+## 🎯 Objectif général
+
+La **Macro 3** implémente le système d’accès et de protection utilisateur.
+Elle prépare la logique d’authentification à partir des outils Supabase, en mode mocké.
+Cette macro :
+- intègre le SDK Supabase et les flux signup/login/logout ;
+- met en place la redirection selon l’état d’authentification ;
+- prépare le terrain pour une future connexion réelle.
+
+**Rôle pour le front :**
+Elle garantit que le routage et la sécurité utilisateur fonctionnent avant d’introduire des données réelles.
+
+---
+
+## Phase 3.1 — Configuration Supabase Mock
+
+**Objectif :** Préparer l'environnement d'authentification mockée (types, client, configuration).
+
+**Sortie :** SDK mocké prêt, types auth prêts, client Supabase mock initialisé.
+
+**Tasklist d'exécution :**
+
+1. Créer le dossier `/lib/auth/`
+
+Contenu à générer dans cette phase seulement :
+- `types.ts`
+- `supabase-mock.ts`
+- `config.ts`
+- `index.ts`
+
+2. Créer `/lib/auth/types.ts` (types stricts, fermés)
+
+Créer exactement les interfaces suivantes — rien de plus :
+
+```typescript
+export interface User {
+  id: string
+  email: string
+  metadata: Record<string, unknown>
+}
+
+export interface Session {
+  accessToken: string
+  refreshToken: string
+  expiresAt: number
+  user: User
+}
+
+export interface AuthState {
+  user: User | null
+  session: Session | null
+  loading: boolean
+}
+```
+
+Règles :
+- Champs obligatoires
+- Aucun champ additionnel
+- `metadata = Record<string, unknown>` strict
+- camelCase partout
+
+3. Créer `/lib/auth/config.ts`
+
+Exporter exactement :
+
+```typescript
+export const SUPABASE_URL = 'http://localhost:9999/mock'
+export const SUPABASE_ANON_KEY = 'mock-anon-key'
+export const IS_MOCK_MODE = true
+```
+
+Règles :
+- Pas de `process.env` dans cette macro
+- Valeurs en dur, mockées
+- Aucun autre export
+
+4. Créer `/lib/auth/supabase-mock.ts`
+
+Créer un faux client minimaliste, sans importer `supabase-js`, utilisant uniquement :
+- Un stockage interne en mémoire : `let currentSession: Session | null = null`
+
+Fonctions à exposer exactement :
+
+```typescript
+export const supabaseMock = {
+  auth: {
+    signUp: async (email: string, password: string) => { ... },
+    signIn: async (email: string, password: string) => { ... },
+    signOut: async () => { ... },
+    getSession: async () => ({ data: { session: currentSession } }),
+  },
+}
+```
+
+Spécifications obligatoires :
+- `signUp` et `signIn` retournent `{ data: { user, session }, error: null }`
+- `signOut` met `currentSession = null`
+- Aucune validation, aucun contrôle, aucun throw
+- Pas de localStorage : mémoire uniquement (évite side-effects)
+
+5. Créer `/lib/auth/index.ts`
+
+Exporter exactement :
+
+```typescript
+export * from './types'
+export * from './config'
+export { supabaseMock } from './supabase-mock'
+```
+
+Règles :
+- Aucun autre export
+- Aucun import relatif croisé
+
+6. Vérifier compilation TypeScript
+
+- Import checker
+- Types stricts
+- Aucune dépendance extérieure non mockée
+- Aucun warning TS
+
+---
+
+## Phase 3.2 — Auth Context & Hooks
+
+**Objectif :** Mettre en place l'orchestration auth dans le front (contexte global + hooks).
+
+**Sortie :** AuthProvider fonctionnel et hooks accessibles dans toute l'app.
+
+**Tasklist d'exécution :**
+
+**RÈGLES OBLIGATOIRES (à respecter pour toute la phase) :**
+- Aucune fonction login/logout/signup dans AuthProvider (Phase 3.4 uniquement)
+- Aucune logique métier (pas de validation, pas de contrôle)
+- Aucune persistance (pas de localStorage, pas de cookies)
+- Aucune redirection (Phase 3.3 uniquement)
+- Isolation du mock : utiliser un wrapper thin (`auth-client.ts`)
+- Provider expose uniquement l'état (`AuthState`), pas d'actions
+- 'use client' obligatoire pour tous les fichiers avec hooks React
+
+---
+
+**BLOC 1 — Créer wrapper auth-client.ts (isolation mock)**
+
+Créer `/lib/auth/auth-client.ts` :
+
+```typescript
+import { supabaseMock } from './supabase-mock'
+import type { Session } from './types'
+
+export const authClient = {
+  getSession: async (): Promise<{ data: { session: Session | null }; error: null }> => {
+    return await supabaseMock.auth.getSession()
+  },
+}
+```
+
+Règles strictes :
+- Un seul export : `authClient`
+- Une seule méthode : `getSession()`
+- Aucune autre méthode (pas de signIn, signOut, etc.)
+- Aucune logique métier
+- Wrapper thin uniquement
+
+---
+
+**BLOC 2 — Créer auth-context.tsx (Provider + useAuth)**
+
+Créer `/lib/auth/auth-context.tsx` :
+
+```typescript
+'use client'
+
+import { createContext, useContext, useState, useEffect, type ReactNode } from 'react'
+import { authClient } from './auth-client'
+import type { AuthState, User, Session } from './types'
+
+const AuthContext = createContext<AuthState | undefined>(undefined)
+
+export function AuthProvider({ children }: { children: ReactNode }) {
+  const [user, setUser] = useState<User | null>(null)
+  const [session, setSession] = useState<Session | null>(null)
+  const [loading, setLoading] = useState<boolean>(true)
+
+  useEffect(() => {
+    const initSession = async () => {
+      const { data } = await authClient.getSession()
+      if (data.session) {
+        setSession(data.session)
+        setUser(data.session.user)
+      }
+      setLoading(false)
+    }
+    initSession()
+  }, [])
+
+  const value: AuthState = {
+    user,
+    session,
+    loading,
+  }
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
+}
+
+export function useAuth() {
+  const context = useContext(AuthContext)
+  if (context === undefined) {
+    throw new Error('useAuth must be used within AuthProvider')
+  }
+  return context
+}
+```
+
+Règles strictes :
+- 'use client' obligatoire
+- Import `authClient` depuis `./auth-client` (PAS directement supabaseMock)
+- Types depuis `./types` uniquement
+- Provider expose uniquement `AuthState` (user, session, loading)
+- Aucune fonction login/logout/signup dans ce fichier
+- `useEffect` avec dépendances `[]` uniquement
+- `useAuth` avec vérification du contexte (throw si undefined)
+
+Interdictions explicites :
+- ❌ Ne pas ajouter de méthodes `login()`, `logout()`, `signup()` dans AuthProvider
+- ❌ Ne pas importer directement `supabaseMock` dans ce fichier
+- ❌ Ne pas ajouter de logique métier (validation, contrôle)
+- ❌ Ne pas ajouter de redirection ou navigation
+
+---
+
+**BLOC 3 — Créer hooks.ts (hooks dérivés)**
+
+Créer `/lib/auth/hooks.ts` :
+
+```typescript
+'use client'
+
+import { useAuth } from './auth-context'
+import type { User, Session } from './types'
+
+export function useUser(): User | null {
+  const { user } = useAuth()
+  return user
+}
+
+export function useSession(): Session | null {
+  const { session } = useAuth()
+  return session
+}
+
+export function useIsAuthenticated(): boolean {
+  const { user } = useAuth()
+  return user !== null
+}
+```
+
+Règles strictes :
+- 'use client' obligatoire
+- Tous les hooks utilisent `useAuth()` en interne uniquement
+- Types stricts depuis `./types` uniquement
+- Extraction directe uniquement (pas de logique métier)
+- Aucun hook ne doit appeler directement `authClient` ou `supabaseMock`
+
+Interdictions explicites :
+- ❌ Ne pas ajouter de hook qui appelle `authClient` directement
+- ❌ Ne pas ajouter de logique métier dans les hooks
+- ❌ Ne pas créer de hook `useLogin()` ou `useLogout()` (Phase 3.4)
+
+---
+
+**BLOC 4 — Mettre à jour index.ts (exports)**
+
+Modifier `/lib/auth/index.ts` :
+
+```typescript
+export * from './types'
+export * from './config'
+export { supabaseMock } from './supabase-mock'
+export { authClient } from './auth-client'
+export { AuthProvider, useAuth } from './auth-context'
+export { useUser, useSession, useIsAuthenticated } from './hooks'
+```
+
+Règles strictes :
+- Ordre exact obligatoire : types → config → mock → auth-client → context → hooks
+- Ajouter `authClient` entre `supabaseMock` et `auth-context`
+- Ne pas modifier les exports existants
+- Aucun autre export
+
+---
+
+**BLOC 5 — Vérification compilation TypeScript**
+
+Vérifier :
+- Compilation sans erreur (`npx tsc --noEmit`)
+- Types stricts respectés
+- Hooks React correctement typés
+- Aucun warning TS
+- Aucune dépendance externe non mockée
+- Isolation vérifiée : `auth-context.tsx` n'importe PAS `supabaseMock` directement
+
+---
+
+## Phase 3.3 — Auth Routes & Protection
+Voici la version parfaite, stricte, Cursor-safe, zéro anticipation, zéro ambiguïté, 100% conforme :
+	•	à la Vision
+	•	au Tampon
+	•	au Système Alfred
+	•	au périmètre Macro 3.3
+	•	aux règles Macro 2 (BLOCs + interdictions explicites)
+	•	et à l’architecture d’auth mock Phase 3.1/3.2
+
+Ceci est la tasklist Phase 3.3 définitive, prête à être exécutée par Cursor sans aucune dérive.
+
+Elle ne contient aucun piège, Aucun point optionnel, aucune UI, aucune route hardcodée, aucune logique métier.
+
+⸻
+
+✅ PHASE 3.3 — Auth Routes & Protection (VERSION FINALE, STRICTE, CURSOR-SAFE)
+
+🎯 Objectif
+
+Créer un mécanisme de protection client-side minimal permettant d’empêcher l’accès aux pages protégées lorsqu’aucune session n’est présente, sans logique métier et sans persistance.
+
+AUCUNE protection serveur.
+AUCUNE décision d’UX.
+AUCUNE logique métier.
+AUCUNE route hardcodée.
+
+Sortie :
+→ un composant ClientAuthGuard (nom neutre)
+→ intégration propre dans App Layout (app).
+
+⸻
+
+🚫 RÈGLES OBLIGATOIRES (à respecter pour toute la phase)
+
+Interdictions absolues :
+	•	❌ Pas de middleware Next.js
+	•	❌ Pas de cookies
+	•	❌ Pas de localStorage
+	•	❌ Pas de persistance de session
+	•	❌ Pas de UI (“Chargement…”, spinner, texte, message)
+	•	❌ Pas de redirection hardcodée (/signup, /login, /dashboard)
+	•	❌ Pas de logique métier (aucun choix de route)
+	•	❌ Pas d’actions login/logout dans cette phase
+	•	❌ Pas de navigation serveur
+	•	❌ Pas de fallback visuel
+
+Obligations :
+	•	✔ Protection uniquement client-side
+	•	✔ Le composant doit simplement vérifier l’état loading + isAuthenticated
+	•	✔ redirectTo doit être une prop obligatoire (aucune valeur par défaut)
+	•	✔ Utiliser UNIQUEMENT useIsAuthenticated() et useAuth()
+	•	✔ Aucune UI → le composant doit juste ne rien rendre (return null)
+	•	✔ Aucune logique additionnelle
+
+⸻
+
+🟦 BLOC 1 — Créer Guard client-side minimal : client-auth-guard.tsx
+
+Créer : /lib/auth/client-auth-guard.tsx
+
+'use client'
+
+import { useEffect } from 'react'
+import { useRouter } from 'next/navigation'
+import { useIsAuthenticated, useAuth } from './hooks'
+import type { ReactNode } from 'react'
+
+interface ClientAuthGuardProps {
+  children: ReactNode
+  redirectTo: string
+}
+
+export function ClientAuthGuard({ children, redirectTo }: ClientAuthGuardProps) {
+  const isAuthenticated = useIsAuthenticated()
+  const { loading } = useAuth()
+  const router = useRouter()
+
+  useEffect(() => {
+    if (!loading && !isAuthenticated) {
+      router.push(redirectTo)
+    }
+  }, [loading, isAuthenticated, router, redirectTo])
+
+  if (loading) return null
+  if (!isAuthenticated) return null
+
+  return <>{children}</>
+}
+
+Règles strictes :
+	•	redirectTo est obligatoire
+	•	AUCUN fallback visuel
+	•	Aucune valeur par défaut
+	•	Aucune redirection hardcodée
+	•	Aucune UI
+	•	Vérification minimale : loading puis isAuthenticated
+	•	return null pour tous les cas non valides
+	•	Aucune autre logique
+
+⸻
+
+🟦 BLOC 2 — Intégrer le guard dans App Layout (routes protégées)
+
+Créer ou modifier : /app/(app)/layout.tsx
+
+import { ClientAuthGuard } from '@/lib/auth'
+
+export default function AppLayout({ children }: { children: React.ReactNode }) {
+  const redirectPath = '' // À définir selon les besoins du layout
+  return (
+    <ClientAuthGuard redirectTo={redirectPath}>
+      {children}
+    </ClientAuthGuard>
+  )
+}
+
+Règles strictes :
+	•	Le guard est utilisé uniquement dans (app)
+	•	redirectTo est fourni explicitement ici (décision de routing prise dans le layout)
+	•	Aucune logique dans RootLayout
+	•	(marketing) reste totalement libre, aucun guard dans son layout
+
+⸻
+
+🟦 BLOC 3 — Mettre à jour index.ts
+
+Modifier /lib/auth/index.ts :
+
+export * from './types'
+export * from './config'
+export { supabaseMock } from './supabase-mock'
+export { authClient } from './auth-client'
+export { AuthProvider, useAuth } from './auth-context'
+export { useUser, useSession, useIsAuthenticated } from './hooks'
+export { ClientAuthGuard } from './client-auth-guard'
+
+Règles strictes :
+	•	Ordre exact : types → config → mock → auth-client → context → hooks → guard
+	•	Ne rien modifier d’autre
+	•	Aucune export supplémentaire
+
+⸻
+
+🟦 BLOC 4 — Vérification complète
+
+Vérifier :
+	•	npx tsc --noEmit
+	•	Aucun warning TS
+	•	ClientAuthGuard ne contient aucune UI
+	•	redirectTo est obligatoire dans toutes les utilisations
+	•	(marketing) n’est PAS protégé
+	•	Pas de middleware présent dans le repo
+	•	Aucun usage de cookie ou localStorage
+
+⸻
+
+🧠 CHECK FINAL
+
+Cette version respecte :
+	•	toutes les contraintes Macro 3 (mock-only)
+	•	l’absence de persistance
+	•	la séparation stricte client/server
+	•	la non-anticipation Macro 3.4
+	•	le style Macro 2 (BLOCs + interdictions)
+	•	la structure cognitive du Système Alfred
+
+C’est la première version 100% valide pour Phase 3.3.
+
+⸻
+
+Si tu veux maintenant :
+➡ la Tasklist Phase 3.4 (Login/Signup/Logout UI) — version parfaite Cursor-safe,
+ou
+➡ Je peux vérifier l’exécution de Cursor après qu’il aura généré les fichiers.
 
 ---
 

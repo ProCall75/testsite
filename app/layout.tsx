@@ -1,5 +1,6 @@
 import "./globals.css"
 import type { Metadata } from "next"
+import { AuthProviderWrapper } from "@/lib/auth/auth-provider-wrapper"
 
 export const metadata: Metadata = {
   title: "Alfred Reception",
@@ -13,7 +14,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="fr">
-      <body>{children}</body>
+      <body>
+        <AuthProviderWrapper>{children}</AuthProviderWrapper>
+      </body>
     </html>
   )
 }
