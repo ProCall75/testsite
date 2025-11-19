@@ -120,32 +120,38 @@ check:
   - "Résumé 3C systématique."
   - "Lisibilité et cohérence vérifiées."
 
-  # ————————————————————————————————————————
-# 🔁 EXECUTION CONTINUITY RULE (DOC + CODE)
-# ————————————————————————————————————————
 
-Cursor MUST ALWAYS read and use the output of all previously completed phases
-(documentation AND code) before generating or executing any new To-Do.
+    rules:
+      - Le `Check` DOIT respecter ce format exact :
 
-Expected behavior:
-1. Cursor must align with all decisions, structures, conventions, and boundaries
-   produced in previous phases.
-2. Cursor must use existing code and folders as the reference state.
-3. Cursor must NOT regenerate, duplicate, or redefine what already exists.
-4. Cursor must NOT contradict previous phases.
-5. If previous documentation is incomplete, Cursor MUST:
-   - rely on the existing codebase,
-   - follow the current phase’s constraints,
-   - complete only what is strictly required for the active phase,
-   - NEVER anticipate future phases.
-6. If inconsistency is detected, Cursor must warn GPT-1 instead of improvising.
+        CHECK:
+          1. PLAN_RECAP
+             - étapes du plan → "done / partial / skipped".
 
-This rule applies to ALL tasks, including:
-- generation of To-Do,
-- execution of To-Do,
-- code changes,
-- folder creation,
-- naming decisions,
-- architectural structures.
+          2. ACTION_LOG
+             - chronologie des actions :
+               fichiers modifiés, fonctions touchées,
+               type (create, refactor, bugfix, config, test).
 
-# ————————————————————————————————————————
+          3. PROBLEMS_ENCOUNTERED
+             - Pour chaque problème :
+               - description
+               - hypothèses
+               - tentatives (1, 2, 3…)
+               - résultat ("failed", "partial", "fixed", "workaround")
+               - décision finale
+
+          4. TESTS_AND_CHECKS
+             - lints, tests, vérifications manuelles + résultats.
+
+          5. GAPS_AND_RISKS
+             - incohérences, dettes techniques,
+             - points nécessitant revue humaine.
+
+          6. ARTIFACTS
+             - fichiers créés/modifiés
+             - branches
+             - commits locaux
+             - artefacts générés
+
+      - Toute variante = non-conformité.

@@ -1,0 +1,198 @@
+---
+alwaysApply: true
+---
+
+RULESET — MACRO 3.5 (AUTH MINIMAL & REDIRECTIONS MINIMALES)
+
+Règles d’exécution officielles — Strict Boundaries
+
+⸻
+
+1. Périmètre strict de Macro 3.5
+
+Macro 3.5 traite uniquement :
+	•	Auth mockée (supabase-mock.ts)
+	•	AuthContext & Hooks (useAuth, useUser, useSession)
+	•	Guard (ClientAuthGuard)
+	•	Formulaires : Login, Signup, Logout
+	•	Redirections POST-ACTION minimales
+	•	Routing minimal basé sur état auth uniquement
+	•	Navigation entre pages marketing et app (haut niveau seulement)
+
+C’EST TOUT.
+
+⸻
+
+2. Ce qui est STRICTEMENT INTERDIT dans Macro 3.5
+
+Cursor NE DOIT PAS :
+
+❌ A. Parler, analyser ou implémenter Onboarding
+
+Interdit de référencer :
+	•	onboarding incomplet / complet
+	•	steps onboarding
+	•	logique first login
+	•	wizard
+	•	progression
+	•	state machine onboarding
+	•	isNewUser, isOnboardingComplete
+
+❌ B. Parler ou implémenter la logique produit avancée
+
+Interdit de référencer :
+	•	routes conditionnelles selon les données mock
+	•	conditions métier (ex : salon complet / incomplet)
+	•	dashboard logique ou ses données
+	•	settings logique
+
+❌ C. Modifier ou analyser le contenu des pages (app)
+
+Cursor NE DOIT PAS :
+	•	lire ou interpréter /dashboard/page.tsx
+	•	lire ou interpréter /onboarding/page.tsx
+	•	inspecter / analyser UI
+	•	analyser des Domain Models
+	•	tirer des conclusions produit
+
+❌ D. Ajouter des états auth qui n’existent pas
+
+Interdit de créer ou mentionner :
+	•	isNewUser
+	•	isOnboardingComplete
+	•	clientReady
+	•	firstLogin
+
+❌ E. Implémenter des redirections avancées
+
+Interdit :
+	•	login → onboarding
+	•	signup → onboarding
+	•	onboarding → dashboard
+	•	fallback produit
+	•	redirections basées sur mock data
+
+⸻
+
+3. Ce que Macro 3.5 DOIT implémenter (et uniquement ça)
+
+✔ A. Redirections AUTH minimales
+
+À la fin de la macro, le système auth doit permette uniquement :
+	•	login → /dashboard
+	•	signup → /login
+	•	logout → /login
+	•	guard (non-auth) → /login
+
+Aucune autre route cible.
+
+✔ B. Guard complété
+
+Guard = protection de route uniquement basée sur :
+	•	loading
+	•	session
+	•	user
+
+Pas d’autres conditions.
+
+✔ C. Routing Contract minimal (Phase 3.5.2)
+
+Le contrat doit définir :
+	•	routes publiques : /, /login, /signup, marketing
+	•	routes protégées : tout (app)
+	•	règles auth minimales
+
+Et rien d’autre.
+
+⸻
+
+4. Ce que Macro 3.5 peut analyser (autorisé)
+
+Cursor peut lire et analyser :
+	•	/lib/auth/*
+	•	/app/(marketing)/*
+	•	/app/(app)/layout.tsx uniquement pour vérifier présence du guard
+	•	/app/(app)/dashboard uniquement pour vérifier que la route existe (cible de login)
+
+Il ne doit pas analyser leur contenu fonctionnel.
+
+⸻
+
+5. Ce que Macro 3.5 doit produire comme livrables
+
+Phase 3.5.1 — Audit SOCLE AUTH
+	•	uniquement ce qui concerne auth mockée
+	•	pas de mention onboarding
+	•	pas de mention produit
+	•	pas de mention logique métier
+
+Phase 3.5.2 — Routing Contract minimal
+	•	login → dashboard
+	•	signup → login
+	•	logout → login
+	•	guard (non-auth) → login
+	•	distinction public/protected
+	•	rien d’autre
+
+Phase 3.5.3 — Implémentation
+
+Implémenter le contrat minimal, sans anticiper:
+	•	onboarding
+	•	logique produit
+	•	routing avancé
+	•	state machine
+
+Phase 3.5.4 — Validation
+
+Tester uniquement :
+	•	login → dashboard
+	•	signup → login
+	•	logout → login
+	•	guard non-auth → login
+	•	refresh route protégée → login
+
+Phase 3.5.5 — Refactor léger
+	•	nettoyages auth
+	•	rien d’autre
+
+⸻
+
+6. Vérification obligatoire avant toute sortie
+
+Cursor doit vérifier que :
+	•	aucune mention onboarding n’apparaît
+	•	aucune logique produit n’apparaît
+	•	aucune route avancée n’est incluse
+	•	aucune anticipation inter-macro n’est présente
+	•	les redirections sont strictement celles demandées
+	•	le code n’ajoute aucun nouvel état
+	•	le périmètre reste auth-only
+
+Si une de ces conditions est violée → Cursor doit corriger avant de produire la sortie.
+
+⸻
+
+7. Raison d’être de Macro 3.5 (pour éviter les dérives)
+
+Objectif unique de Macro 3.5 :
+Faire fonctionner la boucle auth complète : login → guard → page protégée.
+
+Ni onboarding, ni logique produit, ni routing métier.
+
+⸻
+
+Check
+
+✔ Cohérent avec Tampon STADE MACRO 3.5
+✔ Conforme au séquençage Alfred
+✔ Interdit formel d’onboarding / produit
+✔ 100% exécutable par Cursor
+✔ Prépare parfaitement Macro 3.5.2
+
+⸻
+
+Si tu veux, je peux aussi te préparer :
+
+📌 La version en markdown prête à coller dans Cursor,
+📌 La To-Do 3.5.2 conforme à ces règles,
+📌 Ou un test “anti-anticipation” que Cursor doit exécuter avant chaque phase.

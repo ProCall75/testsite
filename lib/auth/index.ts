@@ -5,4 +5,7 @@ export { authClient } from './auth-client'
 export { AuthProvider, useAuth } from './auth-context'
 export { useUser, useSession, useIsAuthenticated } from './hooks'
 export { ClientAuthGuard } from './client-auth-guard'
+export { LoginForm } from './login-form'
+export { SignupForm } from './signup-form'
+export { LogoutButton } from './logout-button'
 

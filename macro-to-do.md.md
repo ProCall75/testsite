@@ -807,1067 +807,424 @@ STOP après ce bloc.
 
 ⸻
 
-BLOC 3 — API Reception (reception.ts)
+	BLOC 3 — API Reception (reception.ts)
 
-Checklist :
-• Importer mockDB depuis @/lib/mockdb/schema (ordre 1)
-• Importer Reception depuis @/lib/domain (ordre 2)
-• Exporter getReception() : Reception
-• Construire objet avec champs dans l’ordre exact : details, config, integrations, services
-• details : mockDB.receptionDetails[0] ?? valeur par défaut
-• config : mockDB.receptionConfigs[0] ?? valeur par défaut
-• integrations : mockDB.receptionIntegrations[0] ?? valeur par défaut
-• services : mockDB.receptionServices ?? []
+	Checklist :
+	• Importer mockDB depuis @/lib/mockdb/schema (ordre 1)
+	• Importer Reception depuis @/lib/domain (ordre 2)
+	• Exporter getReception() : Reception
+	• Construire objet avec champs dans l’ordre exact : details, config, integrations, services
+	• details : mockDB.receptionDetails[0] ?? valeur par défaut
+	• config : mockDB.receptionConfigs[0] ?? valeur par défaut
+	• integrations : mockDB.receptionIntegrations[0] ?? valeur par défaut
+	• services : mockDB.receptionServices ?? []
 
-Valeurs par défaut :
-• details : { address: ‘’, city: ‘’, postalCode: ‘’, country: ‘’, openingHours: {} as unknown, paymentMethods: [] as unknown, logoUrl: ‘’, description: ‘’ }
-• config : { assignmentStrategy: ‘manual’, relancesEnabled: false, feedbackEnabled: false, notificationsProEnabled: false }
-• integrations : { googleCalendarEnabled: false, outlookCalendarEnabled: false, telegramEnabled: false, whatsappEnabled: false, syncStatus: ‘not_synced’, errorMessage: ‘’ }
+	Valeurs par défaut :
+	• details : { address: ‘’, city: ‘’, postalCode: ‘’, country: ‘’, openingHours: {} as unknown, paymentMethods: [] as unknown, logoUrl: ‘’, description: ‘’ }
+	• config : { assignmentStrategy: ‘manual’, relancesEnabled: false, feedbackEnabled: false, notificationsProEnabled: false }
+	• integrations : { googleCalendarEnabled: false, outlookCalendarEnabled: false, telegramEnabled: false, whatsappEnabled: false, syncStatus: ‘not_synced’, errorMessage: ‘’ }
 
-STOP après ce bloc.
+	STOP après ce bloc.
+
+	⸻
+
+	BLOC 4 — API Pro (pro.ts)
+
+	Checklist :
+	• Importer mockDB depuis @/lib/mockdb/schema (ordre 1)
+	• Importer Pro depuis @/lib/domain (ordre 2)
+	• Exporter getPros() : Pro[]
+	• Exporter getProById(teamMemberId: string) : Pro | null
+	• Pour chaque teamMember dans mockDB.teamMembers (TOUS, aucun filtrage) :
+	 - Construire Pro avec champs dans l’ordre exact : member, reception, stats, skills, availability
+	 - reception : find(…) ?? valeur par défaut
+	 - stats : find(…) ?? valeur par défaut
+	 - skills : filter(…) ?? []
+	 - availability : filter(…) ?? []
+	• getProById() : teamMemberId utilisé tel quel
+
+	Valeurs par défaut :
+	• reception : { teamMemberId: member.id, gcalEmail: ‘’, gcalIsShared: false, acceptNewClients: true, notificationsEnabled: false, preferredChannel: ‘whatsapp’, fallbackNumber: ‘’, isVisible: true }
+	• stats : { teamMemberId: member.id, completedBookings: 0, cancelledBookings: 0, ratingAvg: 0 }
+
+	STOP après ce bloc.
+
+	⸻
+
+	BLOC 5 — INDEX API (index.ts)
+
+	Checklist :
+	Exporter exactement :
+	• getClientContext depuis ‘./client-context’
+	• getPros, getProById depuis ‘./pro’
+	• getReception depuis ‘./reception’
+
+	STOP après ce bloc.
+
+	⸻
+
+	BLOC 6 — VÉRIFICATIONS INTERNES
+
+	Checklist :
+	• Types stricts respectés
+	• Lecture seule de mockDB
+	• Ordre strict des champs respecté
+	• Ordre strict des imports respecté
+	• Relations respectées mais jamais validées
+	• Zéro ! partout
+	• Zéro throw sauf client absent
+	• Null-safety partout
+	• Aucune logique métier
+	• Valeurs par défaut respectées
+	• Aucun spread d’objet
+	• getPros() retourne TOUS les teamMembers
+	• getProById() retourne Pro | null
+	• Compilation TS valide
+	• Aucun débordement sur 2.5
+
+	STOP après ce bloc.
+
+	⸻
+
+	Si tu veux maintenant je te génère :
+		•	la version “cursor-proof encore plus compacte”
+		•	ou la version “test automatique Phase 2.4”, similaire à 2.3.
+
+	Phase 2.5 — Validation de Cohérence
+
+	Objectif : vérifier que l’ensemble Domain Models + MockDB + API Mock est compatible et opérationnel.
+	Tâches principales :
+		•	Vérifier que tout compile sans erreur TypeScript.
+		•	Vérifier que tous les Domain Models sont alimentés correctement.
+		•	Vérifier que les relations fonctionnent.
+		•	Vérifier que les API mock retournent les bons formats.
+		•	Vérifier que rien ne dépend de données non whitelistées.
+		•	Vérifier l’alignement strict avec macro2.support.
+
+	Sortie attendue :
+	Macro 2 validée, prête à être utilisée par Macro 3, 4, 5, 6.
+
+	⸻
+
+	Résumé des phases Macro 2
+		•	Phase 2.1 : Domain Models Front
+		•	Phase 2.2 : Mock Database Schema
+		•	Phase 2.3 : Mock Data
+		•	Phase 2.4 : API Mock Layer
+		•	Phase 2.5 : Validation de Cohérence
+
+
+	---
+
+
+	---
+
+	# **Macro 3 — Authentification (mockée Supabase)**
+
+	## 🎯 Objectif général
+
+	La **Macro 3** implémente le système d’accès et de protection utilisateur.
+	Elle prépare la logique d’authentification à partir des outils Supabase, en mode mocké.
+	Cette macro :
+	- intègre le SDK Supabase et les flux signup/login/logout ;
+	- met en place la redirection selon l’état d’authentification ;
+	- prépare le terrain pour une future connexion réelle.
+
+	**Rôle pour le front :**
+	Elle garantit que le routage et la sécurité utilisateur fonctionnent avant d’introduire des données réelles.
+
+	---
+
+	## Macro 3 — Authentification Mockée
+
+	### Context
+
+	La Macro 3 implémente le système d'authentification mocké complet (Supabase mock) pour le front Alfred Reception. Elle établit les fondations d'accès utilisateur : types auth stricts, client mock en mémoire, contexte React global, hooks d'authentification, protection client-side des routes (app), et interfaces UI minimales (login/signup/logout). Le système est entièrement non-persistant (sessions en mémoire uniquement) et prépare l'intégration future avec Supabase réel.
+
+	### Command
+
+	- **Phase 3.1** : Configuration Supabase mock (types `User`, `Session`, `AuthState`, client `supabaseMock` avec `signUp`, `signIn`, `signOut`, `getSession`, config mock)
+	- **Phase 3.2** : Auth Context & Hooks (`auth-client.ts` wrapper, `AuthProvider` avec état global, hooks `useUser`, `useSession`, `useIsAuthenticated`, intégration dans `RootLayout`)
+	- **Phase 3.3** : Auth Routes & Protection (`ClientAuthGuard` client-side minimal, intégration dans layout `(app)` avec `redirectTo`, routes marketing publiques, routes app protégées)
+	- **Phase 3.4** : Login/Signup/Logout UI (`LoginForm`, `SignupForm`, `LogoutButton` utilisant `supabaseMock`, pages `/login` et `/signup` dans `(marketing)`, `LogoutButton` intégré dans layout `(app)`)
+
+### Check
+
+- ✅ Système auth mock complet et fonctionnel (signup → login → access → logout)
+- ✅ Routes marketing publiques (`/login`, `/signup` accessibles sans auth)
+- ✅ Routes app protégées (`ClientAuthGuard` redirige vers `/` si non-auth)
+- ✅ Aucune persistance (sessions en mémoire uniquement, refresh → déconnexion)
+- ✅ Utilisation exclusive de `supabaseMock` (aucun Supabase réel, aucun pattern interdit)
+- ✅ Compilation TypeScript OK, types stricts respectés
+- ✅ Validation Phase 3.5 passée (8/8 vérifications)
+- ✅ **Prêt pour Macro 3.5** (Redirections & Guards complets)
+
+---
+
+
+
+
+
+## Macro 3.5 — Redirections & Guards Complets
+
+### Context
+
+La Macro 3.5 complète le système d'authentification mockée en ajoutant les redirections complètes et la logique de navigation. Elle s'appuie strictement sur l'existant de Macro 3 (auth mockée, providers, guards, pages) sans rien réécrire ni dupliquer. Elle définit le contrat de routing, implémente les redirections dans le guard existant, valide la logique complète, et effectue un refactor propre.
+
+### Command
+
+- **Phase 3.5.1** : Vérification du socle Macro 3 (lecture seule) — analyse du code existant (providers, auth context, guard, login/signup/logout, redirections actuelles), rapport de ce qui existe et manque
+
+**Context** : La Phase 3.5.1 analyse le socle auth Macro 3 pour identifier ce qui existe réellement et ce qui manque pour compléter les redirections auth minimales, sans logique produit ni onboarding.
+
+**Command** : Analyse en lecture seule de tous les fichiers auth (`types.ts`, `config.ts`, `supabase-mock.ts`, `auth-client.ts`, `auth-context.tsx`, `hooks.ts`, `client-auth-guard.tsx`, `login-form.tsx`, `signup-form.tsx`, `logout-button.tsx`, `index.ts`), layouts (`app/layout.tsx`, `app/(app)/layout.tsx`, `app/(marketing)/layout.tsx`), pages (`app/(marketing)/login/page.tsx`, `app/(marketing)/signup/page.tsx`), et recherche des occurrences `router.push`/`redirect`. Compilation du rapport dans `/DOCS/PHASE3.5.1-RAPPORT-SOCLE.md`.
+
+**Check** : Audit complet effectué, structures existantes analysées, absence totale de logique onboarding/produit confirmée, aucun écart entre audit et code réel, rapport généré, conforme Macro 3.5.
 
 ⸻
 
-BLOC 4 — API Pro (pro.ts)
+- **Phase 3.5.2** : Définition du Routing Contract — document `/DOCS/auth-routing.contract.md` définissant routes publiques/protégées, règles de navigation minimales (login → dashboard, signup → login, logout → login, guard → login, refresh → état mocké)
 
-Checklist :
-• Importer mockDB depuis @/lib/mockdb/schema (ordre 1)
-• Importer Pro depuis @/lib/domain (ordre 2)
-• Exporter getPros() : Pro[]
-• Exporter getProById(teamMemberId: string) : Pro | null
-• Pour chaque teamMember dans mockDB.teamMembers (TOUS, aucun filtrage) :
- - Construire Pro avec champs dans l’ordre exact : member, reception, stats, skills, availability
- - reception : find(…) ?? valeur par défaut
- - stats : find(…) ?? valeur par défaut
- - skills : filter(…) ?? []
- - availability : filter(…) ?? []
-• getProById() : teamMemberId utilisé tel quel
+**Context** : Le contrat de routing AUTH minimal doit être documenté pour définir explicitement les règles de navigation basées uniquement sur l'état d'authentification, sans logique produit ni onboarding.
 
-Valeurs par défaut :
-• reception : { teamMemberId: member.id, gcalEmail: ‘’, gcalIsShared: false, acceptNewClients: true, notificationsEnabled: false, preferredChannel: ‘whatsapp’, fallbackNumber: ‘’, isVisible: true }
-• stats : { teamMemberId: member.id, completedBookings: 0, cancelledBookings: 0, ratingAvg: 0 }
+**Command** : Créer le document `/DOCS/auth-routing.contract.md` avec sections routes publiques/protégées, règles de navigation minimales, comportement guard/refresh, périmètre & limites, interdits explicites.
 
-STOP après ce bloc.
+**Check** : Contrat documenté, routes publiques/protégées listées, règles minimales définies (login → dashboard, signup → login, logout → login, guard → login), aucun code modifié, conforme Macro 3.5.
 
 ⸻
 
-BLOC 5 — INDEX API (index.ts)
+- **Phase 3.5.3** : Implémentation des redirections — complétion des formulaires et guard avec redirections du contrat (`/DOCS/auth-routing.contract.md`), utilisation des helpers/structures existants, sans casser l'existant
 
-Checklist :
-Exporter exactement :
-• getClientContext depuis ‘./client-context’
-• getPros, getProById depuis ‘./pro’
-• getReception depuis ‘./reception’
+**Context** : La Phase 3.5.3 implémente les redirections auth minimales définies dans le contrat, en complétant les formulaires et le guard existants sans modifier la logique métier.
 
-STOP après ce bloc.
+**Command** : Modifier `/lib/auth/login-form.tsx` (ajouter `router.push('/dashboard')` après `signIn` et `setTimeout`), `/lib/auth/signup-form.tsx` (ajouter `router.push('/login')` après `signUp` et `setTimeout`), `/lib/auth/logout-button.tsx` (ajouter `router.push('/login')` après `signOut`), `/app/(app)/layout.tsx` (changer `redirectPath` de `'/'` à `'/login'`). Vérifier synchronisation auth et absence d'anticipation.
+
+**Check** : Redirections conformes au contrat (login → /dashboard, signup → /login, logout → /login, guard → /login), utilisation exclusive de l'existant, aucune logique onboarding/produit, synchronisation auth respectée, TypeScript OK, conforme Macro 3.5.
 
 ⸻
 
-BLOC 6 — VÉRIFICATIONS INTERNES
+- **Phase 3.5.4** : Validation (guard complet) — validation statique (redirections présentes, absence d'interdits, guard conforme) + validation humaine runtime (tests manuels dans navigateur)
 
-Checklist :
-• Types stricts respectés
-• Lecture seule de mockDB
-• Ordre strict des champs respecté
-• Ordre strict des imports respecté
-• Relations respectées mais jamais validées
-• Zéro ! partout
-• Zéro throw sauf client absent
-• Null-safety partout
-• Aucune logique métier
-• Valeurs par défaut respectées
-• Aucun spread d’objet
-• getPros() retourne TOUS les teamMembers
-• getProById() retourne Pro | null
-• Compilation TS valide
-• Aucun débordement sur 2.5
+**Context** : La Phase 3.5.4 valide que toutes les redirections AUTH minimales sont correctement implémentées et fonctionnent en runtime.
 
-STOP après ce bloc.
+**Command** : Validation statique du code (présence redirections, absence interdits, guard conforme, synchronisation auth, TypeScript OK) + validation humaine runtime (tests manuels login → dashboard, signup → login, logout → login, guard → login, refresh routes protégées/publiques).
+
+**Check** : Validation statique réussie, toutes redirections conformes au contrat, absence de redirections interdites, synchronisation auth respectée, guard conforme, TypeScript OK, validation humaine documentée (tests runtime réussis), conforme Macro 3.5.
 
 ⸻
 
-Si tu veux maintenant je te génère :
-	•	la version “cursor-proof encore plus compacte”
-	•	ou la version “test automatique Phase 2.4”, similaire à 2.3.
+- **Phase 3.5.5** : Refactor propre — nettoyage léger, nommage cohérent, suppression doublons, extraction dans `/lib/auth/*` si pertinent, sans toucher la logique ni bouger ce qui marche
 
-Phase 2.5 — Validation de Cohérence
+**Context** : La Phase 3.5.5 effectue un nettoyage minimal du code auth sans modifier la logique, en supprimant les fichiers obsolètes, les imports non utilisés, les commentaires morts, et en vérifiant la cohérence structurelle.
 
-Objectif : vérifier que l’ensemble Domain Models + MockDB + API Mock est compatible et opérationnel.
-Tâches principales :
-	•	Vérifier que tout compile sans erreur TypeScript.
-	•	Vérifier que tous les Domain Models sont alimentés correctement.
-	•	Vérifier que les relations fonctionnent.
-	•	Vérifier que les API mock retournent les bons formats.
-	•	Vérifier que rien ne dépend de données non whitelistées.
-	•	Vérifier l’alignement strict avec macro2.support.
+**Command** : Supprimer `/app/debug/auth-test/page.tsx` et dossier vide, supprimer `/lib/auth/auth-provider-wrapper.tsx` si orphelin, nettoyer imports non utilisés et commentaires morts dans `/lib/auth`, vérifier nommage fichiers et structure exports (lecture seule), valider compilation TypeScript.
 
-Sortie attendue :
-Macro 2 validée, prête à être utilisée par Macro 3, 4, 5, 6.
+**Check** : Page debug supprimée, fichier obsolète supprimé, imports non utilisés supprimés, commentaires morts supprimés, nommage fichiers vérifié, structure exports vérifiée, TypeScript OK, aucune modification de logique, conforme Macro 3.5
 
 ⸻
 
-Résumé des phases Macro 2
-	•	Phase 2.1 : Domain Models Front
-	•	Phase 2.2 : Mock Database Schema
-	•	Phase 2.3 : Mock Data
-	•	Phase 2.4 : API Mock Layer
-	•	Phase 2.5 : Validation de Cohérence
+### Check
+
+- ✅ Contrat de routing défini et documenté
+- ✅ Redirections complètes implémentées dans guard existant
+- ✅ Logique de navigation validée (login/logout/refresh)
+- ✅ Aucune réécriture ni duplication de Macro 3
+- ✅ Utilisation exclusive de l'existant (providers, context, guard, pages)
+- ✅ Compilation TypeScript OK
+- ✅ **Prêt pour Macro 4**
+
+
+
 
 
 ---
 
+⸻
+
+MACRO 4 — ONBOARDING ✅
+
+**Context**
+
+Macro 4 a mis en place l'onboarding minimaliste d'Alfred Reception. Objectif : permettre à l'utilisateur d'enchaîner les étapes essentielles à l'activation du salon (identité, horaires, services, intégrations) via un wizard multi-étapes simple, utilisant uniquement les mock data de Macro 2.
+
+Règle d'or : Solo et Pro utilisent le même onboarding minimal. Toutes les précisions et configurations avancées sont réservées à Settings (Macro 6).
+
+**Command**
+
+Implémentation complète du wizard d'onboarding avec 6 étapes :
+1. Identité du Salon — Formulaire avec champs obligatoires et optionnels
+2. Horaires du Salon — Gestion des horaires par jour avec possibilité de fermer des jours
+3. Services — Ajout/suppression de services avec validation minimale
+4. Intégration Agenda — Activation Google Calendar / Outlook Calendar
+5. Communication — Activation SMS/WhatsApp/Telegram
+6. Confirmation & Activation — Résumé complet avec CTA vers dashboard
+
+Composants créés :
+- `OnboardingWizard` (page.tsx) — Container principal avec gestion d'état
+- `WizardFooter` — Navigation Back/Next avec validation
+- `Timeline` — Indicateur de progression textuel (6 segments)
+- `StepIdentity`, `StepHours`, `StepServices`, `StepCalendar`, `StepCommunications`, `StepSummary`
+
+Fonctionnalités :
+- Navigation linéaire Next/Back avec validation par étape
+- Gestion d'état `formData` pour toutes les étapes
+- Redirection vers `/dashboard` après activation
+- Bypass temporaire du guard pour `/onboarding` et `/dashboard`
+- Code nettoyé (imports obsolètes, TODOs retirés)
+
+**Check**
+
+✅ Wizard minimal fonctionnel (UI testable)
+✅ Navigation interne fonctionnelle
+✅ Redirection vers dashboard opérationnelle
+✅ Code nettoyé et prêt
+✅ Documentation complète dans `/DOCS/Macro 4 support/`
+✅ Prêt pour Macro 5 (Dashboard)
+
+Livrables :
+- `/DOCS/Macro 4 support/onboarding.flow.md`
+- `/DOCS/Macro 4 support/onboarding.ui-contract.md`
+- `/DOCS/Macro 4 support/macro4.support.md`
+- `/DOCS/Macro 4 support/PHASE4.4-TODOS-EXECUTIFS.md`
+
+# **Macro 5 — Dashboard (UI minimale requise)**
+
+Création de :
+
+- header
+- sidebar
+- cartes mockées
+- KPIs
+- listes de données
+
+→ test du dashboard complet.
 
 ---
 
-# **Macro 3 — Authentification (mockée Supabase)**
+# **Macro 6 — Settings (UI minimale requise)**
 
-## 🎯 Objectif général
+Création de :
 
-La **Macro 3** implémente le système d’accès et de protection utilisateur.
-Elle prépare la logique d’authentification à partir des outils Supabase, en mode mocké.
-Cette macro :
-- intègre le SDK Supabase et les flux signup/login/logout ;
-- met en place la redirection selon l’état d’authentification ;
-- prépare le terrain pour une future connexion réelle.
+- page profil
+- page équipe
+- formulaire
+- switch
+- listes membres
+- permissions minimalistes
 
-**Rôle pour le front :**
-Elle garantit que le routage et la sécurité utilisateur fonctionnent avant d’introduire des données réelles.
-
----
-
-## Phase 3.1 — Configuration Supabase Mock
-
-**Objectif :** Préparer l'environnement d'authentification mockée (types, client, configuration).
-
-**Sortie :** SDK mocké prêt, types auth prêts, client Supabase mock initialisé.
-
-**Tasklist d'exécution :**
-
-1. Créer le dossier `/lib/auth/`
-
-Contenu à générer dans cette phase seulement :
-- `types.ts`
-- `supabase-mock.ts`
-- `config.ts`
-- `index.ts`
-
-2. Créer `/lib/auth/types.ts` (types stricts, fermés)
-
-Créer exactement les interfaces suivantes — rien de plus :
-
-```typescript
-export interface User {
-  id: string
-  email: string
-  metadata: Record<string, unknown>
-}
-
-export interface Session {
-  accessToken: string
-  refreshToken: string
-  expiresAt: number
-  user: User
-}
-
-export interface AuthState {
-  user: User | null
-  session: Session | null
-  loading: boolean
-}
-```
-
-Règles :
-- Champs obligatoires
-- Aucun champ additionnel
-- `metadata = Record<string, unknown>` strict
-- camelCase partout
-
-3. Créer `/lib/auth/config.ts`
-
-Exporter exactement :
-
-```typescript
-export const SUPABASE_URL = 'http://localhost:9999/mock'
-export const SUPABASE_ANON_KEY = 'mock-anon-key'
-export const IS_MOCK_MODE = true
-```
-
-Règles :
-- Pas de `process.env` dans cette macro
-- Valeurs en dur, mockées
-- Aucun autre export
-
-4. Créer `/lib/auth/supabase-mock.ts`
-
-Créer un faux client minimaliste, sans importer `supabase-js`, utilisant uniquement :
-- Un stockage interne en mémoire : `let currentSession: Session | null = null`
-
-Fonctions à exposer exactement :
-
-```typescript
-export const supabaseMock = {
-  auth: {
-    signUp: async (email: string, password: string) => { ... },
-    signIn: async (email: string, password: string) => { ... },
-    signOut: async () => { ... },
-    getSession: async () => ({ data: { session: currentSession } }),
-  },
-}
-```
-
-Spécifications obligatoires :
-- `signUp` et `signIn` retournent `{ data: { user, session }, error: null }`
-- `signOut` met `currentSession = null`
-- Aucune validation, aucun contrôle, aucun throw
-- Pas de localStorage : mémoire uniquement (évite side-effects)
-
-5. Créer `/lib/auth/index.ts`
-
-Exporter exactement :
-
-```typescript
-export * from './types'
-export * from './config'
-export { supabaseMock } from './supabase-mock'
-```
-
-Règles :
-- Aucun autre export
-- Aucun import relatif croisé
-
-6. Vérifier compilation TypeScript
-
-- Import checker
-- Types stricts
-- Aucune dépendance extérieure non mockée
-- Aucun warning TS
+→ test de tout le module
 
 ---
 
-## Phase 3.2 — Auth Context & Hooks
+# **⭐**
 
-**Objectif :** Mettre en place l'orchestration auth dans le front (contexte global + hooks).
+# **🧩 Macro 6.5 — Routing & Guards Logiques Complets (Produit)**
 
-**Sortie :** AuthProvider fonctionnel et hooks accessibles dans toute l'app.
+**(NOUVEAU — VERSION TAMPON)**
 
-**Tasklist d'exécution :**
+Objectif :
 
-**RÈGLES OBLIGATOIRES (à respecter pour toute la phase) :**
-- Aucune fonction login/logout/signup dans AuthProvider (Phase 3.4 uniquement)
-- Aucune logique métier (pas de validation, pas de contrôle)
-- Aucune persistance (pas de localStorage, pas de cookies)
-- Aucune redirection (Phase 3.3 uniquement)
-- Isolation du mock : utiliser un wrapper thin (`auth-client.ts`)
-- Provider expose uniquement l'état (`AuthState`), pas d'actions
-- 'use client' obligatoire pour tous les fichiers avec hooks React
+Une fois les pages construites (Macros 4-6), créer la **logique de navigation produit réelle**.
 
----
+Contenu :
 
-**BLOC 1 — Créer wrapper auth-client.ts (isolation mock)**
+- onboarding incomplet → onboarding
+- onboarding complet → dashboard
+- first-login → onboarding
+- navigation conditionnelle complète
+- guards produit
+- redirections fallback
+- cohérence totale des flows
 
-Créer `/lib/auth/auth-client.ts` :
+Rôle :
 
-```typescript
-import { supabaseMock } from './supabase-mock'
-import type { Session } from './types'
-
-export const authClient = {
-  getSession: async (): Promise<{ data: { session: Session | null }; error: null }> => {
-    return await supabaseMock.auth.getSession()
-  },
-}
-```
-
-Règles strictes :
-- Un seul export : `authClient`
-- Une seule méthode : `getSession()`
-- Aucune autre méthode (pas de signIn, signOut, etc.)
-- Aucune logique métier
-- Wrapper thin uniquement
+Faire passer le front d’une auth minimale → routage produit complet.
 
 ---
 
-**BLOC 2 — Créer auth-context.tsx (Provider + useAuth)**
+# **🧩 Macro 7 — Design System & Identité Visuelle**
 
-Créer `/lib/auth/auth-context.tsx` :
+Objectif :
 
-```typescript
-'use client'
+Construire le design system + UI components.
 
-import { createContext, useContext, useState, useEffect, type ReactNode } from 'react'
-import { authClient } from './auth-client'
-import type { AuthState, User, Session } from './types'
+Contenu :
 
-const AuthContext = createContext<AuthState | undefined>(undefined)
+- palette
+- typographies
+- spacing
+- components
+- motions
+- Storybook
 
-export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<User | null>(null)
-  const [session, setSession] = useState<Session | null>(null)
-  const [loading, setLoading] = useState<boolean>(true)
+Rôle :
 
-  useEffect(() => {
-    const initSession = async () => {
-      const { data } = await authClient.getSession()
-      if (data.session) {
-        setSession(data.session)
-        setUser(data.session.user)
-      }
-      setLoading(false)
-    }
-    initSession()
-  }, [])
-
-  const value: AuthState = {
-    user,
-    session,
-    loading,
-  }
-
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
-}
-
-export function useAuth() {
-  const context = useContext(AuthContext)
-  if (context === undefined) {
-    throw new Error('useAuth must be used within AuthProvider')
-  }
-  return context
-}
-```
-
-Règles strictes :
-- 'use client' obligatoire
-- Import `authClient` depuis `./auth-client` (PAS directement supabaseMock)
-- Types depuis `./types` uniquement
-- Provider expose uniquement `AuthState` (user, session, loading)
-- Aucune fonction login/logout/signup dans ce fichier
-- `useEffect` avec dépendances `[]` uniquement
-- `useAuth` avec vérification du contexte (throw si undefined)
-
-Interdictions explicites :
-- ❌ Ne pas ajouter de méthodes `login()`, `logout()`, `signup()` dans AuthProvider
-- ❌ Ne pas importer directement `supabaseMock` dans ce fichier
-- ❌ Ne pas ajouter de logique métier (validation, contrôle)
-- ❌ Ne pas ajouter de redirection ou navigation
+Habiller tout le front construit dans les macros précédentes.
 
 ---
 
-**BLOC 3 — Créer hooks.ts (hooks dérivés)**
+# **🧩 Macro 7.5 — Connexion Réelle & QA**
 
-Créer `/lib/auth/hooks.ts` :
+Objectif :
 
-```typescript
-'use client'
+Remplacer les mocks par le vrai Supabase.
 
-import { useAuth } from './auth-context'
-import type { User, Session } from './types'
+Contenu :
 
-export function useUser(): User | null {
-  const { user } = useAuth()
-  return user
-}
+- queries
+- mutations
+- RLS
+- flux réel
+- QA complète
 
-export function useSession(): Session | null {
-  const { session } = useAuth()
-  return session
-}
+Rôle :
 
-export function useIsAuthenticated(): boolean {
-  const { user } = useAuth()
-  return user !== null
-}
-```
-
-Règles strictes :
-- 'use client' obligatoire
-- Tous les hooks utilisent `useAuth()` en interne uniquement
-- Types stricts depuis `./types` uniquement
-- Extraction directe uniquement (pas de logique métier)
-- Aucun hook ne doit appeler directement `authClient` ou `supabaseMock`
-
-Interdictions explicites :
-- ❌ Ne pas ajouter de hook qui appelle `authClient` directement
-- ❌ Ne pas ajouter de logique métier dans les hooks
-- ❌ Ne pas créer de hook `useLogin()` ou `useLogout()` (Phase 3.4)
+Rendre le front réellement opérationnel.
 
 ---
 
-**BLOC 4 — Mettre à jour index.ts (exports)**
+# **🧩 Macro 8 — Landing, Marketing & SEO**
 
-Modifier `/lib/auth/index.ts` :
+Objectif :
 
-```typescript
-export * from './types'
-export * from './config'
-export { supabaseMock } from './supabase-mock'
-export { authClient } from './auth-client'
-export { AuthProvider, useAuth } from './auth-context'
-export { useUser, useSession, useIsAuthenticated } from './hooks'
-```
+Créer l’expérience publique marketing.
 
-Règles strictes :
-- Ordre exact obligatoire : types → config → mock → auth-client → context → hooks
-- Ajouter `authClient` entre `supabaseMock` et `auth-context`
-- Ne pas modifier les exports existants
-- Aucun autre export
+Contenu :
+
+- hero
+- features
+- pricing
+- contact
+- SEO
+- conversion
 
 ---
 
-**BLOC 5 — Vérification compilation TypeScript**
+# **🧩 Macro 9 — Tests & Validation**
 
-Vérifier :
-- Compilation sans erreur (`npx tsc --noEmit`)
-- Types stricts respectés
-- Hooks React correctement typés
-- Aucun warning TS
-- Aucune dépendance externe non mockée
-- Isolation vérifiée : `auth-context.tsx` n'importe PAS `supabaseMock` directement
+Objectif :
 
----
+Solidifier le produit.
 
-## Phase 3.3 — Auth Routes & Protection
-Voici la version parfaite, stricte, Cursor-safe, zéro anticipation, zéro ambiguïté, 100% conforme :
-	•	à la Vision
-	•	au Tampon
-	•	au Système Alfred
-	•	au périmètre Macro 3.3
-	•	aux règles Macro 2 (BLOCs + interdictions explicites)
-	•	et à l’architecture d’auth mock Phase 3.1/3.2
+Contenu :
 
-Ceci est la tasklist Phase 3.3 définitive, prête à être exécutée par Cursor sans aucune dérive.
-
-Elle ne contient aucun piège, Aucun point optionnel, aucune UI, aucune route hardcodée, aucune logique métier.
-
-⸻
-
-✅ PHASE 3.3 — Auth Routes & Protection (VERSION FINALE, STRICTE, CURSOR-SAFE)
-
-🎯 Objectif
-
-Créer un mécanisme de protection client-side minimal permettant d’empêcher l’accès aux pages protégées lorsqu’aucune session n’est présente, sans logique métier et sans persistance.
-
-AUCUNE protection serveur.
-AUCUNE décision d’UX.
-AUCUNE logique métier.
-AUCUNE route hardcodée.
-
-Sortie :
-→ un composant ClientAuthGuard (nom neutre)
-→ intégration propre dans App Layout (app).
-
-⸻
-
-🚫 RÈGLES OBLIGATOIRES (à respecter pour toute la phase)
-
-Interdictions absolues :
-	•	❌ Pas de middleware Next.js
-	•	❌ Pas de cookies
-	•	❌ Pas de localStorage
-	•	❌ Pas de persistance de session
-	•	❌ Pas de UI (“Chargement…”, spinner, texte, message)
-	•	❌ Pas de redirection hardcodée (/signup, /login, /dashboard)
-	•	❌ Pas de logique métier (aucun choix de route)
-	•	❌ Pas d’actions login/logout dans cette phase
-	•	❌ Pas de navigation serveur
-	•	❌ Pas de fallback visuel
-
-Obligations :
-	•	✔ Protection uniquement client-side
-	•	✔ Le composant doit simplement vérifier l’état loading + isAuthenticated
-	•	✔ redirectTo doit être une prop obligatoire (aucune valeur par défaut)
-	•	✔ Utiliser UNIQUEMENT useIsAuthenticated() et useAuth()
-	•	✔ Aucune UI → le composant doit juste ne rien rendre (return null)
-	•	✔ Aucune logique additionnelle
-
-⸻
-
-🟦 BLOC 1 — Créer Guard client-side minimal : client-auth-guard.tsx
-
-Créer : /lib/auth/client-auth-guard.tsx
-
-'use client'
-
-import { useEffect } from 'react'
-import { useRouter } from 'next/navigation'
-import { useIsAuthenticated, useAuth } from './hooks'
-import type { ReactNode } from 'react'
-
-interface ClientAuthGuardProps {
-  children: ReactNode
-  redirectTo: string
-}
-
-export function ClientAuthGuard({ children, redirectTo }: ClientAuthGuardProps) {
-  const isAuthenticated = useIsAuthenticated()
-  const { loading } = useAuth()
-  const router = useRouter()
-
-  useEffect(() => {
-    if (!loading && !isAuthenticated) {
-      router.push(redirectTo)
-    }
-  }, [loading, isAuthenticated, router, redirectTo])
-
-  if (loading) return null
-  if (!isAuthenticated) return null
-
-  return <>{children}</>
-}
-
-Règles strictes :
-	•	redirectTo est obligatoire
-	•	AUCUN fallback visuel
-	•	Aucune valeur par défaut
-	•	Aucune redirection hardcodée
-	•	Aucune UI
-	•	Vérification minimale : loading puis isAuthenticated
-	•	return null pour tous les cas non valides
-	•	Aucune autre logique
-
-⸻
-
-🟦 BLOC 2 — Intégrer le guard dans App Layout (routes protégées)
-
-Créer ou modifier : /app/(app)/layout.tsx
-
-import { ClientAuthGuard } from '@/lib/auth'
-
-export default function AppLayout({ children }: { children: React.ReactNode }) {
-  const redirectPath = '' // À définir selon les besoins du layout
-  return (
-    <ClientAuthGuard redirectTo={redirectPath}>
-      {children}
-    </ClientAuthGuard>
-  )
-}
-
-Règles strictes :
-	•	Le guard est utilisé uniquement dans (app)
-	•	redirectTo est fourni explicitement ici (décision de routing prise dans le layout)
-	•	Aucune logique dans RootLayout
-	•	(marketing) reste totalement libre, aucun guard dans son layout
-
-⸻
-
-🟦 BLOC 3 — Mettre à jour index.ts
-
-Modifier /lib/auth/index.ts :
-
-export * from './types'
-export * from './config'
-export { supabaseMock } from './supabase-mock'
-export { authClient } from './auth-client'
-export { AuthProvider, useAuth } from './auth-context'
-export { useUser, useSession, useIsAuthenticated } from './hooks'
-export { ClientAuthGuard } from './client-auth-guard'
-
-Règles strictes :
-	•	Ordre exact : types → config → mock → auth-client → context → hooks → guard
-	•	Ne rien modifier d’autre
-	•	Aucune export supplémentaire
-
-⸻
-
-🟦 BLOC 4 — Vérification complète
-
-Vérifier :
-	•	npx tsc --noEmit
-	•	Aucun warning TS
-	•	ClientAuthGuard ne contient aucune UI
-	•	redirectTo est obligatoire dans toutes les utilisations
-	•	(marketing) n’est PAS protégé
-	•	Pas de middleware présent dans le repo
-	•	Aucun usage de cookie ou localStorage
-
-⸻
-
-🧠 CHECK FINAL
-
-Cette version respecte :
-	•	toutes les contraintes Macro 3 (mock-only)
-	•	l’absence de persistance
-	•	la séparation stricte client/server
-	•	la non-anticipation Macro 3.4
-	•	le style Macro 2 (BLOCs + interdictions)
-	•	la structure cognitive du Système Alfred
-
-C’est la première version 100% valide pour Phase 3.3.
-
-⸻
-
-Si tu veux maintenant :
-➡ la Tasklist Phase 3.4 (Login/Signup/Logout UI) — version parfaite Cursor-safe,
-ou
-➡ Je peux vérifier l’exécution de Cursor après qu’il aura généré les fichiers.
+- tests unitaires
+- tests E2E
+- Lighthouse
+- QA finale
 
 ---
 
-## Phase 3.4 — Login/Signup/Logout UI
+# **🧩 Macro 10 — Monitoring & Observabilité**Objectif :
 
-Voici la version parfaite, stricte, Cursor-safe, zéro anticipation, zéro ambiguïté, 100% conforme :
-	•	à la Vision
-	•	au Tampon
-	•	au Système Alfred
-	•	au périmètre Macro 3.4
-	•	aux règles Macro 2 (BLOCs + interdictions explicites)
-	•	et à l’architecture d’auth mock Phase 3.1/3.2/3.3
+Ajouter les outils de suivi et d’analyse.
 
-Ceci est la tasklist Phase 3.4 définitive, prête à être exécutée par Cursor sans aucune dérive.
+Contenu :
 
-Elle ne contient aucun piège, aucun point optionnel, aucune logique métier complexe, aucune validation serveur, aucune persistance.
+- Sentry
+- LogRocket
+- PostHog
+- GA4
+- Pixel Meta
+- Dashboards internes
 
-⸻
-
-✅ PHASE 3.4 — Login/Signup/Logout UI (VERSION FINALE, STRICTE, CURSOR-SAFE)
-
-🎯 Objectif
-
-Créer les interfaces utilisateur minimales permettant de déclencher les actions d’authentification mockées (signup, signin, signout) via des formulaires simples, sans validation métier complexe et sans persistance.
-
-AUCUNE validation serveur.
-AUCUNE logique métier complexe.
-AUCUNE persistance.
-AUCUNE redirection automatique (navigation manuelle uniquement).
-
-Sortie :
-→ composants UI LoginForm, SignupForm, LogoutButton
-→ pages /login, /signup (marketing)
-→ intégration avec supabaseMock existant
-→ utilisation des hooks Phase 3.2
-
-⸻
-
-🚫 RÈGLES OBLIGATOIRES (à respecter pour toute la phase)
-
-Interdictions absolues :
-	•	❌ Pas de validation email/password complexe (mock accepte tout)
-	•	❌ Pas de gestion d’erreurs serveur (mock retourne toujours success)
-	•	❌ Pas de cookies
-	•	❌ Pas de localStorage
-	•	❌ Pas de persistance de session
-	•	❌ Pas de redirection automatique après login/signup (navigation manuelle uniquement)
-	•	❌ Pas de logique métier (pas de vérification email, pas de règles password)
-	•	❌ Pas de loading states complexes (spinner simple uniquement)
-	•	❌ Pas de messages d’erreur complexes
-	•	❌ Pas de gestion de tokens refresh
-	•	❌ Pas d’intégration avec middleware ou protection serveur
-
-Obligations :
-	•	✔ UI client-side uniquement
-	•	✔ Utiliser supabaseMock.auth.signIn, signUp, signOut
-	•	✔ Utiliser les hooks Phase 3.2 (useAuth, useIsAuthenticated)
-	•	✔ Formulaires HTML simples (input email, input password, button)
-	•	✔ États locaux React (useState) pour les champs de formulaire
-	•	✔ Navigation manuelle via useRouter après actions
-	•	✔ Composants réutilisables et exportables
-
-⸻
-
-🟦 BLOC 1 — Créer composant LoginForm
-
-Créer : /lib/auth/login-form.tsx
-
-'use client'
-
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
-import { supabaseMock } from './supabase-mock'
-import { useAuth } from './auth-context'
-
-export function LoginForm() {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [loading, setLoading] = useState(false)
-  const router = useRouter()
-  const { loading: authLoading } = useAuth()
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    if (loading || authLoading) return
-
-    setLoading(true)
-    try {
-      await supabaseMock.auth.signIn(email, password)
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  return (
-    <form onSubmit={handleSubmit}>
-      <div>
-        <label htmlFor="email">Email</label>
-        <input
-          id="email"
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-          disabled={loading || authLoading}
-        />
-      </div>
-      <div>
-        <label htmlFor="password">Password</label>
-        <input
-          id="password"
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-          disabled={loading || authLoading}
-        />
-      </div>
-      <button type="submit" disabled={loading || authLoading}>
-        {loading ? 'Loading...' : 'Sign In'}
-      </button>
-    </form>
-  )
-}
-
-Règles strictes :
-	•	'use client' obligatoire
-	•	Utiliser supabaseMock.auth.signIn uniquement
-	•	États locaux pour email/password
-	•	Pas de validation métier (HTML5 required uniquement)
-	•	Pas de redirection automatique (navigation manuelle si nécessaire)
-	•	Loading state simple (texte uniquement)
-	•	Aucune gestion d’erreur complexe
-	•	Utiliser useAuth pour authLoading
-
-⸻
-
-🟦 BLOC 2 — Créer composant SignupForm
-
-Créer : /lib/auth/signup-form.tsx
-
-'use client'
-
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
-import { supabaseMock } from './supabase-mock'
-import { useAuth } from './auth-context'
-
-export function SignupForm() {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [loading, setLoading] = useState(false)
-  const router = useRouter()
-  const { loading: authLoading } = useAuth()
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    if (loading || authLoading) return
-
-    setLoading(true)
-    try {
-      await supabaseMock.auth.signUp(email, password)
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  return (
-    <form onSubmit={handleSubmit}>
-      <div>
-        <label htmlFor="email">Email</label>
-        <input
-          id="email"
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-          disabled={loading || authLoading}
-        />
-      </div>
-      <div>
-        <label htmlFor="password">Password</label>
-        <input
-          id="password"
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-          disabled={loading || authLoading}
-        />
-      </div>
-      <button type="submit" disabled={loading || authLoading}>
-        {loading ? 'Loading...' : 'Sign Up'}
-      </button>
-    </form>
-  )
-}
-
-Règles strictes :
-	•	'use client' obligatoire
-	•	Utiliser supabaseMock.auth.signUp uniquement
-	•	États locaux pour email/password
-	•	Pas de validation métier (HTML5 required uniquement)
-	•	Pas de redirection automatique (navigation manuelle si nécessaire)
-	•	Loading state simple (texte uniquement)
-	•	Aucune gestion d’erreur complexe
-	•	Utiliser useAuth pour authLoading
-
-⸻
-
-🟦 BLOC 3 — Créer composant LogoutButton
-
-Créer : /lib/auth/logout-button.tsx
-
-'use client'
-
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
-import { supabaseMock } from './supabase-mock'
-import { useIsAuthenticated } from './hooks'
-
-export function LogoutButton() {
-  const [loading, setLoading] = useState(false)
-  const router = useRouter()
-  const isAuthenticated = useIsAuthenticated()
-
-  const handleLogout = async () => {
-    if (loading || !isAuthenticated) return
-
-    setLoading(true)
-    try {
-      await supabaseMock.auth.signOut()
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  if (!isAuthenticated) return null
-
-  return (
-    <button onClick={handleLogout} disabled={loading}>
-      {loading ? 'Loading...' : 'Sign Out'}
-    </button>
-  )
-}
-
-Règles strictes :
-	•	'use client' obligatoire
-	•	Utiliser supabaseMock.auth.signOut uniquement
-	•	Afficher uniquement si isAuthenticated
-	•	Loading state simple (texte uniquement)
-	•	Aucune redirection automatique (navigation manuelle si nécessaire)
-	•	Aucune gestion d’erreur complexe
-
-⸻
-
-🟦 BLOC 4 — Créer page /login
-
-Créer ou modifier : /app/(marketing)/login/page.tsx
-
-'use client'
-
-import { LoginForm } from '@/lib/auth'
-
-export default function LoginPage() {
-  return (
-    <div>
-      <h1>Sign In</h1>
-      <LoginForm />
-    </div>
-  )
-}
-
-Règles strictes :
-	•	'use client' obligatoire
-	•	Page dans (marketing) uniquement
-	•	Import LoginForm depuis @/lib/auth
-	•	Structure minimale (titre + formulaire)
-	•	Aucune logique métier
-	•	Aucune redirection automatique
-
-⸻
-
-🟦 BLOC 5 — Créer page /signup
-
-Créer ou modifier : /app/(marketing)/signup/page.tsx
-
-'use client'
-
-import { SignupForm } from '@/lib/auth'
-
-export default function SignupPage() {
-  return (
-    <div>
-      <h1>Sign Up</h1>
-      <SignupForm />
-    </div>
-  )
-}
-
-Règles strictes :
-	•	'use client' obligatoire
-	•	Page dans (marketing) uniquement
-	•	Import SignupForm depuis @/lib/auth
-	•	Structure minimale (titre + formulaire)
-	•	Aucune logique métier
-	•	Aucune redirection automatique
-
-⸻
-
-🟦 BLOC 6 — Mettre à jour index.ts (exports)
-
-Modifier /lib/auth/index.ts :
-
-export * from './types'
-export * from './config'
-export { supabaseMock } from './supabase-mock'
-export { authClient } from './auth-client'
-export { AuthProvider, useAuth } from './auth-context'
-export { useUser, useSession, useIsAuthenticated } from './hooks'
-export { ClientAuthGuard } from './client-auth-guard'
-export { LoginForm } from './login-form'
-export { SignupForm } from './signup-form'
-export { LogoutButton } from './logout-button'
-
-Règles strictes :
-	•	Ordre exact : types → config → mock → auth-client → context → hooks → guard → forms → button
-	•	Ne rien modifier d’autre
-	•	Aucune export supplémentaire
-	•	Maintenir l’ordre existant et ajouter les nouveaux exports à la fin
-
-⸻
-
-🟦 BLOC 7 — Vérification complète
-
-Vérifier :
-	•	npx tsc --noEmit
-	•	Aucun warning TS
-	•	Tous les composants sont 'use client'
-	•	Tous les composants utilisent supabaseMock uniquement
-	•	Aucune persistance (localStorage, sessionStorage, cookies)
-	•	Aucune redirection automatique dans les composants
-	•	Pages /login et /signup dans (marketing) uniquement
-	•	Exports corrects dans index.ts
-	•	Composants réutilisables et exportables
-
-⸻
-
-🧠 CHECK FINAL
-
-Cette version respecte :
-	•	toutes les contraintes Macro 3 (mock-only)
-	•	l’absence de persistance
-	•	la séparation stricte client/server
-	•	la non-anticipation Macro 4+
-	•	le style Macro 2 (BLOCs + interdictions)
-	•	la structure cognitive du Système Alfred
-	•	l’utilisation exclusive de supabaseMock et hooks Phase 3.2
-
-C’est la première version 100% valide pour Phase 3.4.
-
-⸻
-
----
-
-- **Macro 4 — Onboarding (mock data)**
-  ### **🎯 Objectif général**
-  Construire le wizard d’onboarding basé sur mock data, en suivant l’histoire produit :
-  - salon → équipe → services → intégrations → validation
-  ### **🔧 Ajustements nécessaires**
-  Les routes /onboarding/ existent déjà (créées automatiquement lors de Macro 0.5).
-  → Cette macro doit **remplacer** ou **compléter** ces routes selon la structure définie en Macro 1.
-  → Normaliser le wizard pour être compatible avec les données mock de Macro 2.
-  ### **🧱 Rôle pour le front**
-  Simuler la création du “cerveau IA” avant les vraies données Supabase.
-  ***
-  - **Macro 5 — Dashboard (mock data)**
-    - **Objectif général**
-      La **Macro 5** met en place le cœur visuel du produit : le tableau de bord.
-      Elle représente l’activité du salon ou de l’équipe en données simulées.
-      Cette macro :
-      - définit le layout principal (sidebar, header, overview) ;
-      - affiche les cartes et métriques à partir des mocks ;
-      - valide la lisibilité et la structure du dashboard.
-      🎯 **Rôle pour le front :**
-      Elle concrétise la promesse produit d’Alfred Reception et sert de base pour la future intégration data réelle.
-
-#
-
-#
-
-# **(légèrement ajustée)**
-
-###
-
----
-
-- **Macro 6 — Settings & Équipe (mock data)**
-  - **Objectif général**
-    La **Macro 6** gère la personnalisation et la configuration utilisateur.
-    Elle simule la gestion des profils, préférences et équipes à partir des mock data.
-    Cette macro :
-    - construit les pages profil et préférences ;
-    - simule la logique multi-membres Solo ↔ Pro ;
-    - valide les permissions et rôles au niveau front.
-    🎯 **Rôle pour le front :**
-    Elle structure l’administration utilisateur et prépare les logiques d’équipe réelles.
-
----
-
-- **Macro 7 — Design System & Identité Visuelle**
-  - **Objectif général**
-    La **Macro 7** formalise l’identité visuelle d’Alfred Reception.
-    Elle consolide le design system et centralise tous les composants UI.
-    Cette macro :
-    - définit les fondations visuelles (palette, typographies, radius, motion) ;
-    - intègre le design system dans Storybook ;
-    - harmonise le rendu sur l’ensemble du front.
-    🎯 **Rôle pour le front :**
-    Elle apporte cohérence et continuité visuelle avant passage à la data réelle.
-
----
-
-- **Macro 7.5 — Connexion Réelle & QA**
-  - **Objectif général**
-    La **Macro 7.5** connecte le front à Supabase et valide les flux réels.
-    Elle transforme les mocks en requêtes et synchronisations réelles.
-    Cette macro :
-    - remplace les données simulées par des queries Supabase ;
-    - vérifie les RLS et la cohérence des flux ;
-    - exécute une QA complète sur le parcours utilisateur.
-    🎯 **Rôle pour le front :**
-    Elle certifie la stabilité du produit et clôt la phase technique.
-
----
-
-- **Macro 8 — Landing, Marketing & SEO**
-  - **Objectif général**
-    La **Macro 8** développe la vitrine publique du produit.
-    Elle met en avant l’offre et optimise la conversion.
-    Cette macro :
-    - crée les pages marketing (hero, features, pricing, contact) ;
-    - intègre le SEO technique et les formulaires reliés à Supabase ;
-    - unifie le ton visuel entre landing et produit.
-    🎯 **Rôle pour le front :**
-    Elle relie la couche marketing à l’expérience utilisateur et sert d’entrée principale au produit.
-
----
-
-- **Macro 9 — Tests & Validation**
-  - **Objectif général**
-    La **Macro 9** évalue la robustesse du front.
-    Elle s’assure que chaque flux utilisateur et chaque composant fonctionnent sans erreur.
-    Cette macro :
-    - implémente les tests unitaires (Vitest) et E2E (Playwright) ;
-    - valide les performances via Lighthouse ;
-    - garantit la fiabilité avant production.
-    🎯 **Rôle pour le front :**
-    Elle transforme le projet en produit vérifié, maintenable et prêt à déployer.
-
----
-
-- **Macro 10 — Monitoring & Observabilité**
-  - **Objectif général**
-    La **Macro 10** implémente la supervision du produit en production.
-    Elle fournit les outils d’analyse et de suivi nécessaires à la maintenance continue.
-    Cette macro :
-    - intègre LogRocket, Sentry, PostHog, GA4 et Meta Pixel ;
-    - crée le tableau de bord interne d’usage et d’incidents ;
-    - garantit traçabilité et amélioration continue.
-    🎯 **Rôle pour le front :**
-    Elle prolonge la stabilité du produit après lancement et fournit la base de mesure pour les itérations futures.

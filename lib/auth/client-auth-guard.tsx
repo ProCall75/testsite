@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, usePathname } from 'next/navigation'
 import { useIsAuthenticated } from './hooks'
 import { useAuth } from './auth-context'
 import type { ReactNode } from 'react'
@@ -12,6 +12,13 @@ interface ClientAuthGuardProps {
 }
 
 export function ClientAuthGuard({ children, redirectTo }: ClientAuthGuardProps) {
+  const pathname = usePathname()
+  
+  // TEMPORARY: disable gating for onboarding and dashboard during Macro 4 testing
+  if (pathname.startsWith('/onboarding') || pathname.startsWith('/dashboard')) {
+    return <>{children}</>
+  }
+
   const isAuthenticated = useIsAuthenticated()
   const { loading } = useAuth()
   const router = useRouter()
