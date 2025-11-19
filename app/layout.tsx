@@ -1,11 +1,7 @@
-import "./globals.css"
-import type { Metadata } from "next"
-import { AuthProviderWrapper } from "@/lib/auth/auth-provider-wrapper"
+'use client'
 
-export const metadata: Metadata = {
-  title: "Alfred Reception",
-  description: "Assistant IA pour la réception et la gestion de salon",
-}
+import './globals.css'
+import { AuthProvider } from '@/lib/auth'
 
 export default function RootLayout({
   children,
@@ -15,7 +11,9 @@ export default function RootLayout({
   return (
     <html lang="fr">
       <body>
-        <AuthProviderWrapper>{children}</AuthProviderWrapper>
+        <AuthProvider>
+          {children}
+        </AuthProvider>
       </body>
     </html>
   )

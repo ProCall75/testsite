@@ -1402,6 +1402,368 @@ ou
 
 ---
 
+## Phase 3.4 — Login/Signup/Logout UI
+
+Voici la version parfaite, stricte, Cursor-safe, zéro anticipation, zéro ambiguïté, 100% conforme :
+	•	à la Vision
+	•	au Tampon
+	•	au Système Alfred
+	•	au périmètre Macro 3.4
+	•	aux règles Macro 2 (BLOCs + interdictions explicites)
+	•	et à l’architecture d’auth mock Phase 3.1/3.2/3.3
+
+Ceci est la tasklist Phase 3.4 définitive, prête à être exécutée par Cursor sans aucune dérive.
+
+Elle ne contient aucun piège, aucun point optionnel, aucune logique métier complexe, aucune validation serveur, aucune persistance.
+
+⸻
+
+✅ PHASE 3.4 — Login/Signup/Logout UI (VERSION FINALE, STRICTE, CURSOR-SAFE)
+
+🎯 Objectif
+
+Créer les interfaces utilisateur minimales permettant de déclencher les actions d’authentification mockées (signup, signin, signout) via des formulaires simples, sans validation métier complexe et sans persistance.
+
+AUCUNE validation serveur.
+AUCUNE logique métier complexe.
+AUCUNE persistance.
+AUCUNE redirection automatique (navigation manuelle uniquement).
+
+Sortie :
+→ composants UI LoginForm, SignupForm, LogoutButton
+→ pages /login, /signup (marketing)
+→ intégration avec supabaseMock existant
+→ utilisation des hooks Phase 3.2
+
+⸻
+
+🚫 RÈGLES OBLIGATOIRES (à respecter pour toute la phase)
+
+Interdictions absolues :
+	•	❌ Pas de validation email/password complexe (mock accepte tout)
+	•	❌ Pas de gestion d’erreurs serveur (mock retourne toujours success)
+	•	❌ Pas de cookies
+	•	❌ Pas de localStorage
+	•	❌ Pas de persistance de session
+	•	❌ Pas de redirection automatique après login/signup (navigation manuelle uniquement)
+	•	❌ Pas de logique métier (pas de vérification email, pas de règles password)
+	•	❌ Pas de loading states complexes (spinner simple uniquement)
+	•	❌ Pas de messages d’erreur complexes
+	•	❌ Pas de gestion de tokens refresh
+	•	❌ Pas d’intégration avec middleware ou protection serveur
+
+Obligations :
+	•	✔ UI client-side uniquement
+	•	✔ Utiliser supabaseMock.auth.signIn, signUp, signOut
+	•	✔ Utiliser les hooks Phase 3.2 (useAuth, useIsAuthenticated)
+	•	✔ Formulaires HTML simples (input email, input password, button)
+	•	✔ États locaux React (useState) pour les champs de formulaire
+	•	✔ Navigation manuelle via useRouter après actions
+	•	✔ Composants réutilisables et exportables
+
+⸻
+
+🟦 BLOC 1 — Créer composant LoginForm
+
+Créer : /lib/auth/login-form.tsx
+
+'use client'
+
+import { useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { supabaseMock } from './supabase-mock'
+import { useAuth } from './auth-context'
+
+export function LoginForm() {
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [loading, setLoading] = useState(false)
+  const router = useRouter()
+  const { loading: authLoading } = useAuth()
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (loading || authLoading) return
+
+    setLoading(true)
+    try {
+      await supabaseMock.auth.signIn(email, password)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <div>
+        <label htmlFor="email">Email</label>
+        <input
+          id="email"
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+          disabled={loading || authLoading}
+        />
+      </div>
+      <div>
+        <label htmlFor="password">Password</label>
+        <input
+          id="password"
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+          disabled={loading || authLoading}
+        />
+      </div>
+      <button type="submit" disabled={loading || authLoading}>
+        {loading ? 'Loading...' : 'Sign In'}
+      </button>
+    </form>
+  )
+}
+
+Règles strictes :
+	•	'use client' obligatoire
+	•	Utiliser supabaseMock.auth.signIn uniquement
+	•	États locaux pour email/password
+	•	Pas de validation métier (HTML5 required uniquement)
+	•	Pas de redirection automatique (navigation manuelle si nécessaire)
+	•	Loading state simple (texte uniquement)
+	•	Aucune gestion d’erreur complexe
+	•	Utiliser useAuth pour authLoading
+
+⸻
+
+🟦 BLOC 2 — Créer composant SignupForm
+
+Créer : /lib/auth/signup-form.tsx
+
+'use client'
+
+import { useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { supabaseMock } from './supabase-mock'
+import { useAuth } from './auth-context'
+
+export function SignupForm() {
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [loading, setLoading] = useState(false)
+  const router = useRouter()
+  const { loading: authLoading } = useAuth()
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (loading || authLoading) return
+
+    setLoading(true)
+    try {
+      await supabaseMock.auth.signUp(email, password)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <div>
+        <label htmlFor="email">Email</label>
+        <input
+          id="email"
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+          disabled={loading || authLoading}
+        />
+      </div>
+      <div>
+        <label htmlFor="password">Password</label>
+        <input
+          id="password"
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+          disabled={loading || authLoading}
+        />
+      </div>
+      <button type="submit" disabled={loading || authLoading}>
+        {loading ? 'Loading...' : 'Sign Up'}
+      </button>
+    </form>
+  )
+}
+
+Règles strictes :
+	•	'use client' obligatoire
+	•	Utiliser supabaseMock.auth.signUp uniquement
+	•	États locaux pour email/password
+	•	Pas de validation métier (HTML5 required uniquement)
+	•	Pas de redirection automatique (navigation manuelle si nécessaire)
+	•	Loading state simple (texte uniquement)
+	•	Aucune gestion d’erreur complexe
+	•	Utiliser useAuth pour authLoading
+
+⸻
+
+🟦 BLOC 3 — Créer composant LogoutButton
+
+Créer : /lib/auth/logout-button.tsx
+
+'use client'
+
+import { useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { supabaseMock } from './supabase-mock'
+import { useIsAuthenticated } from './hooks'
+
+export function LogoutButton() {
+  const [loading, setLoading] = useState(false)
+  const router = useRouter()
+  const isAuthenticated = useIsAuthenticated()
+
+  const handleLogout = async () => {
+    if (loading || !isAuthenticated) return
+
+    setLoading(true)
+    try {
+      await supabaseMock.auth.signOut()
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  if (!isAuthenticated) return null
+
+  return (
+    <button onClick={handleLogout} disabled={loading}>
+      {loading ? 'Loading...' : 'Sign Out'}
+    </button>
+  )
+}
+
+Règles strictes :
+	•	'use client' obligatoire
+	•	Utiliser supabaseMock.auth.signOut uniquement
+	•	Afficher uniquement si isAuthenticated
+	•	Loading state simple (texte uniquement)
+	•	Aucune redirection automatique (navigation manuelle si nécessaire)
+	•	Aucune gestion d’erreur complexe
+
+⸻
+
+🟦 BLOC 4 — Créer page /login
+
+Créer ou modifier : /app/(marketing)/login/page.tsx
+
+'use client'
+
+import { LoginForm } from '@/lib/auth'
+
+export default function LoginPage() {
+  return (
+    <div>
+      <h1>Sign In</h1>
+      <LoginForm />
+    </div>
+  )
+}
+
+Règles strictes :
+	•	'use client' obligatoire
+	•	Page dans (marketing) uniquement
+	•	Import LoginForm depuis @/lib/auth
+	•	Structure minimale (titre + formulaire)
+	•	Aucune logique métier
+	•	Aucune redirection automatique
+
+⸻
+
+🟦 BLOC 5 — Créer page /signup
+
+Créer ou modifier : /app/(marketing)/signup/page.tsx
+
+'use client'
+
+import { SignupForm } from '@/lib/auth'
+
+export default function SignupPage() {
+  return (
+    <div>
+      <h1>Sign Up</h1>
+      <SignupForm />
+    </div>
+  )
+}
+
+Règles strictes :
+	•	'use client' obligatoire
+	•	Page dans (marketing) uniquement
+	•	Import SignupForm depuis @/lib/auth
+	•	Structure minimale (titre + formulaire)
+	•	Aucune logique métier
+	•	Aucune redirection automatique
+
+⸻
+
+🟦 BLOC 6 — Mettre à jour index.ts (exports)
+
+Modifier /lib/auth/index.ts :
+
+export * from './types'
+export * from './config'
+export { supabaseMock } from './supabase-mock'
+export { authClient } from './auth-client'
+export { AuthProvider, useAuth } from './auth-context'
+export { useUser, useSession, useIsAuthenticated } from './hooks'
+export { ClientAuthGuard } from './client-auth-guard'
+export { LoginForm } from './login-form'
+export { SignupForm } from './signup-form'
+export { LogoutButton } from './logout-button'
+
+Règles strictes :
+	•	Ordre exact : types → config → mock → auth-client → context → hooks → guard → forms → button
+	•	Ne rien modifier d’autre
+	•	Aucune export supplémentaire
+	•	Maintenir l’ordre existant et ajouter les nouveaux exports à la fin
+
+⸻
+
+🟦 BLOC 7 — Vérification complète
+
+Vérifier :
+	•	npx tsc --noEmit
+	•	Aucun warning TS
+	•	Tous les composants sont 'use client'
+	•	Tous les composants utilisent supabaseMock uniquement
+	•	Aucune persistance (localStorage, sessionStorage, cookies)
+	•	Aucune redirection automatique dans les composants
+	•	Pages /login et /signup dans (marketing) uniquement
+	•	Exports corrects dans index.ts
+	•	Composants réutilisables et exportables
+
+⸻
+
+🧠 CHECK FINAL
+
+Cette version respecte :
+	•	toutes les contraintes Macro 3 (mock-only)
+	•	l’absence de persistance
+	•	la séparation stricte client/server
+	•	la non-anticipation Macro 4+
+	•	le style Macro 2 (BLOCs + interdictions)
+	•	la structure cognitive du Système Alfred
+	•	l’utilisation exclusive de supabaseMock et hooks Phase 3.2
+
+C’est la première version 100% valide pour Phase 3.4.
+
+⸻
+
+---
+
 - **Macro 4 — Onboarding (mock data)**
   ### **🎯 Objectif général**
   Construire le wizard d’onboarding basé sur mock data, en suivant l’histoire produit :

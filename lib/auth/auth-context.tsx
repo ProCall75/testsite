@@ -12,15 +12,22 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState<boolean>(true)
 
   useEffect(() => {
-    const initSession = async () => {
+    const refreshSession = async () => {
       const { data } = await authClient.getSession()
       if (data.session) {
         setSession(data.session)
         setUser(data.session.user)
+      } else {
+        setSession(null)
+        setUser(null)
       }
       setLoading(false)
     }
-    initSession()
+
+    refreshSession()
+
+    const interval = setInterval(refreshSession, 500)
+    return () => clearInterval(interval)
   }, [])
 
   const value: AuthState = {
